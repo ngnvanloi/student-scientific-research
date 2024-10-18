@@ -1,0 +1,18 @@
+export type TFormLoginData = {
+  email: string;
+  password: string;
+};
+export type TFormSubmitResearchProjectTabOveriew = {
+  researchProject_ID: number;
+  researchProject_Name: string;
+  researchProject_Description: string;
+  researchProject_DateUpload: string;
+  articleID: string | number;
+  disciplineID: string | number;
+  competitionID: number;
+};
+
+export type TFormSubmitResearchProjectTabGoalResult = {
+  researchProject_Goal: string;
+  researchProject_Result: string;
+};
