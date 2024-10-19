@@ -1,20 +1,18 @@
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import type { ApiResponseWithObject, UseAppQuery } from "@/types/Meta";
-import { User } from "next-auth";
-import { queryKeys } from "./query-keys";
-
-export type LoginResponse = ApiResponseWithObject<{
-  access_token: string;
-  expired_at: number;
-}>;
+import { useMutation } from "@tanstack/react-query";
+import type { IDataWithTokenResponseFromAPI } from "@/types/Meta";
 
 export type LoginParams =
   | { password: string; phone_number: string }
   | { email: string; password: string };
 
 export const useLoginMutation = () => {
-  return useMutation<LoginResponse, Error, LoginParams, unknown>({
+  return useMutation<
+    IDataWithTokenResponseFromAPI<Account>,
+    Error,
+    LoginParams,
+    unknown
+  >({
     mutationFn: (data) => login(data),
     onMutate: () => {},
     onSuccess: (result) => {
@@ -24,18 +22,25 @@ export const useLoginMutation = () => {
   });
 };
 
-export async function login(data: LoginParams): Promise<LoginResponse> {
-  const response = await communityRequest<LoginResponse>(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}login`,
+export async function login(
+  data: LoginParams
+): Promise<IDataWithTokenResponseFromAPI<Account>> {
+  const response = (await communityRequest)(
+    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Auth/login`,
     {
       method: "POST",
       data,
     }
   );
-  return response as LoginResponse;
+  console.log(
+    "checking response: ",
+    response.then((response) => console.log(response))
+  );
+  return response as unknown as IDataWithTokenResponseFromAPI<Account>;
 }
 
-export function handleOnLoginSuccess(result: LoginResponse) {
-  const { access_token } = result.data;
-  setAuthToken(access_token);
+export function handleOnLoginSuccess(
+  result: IDataWithTokenResponseFromAPI<Account>
+) {
+  setAuthToken(result.data.tokenResponse?.accessToken);
 }

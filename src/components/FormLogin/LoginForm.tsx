@@ -49,6 +49,7 @@ const LoginForm = () => {
     console.log("FORM ERRORS", errors); // Kiểm tra các lỗi của form
   };
 
+  const handleLoginGoogle = () => {};
   // RENDER UI
   return (
     <main className="w-full flex flex-col items-center justify-center px-4">
@@ -110,8 +111,12 @@ const LoginForm = () => {
             Sign in
           </button>
         </form>
-        <button className="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg text-sm font-medium hover:bg-gray-50 duration-150 active:bg-gray-100">
+        <button
+          className="w-full flex items-center justify-center gap-x-3 py-2.5 border rounded-lg text-sm font-medium hover:bg-gray-50 duration-150 active:bg-gray-100"
+          onClick={() => handleLoginGoogle()}
+        >
           <GoogleSVG />
+          Login with Google
         </button>
         <p className="text-center">
           Don't have an account?{" "}

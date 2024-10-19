@@ -45,6 +45,38 @@ export interface ApiResponseWithObject<T> {
   request_time: number;
 }
 
+// NVL custom
+export interface ITokenResponse {
+  tokenResponse: {
+    accessToken: string;
+    refreshToken: string;
+    expires: string;
+    account: Account;
+  };
+}
+export interface IDataWithTokenResponseFromAPI<T> {
+  data: {
+    tokenResponse: {
+      accessToken: string;
+      refreshToken: string;
+      expires: string;
+      account: T;
+    };
+  };
+  additionalData: any;
+  message: string;
+  statusCode: number;
+  code: string;
+}
+export interface IDataResponseFromAPI<T> {
+  data: T;
+  additionalData: any;
+  message: string;
+  statusCode: number;
+  code: string;
+}
+// ==========
+
 export interface ErrorResponse {
   response?: {
     config: {

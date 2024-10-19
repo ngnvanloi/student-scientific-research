@@ -1,5 +1,6 @@
 import queryString from "query-string";
 import ky from "ky";
+import { auth } from "@/auth";
 
 interface FetchOptions {
   method?: "GET" | "POST" | "PUT" | "DELETE";
@@ -29,13 +30,26 @@ export function setAuthToken(token: string | undefined) {
     });
   } else {
     httpCommunity = httpCommunity.extend({
-      prefixUrl: process.env.NEXT_PUBLIC_BASE_API_URL,
+      prefixUrl: process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
   }
 }
+
+// export const refreshAndStoreBranchToken = async () => {
+//   const session = await auth();
+//   try {
+//     setAuthToken(undefined);
+//     const res = session?.user?.refresh_token;
+
+//     setAuthToken(res.data.branch_token);
+//   } catch (error) {
+//     console.error("refreshAndStoreBranchToken error ", error);
+//   }
+// };
+
 export const communityRequest = async <T>(
   endpoint: string,
   options: FetchOptions = {}
