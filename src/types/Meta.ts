@@ -54,6 +54,7 @@ export interface ITokenResponse {
     account: Account;
   };
 }
+// get account
 export interface IDataWithTokenResponseFromAPI<T> {
   data: {
     tokenResponse: {
@@ -68,6 +69,8 @@ export interface IDataWithTokenResponseFromAPI<T> {
   statusCode: number;
   code: string;
 }
+
+// for post/get
 export interface IDataResponseFromAPI<T> {
   data: T;
   additionalData: any;
@@ -75,6 +78,7 @@ export interface IDataResponseFromAPI<T> {
   statusCode: number;
   code: string;
 }
+
 // ==========
 
 export interface ErrorResponse {

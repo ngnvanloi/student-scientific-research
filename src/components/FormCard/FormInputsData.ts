@@ -16,3 +16,10 @@ export type TFormSubmitResearchProjectTabGoalResult = {
   researchProject_Goal: string;
   researchProject_Result: string;
 };
+
+export type TFormAddPost = {
+  title: string;
+  // content: string;
+  // dateUpload: string | Date;
+  // filePath?: any;
+};

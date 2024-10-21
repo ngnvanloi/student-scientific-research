@@ -12,6 +12,10 @@ declare module "next-auth" {
     facultyName?: string | null;
     internalCode?: string | null | number;
     email?: string | null;
+
+    accessToken?: string | null;
+    refreshToken?: string | null;
+    expiresAt?: number | null | string;
   }
 
   interface Session {
@@ -25,6 +29,10 @@ declare module "next-auth" {
       facultyName?: string | null;
       internalCode?: string | null | number;
       email?: string | null;
+
+      accessToken?: string | null;
+      refreshToken?: string | null;
+      expiresAt?: number | null | string;
     } & DefaultSession["user"];
   }
 }

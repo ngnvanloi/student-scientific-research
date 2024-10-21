@@ -1,6 +1,7 @@
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
 import type { IDataWithTokenResponseFromAPI } from "@/types/Meta";
+import { auth } from "@/auth";
 
 export type LoginParams =
   | { password: string; phone_number: string }
@@ -16,7 +17,7 @@ export const useLoginMutation = () => {
     mutationFn: (data) => login(data),
     onMutate: () => {},
     onSuccess: (result) => {
-      handleOnLoginSuccess(result);
+      handleOnLoginSuccess(result); // set access token
     },
     onError: (err) => {},
   });

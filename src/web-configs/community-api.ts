@@ -18,10 +18,23 @@ let httpCommunity = ky.create({
     Accept: "application/json",
     "Cache-Control": "no-cache",
   },
+  hooks: {
+    beforeRequest: [
+      (request) => {
+        const headersObj: Record<string, string> = {};
+        request.headers.forEach((value, key) => {
+          headersObj[key] = value;
+        });
+        console.log("Headers being sent: ", headersObj);
+      },
+    ],
+  },
 });
+
 // SET LẠI ACCESS TOKEN CHO CURRENT USER
 export function setAuthToken(token: string | undefined) {
   if (!token) {
+    console.log("Token is undefined, removing Authorization header.");
     httpCommunity = httpCommunity.extend({
       prefixUrl: process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL,
       headers: {
@@ -29,6 +42,7 @@ export function setAuthToken(token: string | undefined) {
       },
     });
   } else {
+    console.log("Setting Authorization header with token:", token);
     httpCommunity = httpCommunity.extend({
       prefixUrl: process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL,
       headers: {

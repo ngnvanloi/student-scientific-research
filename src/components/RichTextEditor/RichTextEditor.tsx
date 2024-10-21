@@ -52,12 +52,14 @@ export default function RichTextEditor(props: IProps) {
     props.setContent(newContent);
   };
   return (
-    <QuillEditor
-      value={props.content}
-      onChange={handleEditorChange}
-      modules={quillModules}
-      formats={quillFormats}
-      className="w-full bg-white h-full"
-    />
+    <div className="w-full h-[300px] overflow-auto">
+      <QuillEditor
+        value={props.content}
+        onChange={handleEditorChange}
+        modules={quillModules}
+        formats={quillFormats}
+        className="w-full h-full bg-white"
+      />
+    </div>
   );
 }

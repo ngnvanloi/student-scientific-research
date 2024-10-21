@@ -1,78 +1,74 @@
-import React, { useState } from "react";
+import React from "react";
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, message, Upload } from "antd";
-import type { GetProp, UploadFile, UploadProps } from "antd";
+import { Button, Upload } from "antd";
+import type { UploadProps } from "antd";
 
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+interface IProps {
+  limit: number;
+  multiple?: boolean;
+  fileList?: File[]; // Thay đổi từ UploadFile[] thành File[]
+  setFileList?: React.Dispatch<React.SetStateAction<File[]>>; // Thay đổi từ UploadFile[] thành File[]
+  setFile?: React.Dispatch<React.SetStateAction<File | undefined>>; // Thay đổi từ UploadFile thành File
+  setFilePreview?: React.Dispatch<React.SetStateAction<string>>;
+}
 
-const ClickFileUpload: React.FC = () => {
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [uploading, setUploading] = useState(false);
+const ClickFileUpload: React.FC<IProps> = ({
+  limit,
+  multiple,
+  fileList,
+  setFileList,
+  setFile,
+  setFilePreview,
+}) => {
+  const handleChange = (info: any) => {
+    const { file, fileList: newFileList } = info;
 
-  const handleUpload = () => {
-    // Tạo mảng metadata của các file
-    const fileMetadata = fileList.map((file) => ({
-      uid: file.uid,
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      url: `localhost:8000/uploadfiles/${file.url}`,
-    }));
+    // Cập nhật file cho upload single
+    if (setFile && limit === 1) {
+      setFile(file as File); // Ép kiểu sang File
+      setFilePreview?.(file ? URL.createObjectURL(file) : "");
+    }
 
-    setUploading(true);
-    console.log("----> check list file: ", fileList);
-    // Gửi metadata file dưới dạng JSON thay vì FormData
-    fetch("http://localhost:8000/uploadfiles", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        files: fileMetadata, // Gửi metadata của file
-      }),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        setFileList([]);
-        message.success("upload successfully.");
-      })
-      .catch(() => {
-        message.error("upload failed.");
-      })
-      .finally(() => {
-        setUploading(false);
-      });
+    // Cập nhật danh sách file cho upload multiple
+    if (multiple && setFileList) {
+      // Chuyển đổi fileList từ UploadFile sang File
+      const files = newFileList.map((f: any) => f.originFileObj) as File[];
+      setFileList(files);
+    }
+  };
+
+  const handleRemove = (file: File) => {
+    // Xử lý khi file bị xóa
+    if (multiple && setFileList && fileList) {
+      const newFileList = fileList.filter((item) => item.name !== file.name);
+      setFileList(newFileList);
+    }
+
+    if (setFile && limit === 1) {
+      setFile(undefined);
+      setFilePreview?.("");
+    }
   };
 
   const props: UploadProps = {
-    onRemove: (file) => {
-      const index = fileList.indexOf(file);
-      const newFileList = fileList.slice();
-      newFileList.splice(index, 1);
-      setFileList(newFileList);
-    },
-    beforeUpload: (file) => {
-      setFileList([...fileList, file]);
-      return false;
-    },
-    fileList,
+    name: "file",
+    multiple: multiple,
+    maxCount: limit,
+    onChange: handleChange,
+    onRemove: handleRemove,
+    fileList: fileList?.map((file, index) => ({
+      uid: String(index), // Tạo uid giả để antd nhận diện file
+      name: file.name,
+      status: "done",
+      originFileObj: file, // Gán lại đối tượng File
+    })),
+    beforeUpload: () => false, // Ngăn không cho tự động upload file
   };
 
   return (
-    <>
-      <Upload {...props}>
-        <Button icon={<UploadOutlined />}>Select File</Button>
-      </Upload>
-      <Button
-        type="primary"
-        onClick={handleUpload}
-        disabled={fileList.length === 0}
-        loading={uploading}
-        style={{ marginTop: 16 }}
-      >
-        {uploading ? "Uploading" : "Start Upload"}
-      </Button>
-    </>
+    <Upload {...props}>
+      <Button icon={<UploadOutlined />}>File đính kèm</Button>
+    </Upload>
   );
 };
 

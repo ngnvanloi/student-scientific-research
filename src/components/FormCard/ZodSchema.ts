@@ -1,9 +1,11 @@
 import { z, ZodType } from "zod";
 import {
+  TFormAddPost,
   TFormLoginData,
   TFormSubmitResearchProjectTabGoalResult,
   TFormSubmitResearchProjectTabOveriew,
 } from "./FormInputsData";
+import { title } from "process";
 
 export const FormLoginSchema: ZodType<TFormLoginData> = z.object({
   email: z.string().email(),
@@ -29,3 +31,10 @@ export const FormTabGoalResultSchema: ZodType<TFormSubmitResearchProjectTabGoalR
     researchProject_Goal: z.string(),
     researchProject_Result: z.string(),
   });
+
+export const FormAddPostSchema: ZodType<TFormAddPost> = z.object({
+  title: z.string(),
+  // content: z.string(),
+  // dateUpload: z.string().date() || z.date(),
+  // filePath: z.any(),
+});

@@ -1,59 +1,53 @@
-import React, { useState } from "react";
+import React from "react";
 import { InboxOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
-import { message, Upload, Button } from "antd";
-import type { GetProp, UploadFile } from "antd";
+import { Upload } from "antd";
 
 interface IProps {
   limit: number;
-  mutiple?: boolean;
-  // upload multi file
-  fileList?: UploadFile[];
-  setFileList?: React.Dispatch<React.SetStateAction<UploadFile[]>>;
-
-  // upload single file
-  setFile?: React.Dispatch<React.SetStateAction<UploadFile<any> | undefined>>;
+  multiple?: boolean;
+  fileList?: File[];
+  setFileList?: React.Dispatch<React.SetStateAction<File[]>>;
+  setFile?: React.Dispatch<React.SetStateAction<File | undefined>>;
   setFilePreview?: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const DragFileUpload = (propss: IProps) => {
+const DragFileUpload: React.FC<IProps> = ({
+  limit,
+  multiple,
+  fileList,
+  setFileList,
+  setFile,
+  setFilePreview,
+}) => {
   const { Dragger } = Upload;
-  const { mutiple, fileList, setFileList, setFilePreview, setFile, limit } =
-    propss;
 
   const props: UploadProps = {
     name: "file",
-    multiple: mutiple,
+    multiple: multiple,
     maxCount: limit,
-    onRemove: (file) => {
-      // // MULTIPLE FILE
-      if (mutiple && mutiple === true && fileList && setFileList) {
-        const index = fileList?.indexOf(file);
-        const newFileList = fileList ? fileList.slice() : [];
-        if (index !== undefined && index !== -1) {
-          newFileList.splice(index, 1);
-        }
-        setFileList?.(newFileList);
+    onRemove: (file: File) => {
+      // Xử lý khi file bị xóa
+      if (multiple && setFileList && fileList) {
+        const newFileList = fileList.filter((item) => item.name !== file.name);
+        setFileList(newFileList);
       }
 
-      // SINGLE FILE
       if (setFile && limit === 1) {
-        setFile?.(undefined);
+        setFile(undefined);
         setFilePreview?.("");
       }
     },
-
-    beforeUpload: (file) => {
+    beforeUpload: (file: File) => {
       // Nếu setFile và setFilePreview được truyền xuống, cập nhật file và preview
       if (setFile && limit === 1) {
         setFile(file);
         setFilePreview?.(file ? URL.createObjectURL(file) : "");
       }
 
-      //Kiểm tra nếu có limit và fileList đã được truyền xuống
+      // Kiểm tra nếu có limit và fileList đã được truyền xuống
       if (fileList && setFileList && limit > 1) {
-        setFileList?.((prevFileList) => {
-          // Nếu số lượng file vượt quá limit, loại bỏ file đầu tiên
+        setFileList((prevFileList) => {
           const updatedFileList = [...(prevFileList || [])];
           if (updatedFileList.length >= limit) {
             updatedFileList.shift(); // Loại bỏ phần tử đầu tiên
@@ -65,27 +59,30 @@ const DragFileUpload = (propss: IProps) => {
 
       return false; // Ngăn không cho tự động upload
     },
-
     onDrop(e) {
       console.log("Dropped files", e.dataTransfer.files);
     },
-    fileList,
+    fileList: fileList?.map((file, index) => ({
+      uid: String(index), // Tạo uid giả để antd nhận diện file
+      name: file.name,
+      status: "done",
+      originFileObj: file, // Gán lại đối tượng File
+    })),
   };
+
   return (
-    <>
-      <Dragger {...props}>
-        <p className="ant-upload-drag-icon">
-          <InboxOutlined />
-        </p>
-        <p className="ant-upload-text">
-          Click or drag file to this area to upload
-        </p>
-        <p className="ant-upload-hint">
-          Support for a single or bulk upload. Strictly prohibited from
-          uploading company data or other banned files.
-        </p>
-      </Dragger>
-    </>
+    <Dragger {...props}>
+      <p className="ant-upload-drag-icon">
+        <InboxOutlined />
+      </p>
+      <p className="ant-upload-text">
+        Click or drag file to this area to upload
+      </p>
+      <p className="ant-upload-hint">
+        Support for a single or bulk upload. Strictly prohibited from uploading
+        company data or other banned files.
+      </p>
+    </Dragger>
   );
 };
 

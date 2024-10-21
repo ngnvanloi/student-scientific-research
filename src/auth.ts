@@ -58,6 +58,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           facultyName: user_profile.data.facultyName,
           internalCode: user_profile.data.internalCode,
           email: credentials.email as string,
+
+          accessToken: res.data.tokenResponse.accessToken,
+          refreshToken: res.data.tokenResponse.refreshToken,
+          expiresAt: res.data.tokenResponse.expires,
         };
 
         console.log("check user", user);
@@ -90,52 +94,53 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // }
       return true;
     },
-    async session({ session, token, user }) {
-      console.log(
-        "authConfig session: " + JSON.stringify([session, token, user], null, 2)
-      );
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          userId: user?.userId, // Sử dụng dấu ? để tránh lỗi khi user undefined
-          accountId: user?.accountId,
-          roleName: user?.roleName,
-          numberPhone: user?.numberPhone,
-          falcutyId: user?.facultyId,
-          facultyName: user?.facultyName,
-          internalCode: user?.internalCode,
-          user: {
-            ...session.user,
-            userId: user?.userId || token.id, // Nếu user undefined, dùng token.id
-            accountId: user?.accountId,
-            roleName: user?.roleName,
-            numberPhone: user?.numberPhone,
-            falcutyId: user?.facultyId,
-            facultyName: user?.facultyName,
-            internalCode: user?.internalCode,
-            email: user?.email, // Thêm email vào session.user
-          },
-        },
-      };
-    },
-    jwt({ token, user, account, session, profile, trigger }) {
-      // console.log(
-      //   "authConfig jwt: " +
-      //     JSON.stringify(
-      //       [token, user, account, session, profile, trigger],
-      //       null,
-      //       2
-      //     )
-      // );
+    async jwt({ token, user, account }) {
+      // Đây là nơi bạn cần gán các giá trị trả về từ authorize()
+      // (như user, accessToken, refreshToken, v.v.) vào token
       if (user) {
-        token.id = user.userId; // Sử dụng userId thay vì id
-        //@ts-expect-error
-        token.access_token = user.access_token;
-        //@ts-expect-error
-        token.branch_token = user.branch_token;
+        token.userId = user.userId;
+        token.accountId = user.accountId;
+        token.name = user.name;
+        token.roleName = user.roleName;
+        token.numberPhone = user.numberPhone;
+        token.facultyId = user.facultyId;
+        token.facultyName = user.facultyName;
+        token.internalCode = user.internalCode;
+        token.email = user.email;
+
+        token.accessToken = user.accessToken;
+        token.refreshToken = user.refreshToken;
+        token.expiresAt = user.expiresAt;
       }
+
       return token;
+    },
+
+    async session({ session, token }) {
+      // lưu ý: session không được tạo ra từ kết quả trả về của hàm authorized() mà phải thông qua token
+      // session callback: Trong callback này, bạn sẽ cần lấy các giá trị từ token và
+      // gán vào session trước khi nó được trả về phía client.
+      session.user.userId = token.userId;
+      session.user.accountId = token.accountId as number;
+      session.user.name = token.name as string;
+      session.user.roleName = token.roleName as string;
+      session.user.numberPhone = token.numberPhone as string;
+      session.user.facultyId = token.facultyId as number;
+      session.user.facultyName = token.facultyName as string;
+      session.user.internalCode = token.internalCode as number | string;
+      session.user.email = token.email as string;
+
+      session.user.accessToken = token.accessToken as string;
+      session.user.refreshToken = token.refreshToken as string;
+      session.user.expiresAt = token.expiresAt as string | number;
+
+      return session;
     },
   },
 });
+
+// NOTE:
+// Cơ chế hoạt động
+// 1. authorize() thực hiện xác thực người dùng, trả về thông tin người dùng tạm thời.
+// 2. jwt() lưu trữ thông tin người dùng vào token JWT.
+// 3. session() trích xuất thông tin từ JWT và gán vào session để sử dụng trên client-side.
