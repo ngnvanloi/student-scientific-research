@@ -19,25 +19,28 @@ export const useLoginMutation = () => {
     onSuccess: (result) => {
       handleOnLoginSuccess(result); // set access token
     },
-    onError: (err) => {},
+    onError: (err) => {
+      console.error("Login failed: ", err);
+    },
   });
 };
 
 export async function login(
   data: LoginParams
 ): Promise<IDataWithTokenResponseFromAPI<Account>> {
-  const response = (await communityRequest)(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Auth/login`,
-    {
-      method: "POST",
-      data,
-    }
-  );
-  console.log(
-    "checking response: ",
-    response.then((response) => console.log(response))
-  );
-  return response as unknown as IDataWithTokenResponseFromAPI<Account>;
+  try {
+    const response = await communityRequest(
+      `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Auth/login`,
+      {
+        method: "POST",
+        data,
+      }
+    );
+    return response as IDataWithTokenResponseFromAPI<Account>;
+  } catch (error) {
+    console.error("Login error: ", error);
+    throw error;
+  }
 }
 
 export function handleOnLoginSuccess(

@@ -27,51 +27,46 @@ export const useCreatePostMutation = () => {
   });
 };
 
-// export async function createNewPost(
-//   data: ParamsCreatePost
-// ): Promise<IDataResponseFromAPI<null>> {
-//   try {
-//     const response = await communityRequest<IDataResponseFromAPI<null>>(
-//       `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Post`,
-//       {
-//         method: "POST",
-//         // headers: {
-//         //   Authorization: `Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwIiwicm9sZSI6ImF1dGhvciIsImV4cCI6MTcyOTUyNzczOCwiaXNzIjoic2VtaW5hci1tYW5hZ2VtZW50LWJlIiwiYXVkIjoic2VtaW5hci1tYW5hZ2VtZW50LWZlIn0.xRo6-C8VgSSGk9wxWPGmBaOwjS8Ep2pORzHIkfOfhVo`, // Lấy token từ nơi lưu trữ
-//         // },
-//         data,
-//       }
-//     );
-//     console.log("Response:", response);
-//     return response;
-//   } catch (error) {
-//     console.error("Error creating post:", error);
-//     throw error;
-//   }
-// }
-
 export async function createNewPost(
-  formData: FormData
+  data: FormData
 ): Promise<IDataResponseFromAPI<null>> {
-  const token =
-    "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJyb2xlIjoib3JnYW5pemVyIiwiZXhwIjoxNzMwNzM4OTM3LCJpc3MiOiJzZW1pbmFyLW1hbmFnZW1lbnQtYmUiLCJhdWQiOiJzZW1pbmFyLW1hbmFnZW1lbnQtZmUifQ.gP177IANhFgVtAOoqWn2Zqwt2cboI1Vt_udB4UWFajU"; // Lấy token từ localStorage hoặc context tùy vào cách bạn lưu trữ
-
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Post`,
-    {
-      method: "POST",
-      headers: {
-        // "Content-Type": " multipart/form-data",
-        Authorization: `Bearer ${token}`,
-        // "Access-Control-Allow-Origin": "*",
-        // "Cache-Control": "no-cache",
-      },
-      body: formData,
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error(`Error: ${response.statusText}`);
+  try {
+    const response = await communityRequest<IDataResponseFromAPI<null>>(
+      `api/Post`,
+      {
+        method: "POST",
+        headers: {},
+        data,
+      }
+    );
+    console.log("Response:", response);
+    return response;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw error;
   }
-
-  return response.json() as Promise<IDataResponseFromAPI<null>>;
 }
+
+// export async function createNewPost(
+//   formData: FormData
+// ): Promise<IDataResponseFromAPI<null>> {
+//   const token =
+//     "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJyb2xlIjoib3JnYW5pemVyIiwiZXhwIjoxNzI5NTcxNDEyLCJpc3MiOiJzZW1pbmFyLW1hbmFnZW1lbnQtYmUiLCJhdWQiOiJzZW1pbmFyLW1hbmFnZW1lbnQtZmUifQ.3TcqSrQDOLrywdshuukRjh2UFZsOHG4xYC8xlUFOzEk"; // Lấy token từ localStorage hoặc context tùy vào cách bạn lưu trữ
+
+//   const response = await fetch(
+//     `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Post`,
+//     {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//       body: formData,
+//     }
+//   );
+
+//   if (!response.ok) {
+//     throw new Error(`Error: ${response.statusText}`);
+//   }
+
+//   return response.json() as Promise<IDataResponseFromAPI<null>>;
+// }

@@ -72,7 +72,7 @@ export default function AppHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { data: session } = useSession();
 
-  // console.log("check session in AppHeader: ", JSON.stringify(session, null, 2));
+  console.log("check session in AppHeader: ", JSON.stringify(session, null, 2));
   return (
     <header className="bg-white">
       <nav

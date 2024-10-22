@@ -1,6 +1,10 @@
 import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { login, LoginParams } from "./hooks-query/queries/use-login-mutation";
+import {
+  login,
+  LoginParams,
+  useLoginMutation,
+} from "./hooks-query/queries/use-login-mutation";
 import { setAuthToken } from "./web-configs/community-api";
 import { getProfile } from "./hooks-query/queries/use-get-user-profile";
 
@@ -28,6 +32,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         };
 
         // logic login
+        // const { mutate, isSuccess, isError, error } = useLoginMutation();
+        // mutate(params, {
+        //   onSuccess: (data) => {
+        //     console.log("Login success with mutation:", data);
+        //   },
+        //   onError: (error) => {
+        //     console.error("Login failed with mutation:", error);
+        //   },
+        // });
         const res = await login(params);
         console.log("Checking res: ", res);
 
