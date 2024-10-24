@@ -53,16 +53,19 @@ const PostCardForAdmin = (props: IProps) => {
   const { post } = props;
 
   return (
-    <article className="mt-5 pt-8 md:pt-0" key={`post${post?.id}`}>
-      <a href={`/post/${post?.id}`}>
+    <article
+      className="mt-5 pt-8 md:pt-0 hover:shadow-lg hover:border transition duration-300 p-3"
+      key={`post${post?.id}`}
+    >
+      <a href={`/posts/${post?.id}`}>
         <span className="block text-gray-400 text-sm">{post?.dateUpLoad}</span>
         <div className="mt-2">
           <h3 className="text-xl text-gray-900 font-semibold hover:underline">
             {post?.title}
           </h3>
-          <p className="text-gray-400 mt-1 leading-relaxed truncate w-48 max-h-60 text-ellipsis">
+          {/* <p className="text-gray-400 mt-1 leading-relaxed truncate w-48 max-h-60 text-ellipsis">
             <div dangerouslySetInnerHTML={{ __html: post?.content ?? "" }} />
-          </p>
+          </p> */}
         </div>
       </a>
     </article>
