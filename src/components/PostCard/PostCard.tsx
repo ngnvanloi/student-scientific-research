@@ -1,5 +1,7 @@
-import { CalendarDaysIcon } from "@heroicons/react/24/outline";
+import { CalendarDaysIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import postIcon from "../../assets/icon/icons8-bell-96.png";
+import { Button, Card, Dropdown, MenuProps, Popover, Space } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 interface IProps {
   post: Post | undefined;
 }
@@ -19,8 +21,7 @@ const PostCard = (props: IProps) => (
             </div>
             <div>
               <span className="block text-sm text-indigo-600 font-medium">
-                {/* {props.post?.organizerID} */}
-                Khoa Công nghệ thông tin
+                {props.post?.organizerName}
               </span>
               <h3 className="text-base text-gray-800 font-semibold mt-1">
                 {props.post?.title}
@@ -36,7 +37,7 @@ const PostCard = (props: IProps) => (
           <div className="text-sm text-gray-600 flex items-center gap-6">
             <span className="flex items-center gap-2">
               <CalendarDaysIcon width={"16px"} />
-              {new Date(props.post?.dateUpload || "").toLocaleDateString()}
+              {props.post?.dateUpLoad}
             </span>
           </div>
         </a>
@@ -44,4 +45,28 @@ const PostCard = (props: IProps) => (
     </ul>
   </section>
 );
+
+interface IProps {
+  post: Post | undefined;
+}
+const PostCardForAdmin = (props: IProps) => {
+  const { post } = props;
+
+  return (
+    <article className="mt-5 pt-8 md:pt-0" key={`post${post?.id}`}>
+      <a href={`/post/${post?.id}`}>
+        <span className="block text-gray-400 text-sm">{post?.dateUpLoad}</span>
+        <div className="mt-2">
+          <h3 className="text-xl text-gray-900 font-semibold hover:underline">
+            {post?.title}
+          </h3>
+          <p className="text-gray-400 mt-1 leading-relaxed truncate w-48 max-h-60 text-ellipsis">
+            <div dangerouslySetInnerHTML={{ __html: post?.content ?? "" }} />
+          </p>
+        </div>
+      </a>
+    </article>
+  );
+};
+export { PostCardForAdmin };
 export default PostCard;

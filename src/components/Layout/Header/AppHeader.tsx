@@ -30,6 +30,7 @@ import { signOut, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { setAuthToken } from "@/web-configs/community-api";
+// import { useApplicationGlobalContext } from "@/providers/app-global-context";
 
 const products = [
   {
@@ -71,8 +72,8 @@ const callsToAction = [
 export default function AppHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { data: session } = useSession();
-
-  console.log("check session in AppHeader: ", JSON.stringify(session, null, 2));
+  // const session = useApplicationGlobalContext();
+  // console.log("check session in AppHeader: ", JSON.stringify(session, null, 2));
   return (
     <header className="bg-white">
       <nav
@@ -198,7 +199,7 @@ export default function AppHeader() {
               href=""
               className="text-sm font-semibold leading-6 text-gray-900"
             >
-              {session.user?.name}
+              {session?.user?.name}
             </Link>
             &nbsp;
             <Link

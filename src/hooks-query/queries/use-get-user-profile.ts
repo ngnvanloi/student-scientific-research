@@ -1,11 +1,12 @@
 import { IDataResponseFromAPI } from "@/types/Meta";
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { queryKeys } from "./query-keys";
 
 // Hook để sử dụng useQuery cho việc lấy thông tin user profile
 export const useGetProfile = () => {
   return useQuery<IDataResponseFromAPI<TUser>, Error>({
-    queryKey: ["userProfile"], // Key dùng để quản lý cache và dữ liệu
+    queryKey: queryKeys.userProfile, // Key dùng để quản lý cache và dữ liệu
     queryFn: getProfile, // Hàm gọi API
   });
 };

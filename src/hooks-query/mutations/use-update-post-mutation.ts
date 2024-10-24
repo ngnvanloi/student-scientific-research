@@ -5,16 +5,21 @@ import { UploadFile } from "antd";
 import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
 
-export type ParamsCreatePost = {
-  title: string;
-  content: string;
-  date: string | Date | undefined;
-  file?: UploadFile;
+export type ParamsUpdatePost = {
+  Title: string;
+  Content: string;
+  DateUpload?: string | Date | undefined;
+  FilePath?: string;
 };
 
-export const useCreatePostMutation = () => {
-  return useMutation<IDataResponseFromAPI<null>, Error, FormData, unknown>({
-    mutationFn: (data) => createNewPost(data),
+export const useUpdatePostMutation = () => {
+  return useMutation<
+    IDataResponseFromAPI<null>,
+    Error,
+    { data: FormData; params: ParamsUpdatePost },
+    unknown
+  >({
+    mutationFn: ({ params, data }) => updatePost(params, data),
     onMutate: () => {},
     onSuccess: (result) => {
       console.log(
@@ -28,27 +33,35 @@ export const useCreatePostMutation = () => {
   });
 };
 
-export async function createNewPost(
+export async function updatePost(
+  params: ParamsUpdatePost,
   data: FormData
 ): Promise<IDataResponseFromAPI<null>> {
   const session = await getSession();
   if (!session) {
     throw new Error("User not authenticated");
   }
+
+  // Token lấy từ session hoặc bất kỳ nơi nào bạn lưu trữ nó
+  const token = session.user?.accessToken || ""; // Điều chỉnh lấy token từ session
+
   console.log("Checking getSession() from Server side: ", session.user);
+
   try {
     const response = await communityRequest<IDataResponseFromAPI<null>>(
-      `api/Post`,
+      `api/Post?Title=${params.Title}&Content=${params.Content}`, //&DateUpload=${"2024-07-21T00:00:00"}&FilePath=${params.FilePath || ""}
       {
-        method: "POST",
-        headers: {},
-        data,
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`, // Truyền token vào header
+        },
+        data, // FormData bao gồm file và nội dung bài viết
       }
     );
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error creating post:", error);
+    console.error("Error updating post:", error);
     throw error;
   }
 }

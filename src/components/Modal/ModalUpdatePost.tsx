@@ -8,25 +8,52 @@ import { FormAddPostSchema } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
 import { Button } from "antd";
 import RichTextEditor from "../RichTextEditor/RichTextEditor";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ClickFileUpload from "../UploadFile/ClickFileUpload";
 import { DatePicker } from "../DatePicker/DatePicker";
-import { useCreatePostMutation } from "@/hooks-query/mutations/use-create-post-mutation";
-import DragFileUpload from "../UploadFile/DragFileUpload";
 import { usePostManagementContext } from "../UseContextProvider/PostManagementContext";
+import { useGetPostDetail } from "@/hooks-query/queries/use-get-post";
+import {
+  ParamsUpdatePost,
+  useUpdatePostMutation,
+} from "@/hooks-query/mutations/use-update-post-mutation";
 
-const ModalAddNewPost = () => {
+interface IProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  postID: number;
+}
+const ModalUpdatePost = (props: IProps) => {
   // STATE
+  const { isOpen, setIsOpen, postID } = props;
   const [content, setContent] = useState<string>("");
   const [file, setFile] = useState<File>();
   const [fileList, setFileList] = useState<File[]>([]);
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const { mutate, isSuccess, isError, error } = useCreatePostMutation();
-  // State để điều khiển modal
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
+  const { mutate, isSuccess, isError, error } = useUpdatePostMutation();
   // USE PROVIDER CONTEXT
   const { setIsChange } = usePostManagementContext();
+
+  // POST DETAILS
+  let { data: post, refetch: refetchData } = useGetPostDetail(postID);
+  console.log("checking post details: ", JSON.stringify(post, null, 2));
+
+  // REFETCH DATA
+  useEffect(() => {
+    if (isOpen && postID > 0) {
+      refetchData();
+    }
+  }, [postID, isOpen, refetchData]);
+  useEffect(() => {
+    if (post) {
+      setContent(post.data.content);
+      setDate(new Date(post.data.dateUpLoad));
+      if (post.data.filePath) {
+        setFile(new File([post.data.filePath], post.data.filePath));
+      }
+    }
+  }, [post]);
+
   // REACT HOOK FORM
   const {
     register,
@@ -46,27 +73,35 @@ const ModalAddNewPost = () => {
 
     // gọi API thêm Post
     const formData = new FormData();
-    formData.append("Title", data.title);
-    formData.append("Content", content);
-    formData.append("DateUpload", new Date("2024-07-21").toISOString());
+    formData.append("id", postID.toString());
     if (file) {
-      formData.append("FilePath", file);
+      formData.append("NewFilePath", file);
     }
-
-    mutate(formData, {
-      onSuccess: () => {
-        alert("Create post successfully");
-        setIsChange(true);
-        setIsOpen(false);
-
-        setContent("");
-        setDate(new Date());
-        setFile(undefined);
+    mutate(
+      {
+        params: {
+          Title: data.title,
+          Content: content,
+          DateUpload: date, // Ngày có thể là chuỗi hoặc Date
+          FilePath: post?.data.filePath, // FilePath nếu có
+        },
+        data: formData, // FormData chứa nội dung cập nhật
       },
-      onError: (error) => {
-        console.error("Lỗi khi xóa bài viết:", error);
-      },
-    });
+      {
+        onSuccess: () => {
+          alert("Update post successfully");
+          setIsChange(true);
+          setIsOpen(false);
+
+          setContent("");
+          setDate(new Date());
+          setFile(undefined);
+        },
+        onError: (error) => {
+          console.error("Lỗi khi cập nhật bài viết:", error);
+        },
+      }
+    );
   };
 
   const onError = (errors: any) => {
@@ -76,16 +111,16 @@ const ModalAddNewPost = () => {
   // RENDER UI
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Dialog.Trigger className="w-32 py-2 shadow-sm rounded-md bg-indigo-600 text-white mt-4 flex items-center justify-center">
+      {/* <Dialog.Trigger className="w-32 py-2 shadow-sm rounded-md bg-indigo-600 text-white mt-4 flex items-center justify-center">
         Thêm bài viết
-      </Dialog.Trigger>
+      </Dialog.Trigger> */}
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 w-full h-full bg-black opacity-40 " />
         <Dialog.Content className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full max-w-4xl mx-auto px-4 ">
           <div className="bg-white rounded-md shadow-lg ">
             <div className="flex items-center justify-between p-4 border-b">
               <Dialog.Title className="text-lg font-medium text-gray-800 ">
-                Tạo mới bài viết
+                Cập nhật bài viết
               </Dialog.Title>
               <Dialog.Close className="p-2 text-gray-400 rounded-md hover:bg-gray-100">
                 <CloseModalIcon />
@@ -141,12 +176,12 @@ const ModalAddNewPost = () => {
                   onClick={handleSubmit(onSubmit, onError)}
                   className="px-6 py-2 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "
                 >
-                  Create
+                  Cập nhật
                 </Button>
               </Dialog.Close>
               <Dialog.Close asChild>
                 <Button className="px-6 py-2 text-gray-800 border rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 ">
-                  Cancel
+                  Hủy
                 </Button>
               </Dialog.Close>
             </div>
@@ -156,4 +191,4 @@ const ModalAddNewPost = () => {
     </Dialog.Root>
   );
 };
-export { ModalAddNewPost };
+export { ModalUpdatePost };

@@ -8,4 +8,7 @@ export const queryKeys = {
 
   posts: ["posts"],
   competitions: ["competitions"],
+  userProfile: ["userProfile"],
+  listPost: ["listPost"],
+  postDetail: ["postDetail"],
 };
