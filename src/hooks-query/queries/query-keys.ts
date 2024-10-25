@@ -11,4 +11,7 @@ export const queryKeys = {
   userProfile: ["userProfile"],
   listPost: ["listPost"],
   postDetail: ["postDetail"],
+  listCompetition: ["listCompetition"],
+  listCompetitionAdmin: ["listCompetitionAdmin"],
+  competitionDetail: ["competitionDetail"],
 };

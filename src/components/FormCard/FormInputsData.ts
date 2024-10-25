@@ -23,3 +23,9 @@ export type TFormAddPost = {
   // dateUpload: string | Date;
   // filePath?: any;
 };
+
+export type TFormAddCompetition = {
+  competitionName: string;
+  description: string;
+  destination: string;
+};

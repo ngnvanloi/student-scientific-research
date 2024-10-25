@@ -5,6 +5,7 @@ import {
   CalendarIcon,
   MapPinIcon,
 } from "@heroicons/react/24/outline";
+import { Fragment } from "react";
 
 interface IProps {
   competition: Competition | undefined;
@@ -41,7 +42,7 @@ const CompetitionCard = (props: IProps) => {
             <div className="mt-4 items-center space-y-4 text-sm sm:flex sm:space-x-4 sm:space-y-0">
               <span className="flex items-center text-gray-500">
                 <BriefcaseIcon width={"18px"} /> &nbsp;
-                {competition?.organizerID}
+                {competition?.organizerName}
               </span>
               <span className="flex items-center text-gray-500">
                 <MapPinIcon width={"18px"} /> &nbsp;
@@ -54,4 +55,33 @@ const CompetitionCard = (props: IProps) => {
     </ul>
   );
 };
+
+const CompetitionCardForAdmin = (props: IProps) => {
+  const { competition } = props;
+  return (
+    <Fragment>
+      <article
+        className="mt-5 hover:shadow-lg hover:border transition duration-300 py-4 px-5 hover:rounded-md"
+        key={`post${competition?.id}`}
+      >
+        <a href={`/competitions/${competition?.id}`}>
+          <span className="block text-gray-400 text-sm">
+            {competition?.dateStart}
+            {competition?.dateEnd}
+          </span>
+          <div className="mt-2">
+            <h3 className="text-xl text-gray-900 font-semibold hover:underline">
+              {competition?.competitionName}
+            </h3>
+            {/* <p className="text-gray-400 mt-1 leading-relaxed truncate w-48 max-h-60 text-ellipsis">
+        <div dangerouslySetInnerHTML={{ __html: post?.content ?? "" }} />
+      </p> */}
+          </div>
+        </a>
+      </article>
+    </Fragment>
+  );
+};
+
+export { CompetitionCardForAdmin };
 export default CompetitionCard;

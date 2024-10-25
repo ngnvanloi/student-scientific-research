@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 
 interface FetchOptions {
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-  data?: object | FormData; // Định dạng data có thể là object hoặc FormData
+  data?: object | FormData | number | string; // Định dạng data có thể là object hoặc FormData
   headers?: Record<string, string>;
   params?: Record<string, object> | null;
   timeout?: number;

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {
   DesktopOutlined,
   FileOutlined,
+  FireOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
@@ -57,13 +58,20 @@ export default function AdminLayout({
       undefined,
       "/admin/post"
     ),
+    getItem(
+      "Quản lý cuộc thi",
+      "3",
+      <FireOutlined />,
+      undefined,
+      "/admin/competition"
+    ),
     getItem("Quản lý cuộc thi", "sub1", <UserOutlined />, [
-      getItem("Thêm", "3", undefined, undefined, "/admin/competition"),
-      getItem("Xóa", "4", undefined, undefined, "/admin/"),
-      getItem("Sửa", "5", undefined, undefined, "/admin/"),
+      getItem("Thêm", "4", undefined, undefined, "/admin/competition"),
+      getItem("Xóa", "5", undefined, undefined, "/admin/"),
+      getItem("Sửa", "6", undefined, undefined, "/admin/"),
     ]),
     getItem("Team", "sub2", <TeamOutlined />, [
-      getItem("Team 1", "6", undefined, undefined, "/admin"),
+      getItem("Team 1", "7", undefined, undefined, "/admin"),
       getItem("Team 2", "8", undefined, undefined, "/admin"),
     ]),
     getItem("Files", "9", <FileOutlined />, undefined, "/admin"),

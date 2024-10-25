@@ -1,5 +1,6 @@
 import { z, ZodType } from "zod";
 import {
+  TFormAddCompetition,
   TFormAddPost,
   TFormLoginData,
   TFormSubmitResearchProjectTabGoalResult,
@@ -37,4 +38,10 @@ export const FormAddPostSchema: ZodType<TFormAddPost> = z.object({
   // content: z.string(),
   // dateUpload: z.string().date() || z.date(),
   // filePath: z.any(),
+});
+
+export const FormAddCompetitonSchema: ZodType<TFormAddCompetition> = z.object({
+  competitionName: z.string(),
+  description: z.string(),
+  destination: z.string(),
 });

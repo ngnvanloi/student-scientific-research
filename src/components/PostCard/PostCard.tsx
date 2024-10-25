@@ -54,7 +54,7 @@ const PostCardForAdmin = (props: IProps) => {
 
   return (
     <article
-      className="mt-5 pt-8 md:pt-0 hover:shadow-lg hover:border transition duration-300 p-3"
+      className="mt-5 hover:shadow-lg hover:border transition duration-300 py-4 px-5 hover:rounded-md"
       key={`post${post?.id}`}
     >
       <a href={`/posts/${post?.id}`}>

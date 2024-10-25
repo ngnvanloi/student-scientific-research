@@ -1,9 +1,11 @@
 type Competition = {
   id: number;
   competitionName: string;
+  dateStart: string;
+  dateEnd: string;
   description: string;
   destination: string;
-  dateStart: Date;
-  dateEnd: Date;
-  organizerID: number;
+  organizerId: number;
+  organizerName: string;
+  status: string;
 };
