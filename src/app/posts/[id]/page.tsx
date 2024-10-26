@@ -13,6 +13,7 @@ import PreviewPDFBookmark from "@/components/PreviewPDF/PreviewPDFBookmark";
 const BlogDetailPage = ({ params }: { params: { id: number } }) => {
   const { id } = params;
   let { data: post, refetch: refetchData } = useGetPostDetail(id);
+  console.log("checking post details: ", JSON.stringify(post, null, 2));
   return (
     <>
       <Link

@@ -165,19 +165,19 @@ export default function AppHeader() {
             Nộp bài
           </Link>
           <Link
-            href="posts"
+            href="/posts"
             className="text-sm font-semibold leading-6 text-gray-900"
           >
             Bài viết
           </Link>
           <Link
-            href="competitions"
+            href="/competitions"
             className="text-sm font-semibold leading-6 text-gray-900"
           >
             Cuộc thi
           </Link>
           <Link
-            href="#"
+            href="/"
             className="text-sm font-semibold leading-6 text-gray-900"
           >
             Nghiệm thu
@@ -187,7 +187,7 @@ export default function AppHeader() {
         {!session ? (
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <Link
-              href="login"
+              href="/login"
               className="text-sm font-semibold leading-6 text-gray-900"
             >
               Đăng nhập <span aria-hidden="true">&rarr;</span>

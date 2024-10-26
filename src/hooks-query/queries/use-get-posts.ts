@@ -24,7 +24,7 @@ export async function GetListPost(
   param: ParamsGetListPost
 ): Promise<IDataResponseFromAPI<IListDataResponseFromAPI<Post[]>>> {
   const response = (await communityRequest)(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Post/organizer?index=${param.index}&pageSize=${param.pageSize}`,
+    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Post/all?index=${param.index}&pageSize=${param.pageSize}`,
     {
       method: "GET",
     }

@@ -2,10 +2,13 @@
 import React, { useState } from "react";
 import {
   AppstoreAddOutlined,
+  BellOutlined,
   CarryOutOutlined,
   CloudServerOutlined,
+  CommentOutlined,
   FileTextOutlined,
   FireOutlined,
+  Loading3QuartersOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
@@ -56,55 +59,31 @@ export default function AdminLayout({
   }
 
   const items: MenuItem[] = [
-    getItem("Tổng quan", "1", <PieChartOutlined />, undefined, "/admin"),
-    getItem(
-      "Quản lý bài viết",
-      "2",
-      <FileTextOutlined />,
-      undefined,
-      "/admin/post"
-    ),
-    getItem(
-      "Quản lý cuộc thi",
-      "3",
-      <FireOutlined />,
-      undefined,
-      "/admin/competition"
-    ),
-    getItem("Quản lý quy trình phản biện", "sub1", <ReconciliationOutlined />, [
-      getItem(
-        "Thành lập hội đồng phản biện",
-        "4",
-        <SolutionOutlined />,
-        undefined,
-        "/admin/competition"
-      ),
-      getItem(
-        "Quản lý tình trạng đề tài",
-        "5",
-        <CarryOutOutlined />,
-        undefined,
-        "/admin/"
-      ),
-      getItem("Khác", "6", <AppstoreAddOutlined />, undefined, "/admin/"),
+    getItem("Tổng quan", "1", <PieChartOutlined />, undefined, "/author"),
+    getItem("Quản lý bài báo", "2", <FileTextOutlined />, [
+      getItem("Nộp bài báo", "3", <TrophyOutlined />, undefined, "#"),
+      getItem("Bài báo của tôi", "4", <CommentOutlined />, undefined, "#"),
     ]),
-    getItem("Quản lý quy trình nghiệm thu", "sub2", <CloudServerOutlined />, [
+    getItem("Đề tài của tôi", "5", <ReconciliationOutlined />, [
+      getItem("Đề tài đã công bố", "6", <TrophyOutlined />, undefined, "#"),
+      getItem("Đề tài chờ phản biện", "7", <CommentOutlined />, undefined, "#"),
       getItem(
-        "Đề tài đang nghiệm thu",
-        "7",
-        <SignatureOutlined />,
-        undefined,
-        "/admin"
-      ),
-      getItem(
-        "Đề tài đã xuất bản",
+        "Đề tài chờ nghiệm thu",
         "8",
-        <TrophyOutlined />,
+        <Loading3QuartersOutlined />,
         undefined,
-        "/admin"
+        "#"
       ),
     ]),
-    getItem("Quản lý tài khoản", "9", <UserOutlined />, undefined, "/admin"),
+    getItem(
+      "Đề tài đang nghiệm thu",
+      "9",
+      <CloudServerOutlined />,
+      undefined,
+      "#"
+    ),
+    getItem("Thông báo", "10", <BellOutlined />, undefined, "#"),
+    getItem("Quản lý tài khoản", "11", <UserOutlined />, undefined, "#"),
   ];
 
   return (

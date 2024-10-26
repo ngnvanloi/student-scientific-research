@@ -8,12 +8,17 @@ import { getSession } from "next-auth/react";
 export type ParamsCreatePost = {
   title: string;
   content: string;
-  date: string | Date | undefined;
-  file?: UploadFile;
+  dateUpload: string | Date | undefined;
+  filePath?: string;
 };
 
 export const useCreatePostMutation = () => {
-  return useMutation<IDataResponseFromAPI<null>, Error, FormData, unknown>({
+  return useMutation<
+    IDataResponseFromAPI<null>,
+    Error,
+    ParamsCreatePost,
+    unknown
+  >({
     mutationFn: (data) => createNewPost(data),
     onMutate: () => {},
     onSuccess: (result) => {
@@ -29,7 +34,7 @@ export const useCreatePostMutation = () => {
 };
 
 export async function createNewPost(
-  data: FormData
+  data: ParamsCreatePost
 ): Promise<IDataResponseFromAPI<null>> {
   const session = await getSession();
   if (!session) {

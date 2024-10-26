@@ -2,10 +2,13 @@
 import React, { useState } from "react";
 import {
   AppstoreAddOutlined,
+  BellOutlined,
   CarryOutOutlined,
   CloudServerOutlined,
+  CommentOutlined,
   FileTextOutlined,
   FireOutlined,
+  Loading3QuartersOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
@@ -56,55 +59,17 @@ export default function AdminLayout({
   }
 
   const items: MenuItem[] = [
-    getItem("Tổng quan", "1", <PieChartOutlined />, undefined, "/admin"),
+    getItem("Tổng quan", "1", <PieChartOutlined />, undefined, "/reviewer"),
+    getItem("Hội đồng phản biện", "2", <FileTextOutlined />, undefined, "#"),
     getItem(
-      "Quản lý bài viết",
-      "2",
-      <FileTextOutlined />,
-      undefined,
-      "/admin/post"
-    ),
-    getItem(
-      "Quản lý cuộc thi",
+      "Đề tài chờ phản biện",
       "3",
-      <FireOutlined />,
+      <ReconciliationOutlined />,
       undefined,
-      "/admin/competition"
+      "#"
     ),
-    getItem("Quản lý quy trình phản biện", "sub1", <ReconciliationOutlined />, [
-      getItem(
-        "Thành lập hội đồng phản biện",
-        "4",
-        <SolutionOutlined />,
-        undefined,
-        "/admin/competition"
-      ),
-      getItem(
-        "Quản lý tình trạng đề tài",
-        "5",
-        <CarryOutOutlined />,
-        undefined,
-        "/admin/"
-      ),
-      getItem("Khác", "6", <AppstoreAddOutlined />, undefined, "/admin/"),
-    ]),
-    getItem("Quản lý quy trình nghiệm thu", "sub2", <CloudServerOutlined />, [
-      getItem(
-        "Đề tài đang nghiệm thu",
-        "7",
-        <SignatureOutlined />,
-        undefined,
-        "/admin"
-      ),
-      getItem(
-        "Đề tài đã xuất bản",
-        "8",
-        <TrophyOutlined />,
-        undefined,
-        "/admin"
-      ),
-    ]),
-    getItem("Quản lý tài khoản", "9", <UserOutlined />, undefined, "/admin"),
+    getItem("Thông báo", "4", <BellOutlined />, undefined, "#"),
+    getItem("Quản lý tài khoản", "5", <UserOutlined />, undefined, "#"),
   ];
 
   return (

@@ -11,17 +11,29 @@ import RichTextEditor from "../RichTextEditor/RichTextEditor";
 import React, { useState } from "react";
 import ClickFileUpload from "../UploadFile/ClickFileUpload";
 import { DatePicker } from "../DatePicker/DatePicker";
-import { useCreatePostMutation } from "@/hooks-query/mutations/use-create-post-mutation";
+import {
+  ParamsCreatePost,
+  useCreatePostMutation,
+} from "@/hooks-query/mutations/use-create-post-mutation";
 import DragFileUpload from "../UploadFile/DragFileUpload";
 import { usePostManagementContext } from "../UseContextProvider/PostManagementContext";
+import { useUploadFileMutation } from "@/hooks-query/mutations/use-upload-file-mutation";
+import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-firebase";
+import { ParamsRegisterCompetiton } from "@/hooks-query/mutations/use-register-competition";
 
 const ModalAddNewPost = () => {
   // STATE
   const [content, setContent] = useState<string>("");
   const [file, setFile] = useState<File>();
-  const [fileList, setFileList] = useState<File[]>([]);
   const [date, setDate] = useState<Date | undefined>(new Date());
+
   const { mutate, isSuccess, isError, error } = useCreatePostMutation();
+  const {
+    mutate: fileMutation,
+    isSuccess: fileIsSuccess,
+    isError: fileIsError,
+    error: fileError,
+  } = useUploadFileMutation();
   // State để điều khiển modal
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -39,32 +51,41 @@ const ModalAddNewPost = () => {
 
   // HANDLE LOGIC
   const onSubmit = (data: TFormAddPost) => {
-    // console.log("Check title: ", JSON.stringify(data.title));
-    // console.log("Check file: ", JSON.stringify(fileList[0]));
-    // console.log("Check content: ", content);
-    // console.log("Check date: ", date);
-
-    // gọi API thêm Post
-    const formData = new FormData();
-    formData.append("Title", data.title);
-    formData.append("Content", content);
-    formData.append("DateUpload", new Date("2024-07-21").toISOString());
+    const formDataUploadFile = new FormData();
     if (file) {
-      formData.append("FilePath", file);
+      formDataUploadFile.append("File", file);
     }
+    formDataUploadFile.append(
+      "FolderName",
+      FolderNameUploadFirebase.PostFolder
+    );
+    fileMutation(formDataUploadFile, {
+      onSuccess: (result) => {
+        alert("Upload file successfully");
+        // gọi API thêm Post
+        let bodyRequest: ParamsCreatePost = {
+          title: data.title,
+          content: content,
+          dateUpload: date?.toISOString(),
+          filePath: result.data,
+        };
+        mutate(bodyRequest, {
+          onSuccess: () => {
+            alert("Create post successfully");
+            setIsChange(true);
+            setIsOpen(false);
 
-    mutate(formData, {
-      onSuccess: () => {
-        alert("Create post successfully");
-        setIsChange(true);
-        setIsOpen(false);
-
-        setContent("");
-        setDate(new Date());
-        setFile(undefined);
+            setContent("");
+            setDate(new Date());
+            setFile(undefined);
+          },
+          onError: (error) => {
+            console.error("Lỗi khi xóa bài viết:", error);
+          },
+        });
       },
       onError: (error) => {
-        console.error("Lỗi khi xóa bài viết:", error);
+        console.error("Lỗi khi upload file:", error);
       },
     });
   };

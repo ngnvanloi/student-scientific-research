@@ -44,7 +44,7 @@ const ModalDeleteCompetition = (props: IProps) => {
   const handleOnDelete = () => {
     deletePostMutation.mutate(competitionID, {
       onSuccess: () => {
-        console.log("Delete competition thành công");
+        alert("Delete competition thành công");
         setIsOpen(false);
         setIsChange(true);
       },
