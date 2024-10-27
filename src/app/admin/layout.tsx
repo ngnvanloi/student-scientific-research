@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import {
   AppstoreAddOutlined,
+  BulbOutlined,
   CarryOutOutlined,
   CloudServerOutlined,
   FileTextOutlined,
@@ -10,6 +11,7 @@ import {
   MenuUnfoldOutlined,
   PieChartOutlined,
   ReconciliationOutlined,
+  SafetyCertificateOutlined,
   SignatureOutlined,
   SolutionOutlined,
   TeamOutlined,
@@ -67,26 +69,32 @@ export default function AdminLayout({
     getItem(
       "Quản lý cuộc thi",
       "3",
-      <FireOutlined />,
+      <TrophyOutlined />,
       undefined,
       "/admin/competition"
     ),
     getItem("Quản lý quy trình phản biện", "sub1", <ReconciliationOutlined />, [
       getItem(
-        "Thành lập hội đồng phản biện",
+        "Đề tài chờ phê duyệt",
         "4",
+        <BulbOutlined />,
+        undefined,
+        "/admin/pending-approval-research-topic"
+      ),
+      getItem(
+        "Thành lập hội đồng phản biện",
+        "5",
         <SolutionOutlined />,
         undefined,
         "/admin/competition"
       ),
       getItem(
         "Quản lý tình trạng đề tài",
-        "5",
+        "6",
         <CarryOutOutlined />,
         undefined,
         "/admin/"
       ),
-      getItem("Khác", "6", <AppstoreAddOutlined />, undefined, "/admin/"),
     ]),
     getItem("Quản lý quy trình nghiệm thu", "sub2", <CloudServerOutlined />, [
       getItem(
@@ -99,7 +107,7 @@ export default function AdminLayout({
       getItem(
         "Đề tài đã xuất bản",
         "8",
-        <TrophyOutlined />,
+        <SafetyCertificateOutlined />,
         undefined,
         "/admin"
       ),

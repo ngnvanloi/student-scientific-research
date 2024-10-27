@@ -14,4 +14,5 @@ export const queryKeys = {
   listCompetition: ["listCompetition"],
   listCompetitionAdmin: ["listCompetitionAdmin"],
   competitionDetail: ["competitionDetail"],
+  listRegistrationForm: ["listRegistrationForm"],
 };

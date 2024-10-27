@@ -39,8 +39,9 @@ const CompetitionListForAdmin = () => {
   const { isChange, setIsChange } = useCompetitionManagementContext();
 
   // REACT QUERY - GET POSTS
-  const { data, refetch: refetchCompetitions } = useGetListCompetition(params);
-  const listCompetitions: Competition[] = data?.data.items;
+  const { data: listCompetitions, refetch: refetchCompetitions } =
+    useGetListCompetition(params);
+  // const listCompetitions: Competition[] = data?.data.items;
 
   // REFETCH POSTS
   useEffect(() => {
@@ -52,7 +53,7 @@ const CompetitionListForAdmin = () => {
     <section className="mt-12 max-w-screen-lg mx-auto px-4 md:px-8">
       <div>
         <h1 className="text-gray-800 text-3xl font-semibold">
-          {listCompetitions?.map((item, index) => {
+          {listCompetitions?.data.items?.map((item, index) => {
             return (
               <CompetitionContextMenu competitionID={item.id}>
                 <CompetitionCardForAdmin competition={item} key={index} />

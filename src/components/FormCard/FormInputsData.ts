@@ -12,6 +12,10 @@ export type TFormSubmitResearchProjectTabOveriew = {
   competitionID: number;
 };
 
+export type TFormApprovalRegistration = {
+  approvalStatus: number | string;
+};
+
 export type TFormSubmitResearchProjectTabGoalResult = {
   researchProject_Goal: string;
   researchProject_Result: string;

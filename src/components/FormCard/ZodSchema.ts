@@ -2,6 +2,7 @@ import { z, ZodType } from "zod";
 import {
   TFormAddCompetition,
   TFormAddPost,
+  TFormApprovalRegistration,
   TFormLoginData,
   TFormSubmitResearchProjectTabGoalResult,
   TFormSubmitResearchProjectTabOveriew,
@@ -26,7 +27,10 @@ export const FormTabOverviewSchema: ZodType<TFormSubmitResearchProjectTabOveriew
     disciplineID: z.string(),
     competitionID: z.number(),
   });
-
+export const FormApprovalRegistration: ZodType<TFormApprovalRegistration> =
+  z.object({
+    approvalStatus: z.string() || z.number(),
+  });
 export const FormTabGoalResultSchema: ZodType<TFormSubmitResearchProjectTabGoalResult> =
   z.object({
     researchProject_Goal: z.string(),

@@ -12,7 +12,7 @@ export type ParamsGetListCompetition = {
 // Hook để sử dụng useQuery cho việc lấy danh sách cuộc thi
 export const useGetListCompetition = (params: ParamsGetListCompetition) => {
   return useQuery<
-    IDataResponseFromAPI<IListDataResponseFromAPI<Competition[]>>,
+    IDataResponseFromAPI<IListDataResponseFromAPI<Competition>>,
     Error
   >({
     queryKey: queryKeys.listCompetition,
@@ -22,7 +22,7 @@ export const useGetListCompetition = (params: ParamsGetListCompetition) => {
 
 export async function GetListCompetition(
   param: ParamsGetListCompetition
-): Promise<IDataResponseFromAPI<IListDataResponseFromAPI<Competition[]>>> {
+): Promise<IDataResponseFromAPI<IListDataResponseFromAPI<Competition>>> {
   const response = (await communityRequest)(
     `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/competitions/all?index=${param.index}&pageSize=${param.pageSize}`,
     {
@@ -30,7 +30,7 @@ export async function GetListCompetition(
     }
   );
   return response as unknown as IDataResponseFromAPI<
-    IListDataResponseFromAPI<Competition[]>
+    IListDataResponseFromAPI<Competition>
   >;
 }
 
@@ -40,7 +40,7 @@ export const useGetListCompetitionAdmin = (
   params: ParamsGetListCompetition
 ) => {
   return useQuery<
-    IDataResponseFromAPI<IListDataResponseFromAPI<Competition[]>>,
+    IDataResponseFromAPI<IListDataResponseFromAPI<Competition>>,
     Error
   >({
     queryKey: queryKeys.listCompetitionAdmin,
@@ -50,7 +50,7 @@ export const useGetListCompetitionAdmin = (
 
 export async function GetListCompetitionaAdmin(
   param: ParamsGetListCompetition
-): Promise<IDataResponseFromAPI<IListDataResponseFromAPI<Competition[]>>> {
+): Promise<IDataResponseFromAPI<IListDataResponseFromAPI<Competition>>> {
   const response = (await communityRequest)(
     `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/competitions/organizer?index=${param.index}&pageSize=${param.pageSize}`,
     {
@@ -58,6 +58,6 @@ export async function GetListCompetitionaAdmin(
     }
   );
   return response as unknown as IDataResponseFromAPI<
-    IListDataResponseFromAPI<Competition[]>
+    IListDataResponseFromAPI<Competition>
   >;
 }

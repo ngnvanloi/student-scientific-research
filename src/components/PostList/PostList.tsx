@@ -20,7 +20,6 @@ const PostList = () => {
   };
   const { data: posts, refetch: refetchPosts } = useGetListPost(params);
 
-  const listPost: Post[] = posts?.data.items;
   return (
     <div className="max-w-screen-lg mx-auto px-4 md:px-8 pb-28">
       <div className="max-w-md">
@@ -32,7 +31,7 @@ const PostList = () => {
           help us in our missions and to grow up.
         </p>
       </div>
-      {listPost?.map((post, index) => {
+      {posts?.data.items?.map((post, index) => {
         return (
           <div>
             <PostCard post={post} key={index} />
@@ -55,7 +54,6 @@ const PostListForAdmin = () => {
 
   // REACT QUERY - GET POSTS
   const { data, refetch } = useGetListPost(params);
-  const listPost: Post[] = data?.data.items;
 
   // REFETCH POSTS
   useEffect(() => {
@@ -66,7 +64,7 @@ const PostListForAdmin = () => {
   return (
     <div className="w-full mt-3">
       <div className="mt-12 grid gap-4 divide-y md:grid-cols-2 md:divide-y-0 lg:grid-cols-3">
-        {listPost?.map((item, idx) => (
+        {data?.data.items?.map((item, idx) => (
           <PostContextMenu postID={item.id}>
             <PostCardForAdmin key={idx} post={item} />
           </PostContextMenu>

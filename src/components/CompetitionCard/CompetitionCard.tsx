@@ -105,7 +105,15 @@ const CompetitionCard = (props: IProps) => {
                   } else if (isRegistrationPending(competition?.id)) {
                     return <p>Đang chờ phê duyệt</p>;
                   } else if (isRegistrationReject(competition?.id)) {
-                    return <p>Đăng kí thất bại</p>;
+                    return (
+                      <Button
+                        variant="filled"
+                        className=""
+                        onClick={() => handleRegistrationForm(competition?.id)}
+                      >
+                        Thử đăng kí lại
+                      </Button>
+                    );
                   } else if (isRegistrationApproved(competition?.id)) {
                     return <p>Nộp bài</p>;
                   } else {

@@ -54,11 +54,12 @@ const ModalAddNewPost = () => {
     const formDataUploadFile = new FormData();
     if (file) {
       formDataUploadFile.append("File", file);
+      formDataUploadFile.append(
+        "FolderName",
+        FolderNameUploadFirebase.PostFolder
+      );
     }
-    formDataUploadFile.append(
-      "FolderName",
-      FolderNameUploadFirebase.PostFolder
-    );
+
     fileMutation(formDataUploadFile, {
       onSuccess: (result) => {
         alert("Upload file successfully");
