@@ -78,6 +78,11 @@ export interface IDataResponseFromAPI<T> {
   statusCode: number;
   code: string;
 }
+export interface IResponseFromAPI<> {
+  message: string;
+  statusCode: number;
+  code: string;
+}
 export interface IListDataResponseFromAPI<T> {
   items: T[];
   pageNumber: number;
@@ -86,6 +91,12 @@ export interface IListDataResponseFromAPI<T> {
   pageSize: number;
   hasPreviousPage: boolean;
   hasNextPage: boolean;
+}
+export interface IDataRetrievedResponseFromAPI<T> {
+  data: T[];
+  message: string;
+  statusCode: number;
+  code: string;
 }
 export interface IListPostResponseFromAPI<T> {}
 // ==========

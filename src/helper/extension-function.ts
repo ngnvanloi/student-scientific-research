@@ -8,3 +8,20 @@ export function isCurrentDateInRange(
 
   return currentDate >= start && currentDate <= end;
 }
+
+export function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+
+  // Lấy ngày, tháng, và năm
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Tháng bắt đầu từ 0 nên cần +1
+  const year = date.getFullYear();
+
+  return `${day}-${month}-${year}`;
+}
+
+export function countUnreadNotifications(
+  data: Array<{ status: boolean }>
+): number {
+  return data.filter((item) => item.status === false).length;
+}

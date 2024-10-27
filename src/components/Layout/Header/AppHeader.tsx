@@ -30,6 +30,8 @@ import { signOut, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { setAuthToken } from "@/web-configs/community-api";
+import { NotificationBadge } from "@/components/ShowNotification/NotificationBadge";
+import { MyAccount } from "../MyAccount/MyAccount";
 // import { useApplicationGlobalContext } from "@/providers/app-global-context";
 
 const products = [
@@ -195,23 +197,9 @@ export default function AppHeader() {
           </div>
         ) : (
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <Link
-              href=""
-              className="text-sm font-semibold leading-6 text-gray-900"
-            >
-              {session?.user?.name}
-            </Link>
+            <MyAccount userName={session?.user?.name} />
             &nbsp;
-            <Link
-              href=""
-              className="text-sm font-semibold leading-6 text-gray-900 underline cursor-pointer"
-              onClick={() => {
-                signOut();
-                setAuthToken(undefined);
-              }}
-            >
-              Sign Out
-            </Link>
+            <NotificationBadge />
             &nbsp;
           </div>
         )}

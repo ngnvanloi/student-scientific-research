@@ -90,7 +90,7 @@ const CompetitionCard = (props: IProps) => {
                     !isCompetitionIdPresent(competition?.id) &&
                     isCurrentDateInRange(
                       competition?.dateStart,
-                      competition?.dateEnd
+                      competition?.dateEndSubmit
                     )
                   ) {
                     return (

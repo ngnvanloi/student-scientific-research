@@ -3,6 +3,7 @@ type Competition = {
   competitionName: string;
   dateStart: string;
   dateEnd: string;
+  dateEndSubmit: string;
   description: string;
   destination: string;
   organizerId: number;

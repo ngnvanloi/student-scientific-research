@@ -5,6 +5,7 @@ import CompetitionCard, {
 import {
   ParamsGetListCompetition,
   useGetListCompetition,
+  useGetListCompetitionAdmin,
 } from "@/hooks-query/queries/use-get-competitions";
 import { CompetitionContextMenu } from "../ContextMenu/ContextMenu";
 import { useEffect } from "react";
@@ -40,7 +41,7 @@ const CompetitionListForAdmin = () => {
 
   // REACT QUERY - GET POSTS
   const { data: listCompetitions, refetch: refetchCompetitions } =
-    useGetListCompetition(params);
+    useGetListCompetitionAdmin(params);
   // const listCompetitions: Competition[] = data?.data.items;
 
   // REFETCH POSTS

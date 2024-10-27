@@ -30,6 +30,9 @@ const ModalAddNewCompetition = () => {
   const [fileList, setFileList] = useState<File[]>([]);
   const [dateStart, setDateStart] = useState<Date | undefined>(new Date());
   const [dateEnd, setDateEnd] = useState<Date | undefined>(new Date());
+  const [dateEndSubmit, setDateEndSubmit] = useState<Date | undefined>(
+    new Date()
+  );
   const { mutate, isSuccess, isError, error } = useCreateCompetitionMutation();
   // State để điều khiển modal
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -56,6 +59,7 @@ const ModalAddNewCompetition = () => {
       competitionName: data.competitionName,
       dateStart: dateStart?.toISOString(),
       dateEnd: dateEnd?.toISOString(),
+      dateEndSubmit: dateEndSubmit?.toISOString(),
       description: data.description,
       destination: data.destination,
     };
@@ -99,18 +103,24 @@ const ModalAddNewCompetition = () => {
               </Dialog.Close>
             </div>
             <Dialog.Description className="space-y-2 p-4 mt-3 text-[15.5px] leading-relaxed text-gray-500">
-              <div className="flex gap-10">
-                <div>
+              <div className="grid grid-cols-3 gap-5">
+                <div className="basis-1/3">
                   <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                     Ngày bắt đầu
                   </label>
                   <DatePicker date={dateStart} setDate={setDateStart} />
                 </div>
-                <div>
+                <div className="basis-1/3">
                   <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                     Ngày kết thúc
                   </label>
                   <DatePicker date={dateEnd} setDate={setDateEnd} />
+                </div>
+                <div className="basis-1/3">
+                  <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
+                    Hạn chốt nộp đề tài
+                  </label>
+                  <DatePicker date={dateEndSubmit} setDate={setDateEndSubmit} />
                 </div>
               </div>
               <div>

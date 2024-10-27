@@ -9,6 +9,7 @@ export type ParamsCreateCompetition = {
   competitionName: string;
   dateStart: string | undefined;
   dateEnd: string | undefined;
+  dateEndSubmit: string | undefined;
   description: string;
   destination: string;
 };
