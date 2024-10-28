@@ -61,7 +61,13 @@ export default function AdminLayout({
   const items: MenuItem[] = [
     getItem("Tổng quan", "1", <PieChartOutlined />, undefined, "/author"),
     getItem("Quản lý bài báo", "2", <FileTextOutlined />, [
-      getItem("Nộp bài báo", "3", <TrophyOutlined />, undefined, "#"),
+      getItem(
+        "Nộp bài báo",
+        "3",
+        <TrophyOutlined />,
+        undefined,
+        "/author/submit-article"
+      ),
       getItem("Bài báo của tôi", "4", <CommentOutlined />, undefined, "#"),
     ]),
     getItem("Đề tài của tôi", "5", <ReconciliationOutlined />, [

@@ -94,7 +94,7 @@ export interface IListDataResponseFromAPI<T> {
 }
 export interface IDataRetrievedResponseFromAPI<T> {
   data: T[];
-  message: string;
+  message?: string;
   statusCode: number;
   code: string;
 }

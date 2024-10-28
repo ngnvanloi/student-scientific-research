@@ -16,4 +16,5 @@ export const queryKeys = {
   competitionDetail: ["competitionDetail"],
   listRegistrationForm: ["listRegistrationForm"],
   listNotification: ["listNotification"],
+  listDiscipline: ["listDiscipline"],
 };

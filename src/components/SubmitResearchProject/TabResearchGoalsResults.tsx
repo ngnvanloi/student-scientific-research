@@ -30,18 +30,23 @@ const TabResearchGoalsResults = (props: IProps) => {
     <div>
       <div className="h-[200px]">
         <h4 className="py-2 font-bold">Mục tiêu đề tài</h4>
-        <RichTextEditor
-          content={researchProject_Goal || ""}
-          setContent={setTaget}
-        />
+
+        <div className="max-h-[300px] overflow-auto border-b border-b-[#ccc] shadow-inner">
+          <RichTextEditor
+            content={researchProject_Goal || ""}
+            setContent={setTaget}
+          />
+        </div>
       </div>
 
       <div className="h-[200px] mt-[100px]">
         <h4 className="py-2 font-bold">Kết quả đạt được</h4>
-        <RichTextEditor
-          content={researchProject_Result || ""}
-          setContent={setAchievedResult}
-        />
+        <div className="max-h-[300px] overflow-auto border-b border-b-[#ccc] shadow-inner">
+          <RichTextEditor
+            content={researchProject_Result || ""}
+            setContent={setAchievedResult}
+          />
+        </div>
       </div>
 
       <Button onClick={() => onSubmit()}>Next step</Button>

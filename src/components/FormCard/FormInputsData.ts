@@ -12,6 +12,15 @@ export type TFormSubmitResearchProjectTabOveriew = {
   competitionID: number;
 };
 
+export type TFormSubmitArticle = {
+  title?: string;
+  description?: string;
+  keywords?: string[];
+  filePath?: string;
+  dateUpload?: string | Date;
+  disciplineId?: number | string;
+};
+
 export type TFormApprovalRegistration = {
   approvalStatus: number | string;
 };

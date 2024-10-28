@@ -144,10 +144,12 @@ const ModalAddNewPost = () => {
                 <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                   Nội dung bài viết
                 </label>
-                <RichTextEditor
-                  content={content || ""}
-                  setContent={setContent}
-                />
+                <div className="max-h-[300px] overflow-auto border-b border-b-[#ccc] shadow-inner">
+                  <RichTextEditor
+                    content={content || ""}
+                    setContent={setContent}
+                  />
+                </div>
               </div>
               <div>
                 <ClickFileUpload

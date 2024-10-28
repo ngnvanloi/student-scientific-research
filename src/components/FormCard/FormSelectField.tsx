@@ -2,7 +2,7 @@ import { FieldError, UseFormRegister } from "react-hook-form";
 import React from "react";
 import { classNames } from "@react-pdf-viewer/core";
 
-type SelectItem = {
+export type SelectItem = {
   id: string | number; // 'id' của từng item
   name: string; // Tên hiển thị của item
 };
