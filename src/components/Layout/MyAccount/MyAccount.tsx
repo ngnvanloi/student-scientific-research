@@ -13,6 +13,7 @@ import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import {
   ArrowRightStartOnRectangleIcon,
+  ChevronDownIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 
@@ -24,12 +25,13 @@ export function MyAccount(props: IProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="text-sm font-semibold leading-6 text-gray-900 hover:cursor-pointer">
+        <div className="text-sm font-semibold leading-6 text-gray-900 hover:cursor-pointer flex gap-1 hover:underline">
           {userName}
+          <ChevronDownIcon width={18} />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>

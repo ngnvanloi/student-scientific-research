@@ -6,7 +6,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import imgNotiType from "../../assets/icon/icons8-article-100.png";
+import imgNotiTypeArticle from "../../assets/icon/icons8-article-100.png";
+import imgNotiTypeRegis from "../../assets/icon/icons8-regis-100.png";
+import imgNotiTypeAssignment from "../../assets/icon/icons8-task-100.png";
+import imgNotiTypeReview from "../../assets/icon/icons8-communication-100.png";
+import imgNotiTypeTopic from "../../assets/icon/icons8-submit-document-100.png";
+
 import {
   ArchiveBoxXMarkIcon,
   EllipsisHorizontalIcon,
@@ -88,7 +93,19 @@ const NotificationCard = (props: IProps) => {
     >
       {/* <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" /> */}
       <div className="">
-        <img src={imgNotiType.src} width={30} />
+        {(() => {
+          if (notification.notificationTypeId === 1) {
+            return <img src={imgNotiTypeArticle.src} width={30} />;
+          } else if (notification.notificationTypeId === 2) {
+            return <img src={imgNotiTypeTopic.src} width={30} />;
+          } else if (notification.notificationTypeId === 3) {
+            return <img src={imgNotiTypeReview.src} width={30} />;
+          } else if (notification.notificationTypeId === 4) {
+            return <img src={imgNotiTypeRegis.src} width={30} />;
+          } else if (notification.notificationTypeId === 5) {
+            return <img src={imgNotiTypeAssignment.src} width={30} />;
+          }
+        })()}
       </div>
       <div className=" flex-1">
         <p className="text-sm font-medium leading-none">

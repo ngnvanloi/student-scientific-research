@@ -25,10 +25,10 @@ import { countUnreadNotifications } from "@/helper/extension-function";
 export function NotificationBadge() {
   const [isChanged, setIsChanged] = useState<boolean>(false);
   const { data: listNotification, refetch } = useGetListNotification();
-  console.log(
-    "==== checking list notification: ",
-    JSON.stringify(listNotification, null, 2)
-  );
+  // console.log(
+  //   "==== checking list notification: ",
+  //   JSON.stringify(listNotification, null, 2)
+  // );
   useEffect(() => {
     refetch();
   }, [isChanged]);
@@ -72,9 +72,10 @@ export function NotificationBadge() {
               </ScrollArea>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">
+              <Button className="w-full bg-[#03509d]">
                 <Check className="mr-2 h-4 w-4" /> Mark all as read
               </Button>
+              {/* <p className="text-center">You reach the end of the world !</p> */}
             </CardFooter>
           </Card>
         </DropdownMenuContent>

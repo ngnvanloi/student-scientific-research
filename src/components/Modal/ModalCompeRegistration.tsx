@@ -13,6 +13,13 @@ import {
   useRegisterCompetitonMutation,
 } from "@/hooks-query/mutations/use-register-competition";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import {
+  ParamsCreateNotification,
+  useCreateNotificationMutation,
+} from "@/hooks-query/mutations/use-create-notification-mutation";
+import { getSession, useSession } from "next-auth/react";
+import { NotificationContentSample } from "@/lib/notification-content-sample ";
 
 interface IProps {
   isOpen: boolean;
@@ -21,8 +28,17 @@ interface IProps {
 }
 
 const ModalCompetitionRegistration = (props: IProps) => {
+  const { data: session } = useSession();
+  console.log("checking session in modal compe registration: ", session);
   const route = useRouter();
+  const { toast } = useToast();
   const { isOpen, setIsOpen, competitionID } = props;
+  const {
+    mutate: notiMutation,
+    isSuccess: isNotiSuccess,
+    isError: isNotiError,
+    error: notiError,
+  } = useCreateNotificationMutation();
   // GET DATA
   const { data: competition, refetch: refetchData } =
     useGetCompetitionDetail(competitionID);
@@ -69,7 +85,28 @@ const ModalCompetitionRegistration = (props: IProps) => {
 
         mutate(paramsRegis, {
           onSuccess: () => {
-            alert("Register competition successfully");
+            toast({
+              title: "Xác nhận thành công",
+              variant: "default",
+              description:
+                "Bạn đã đăng kí tham gia cuộc thi thành công. Vui lòng chờ ban tổ chức phê duyệt",
+            });
+            // gửi thông báo cho ban tổ chức
+            const paramsNoti: ParamsCreateNotification = {
+              notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.registration.author} ${competition?.data.competitionName}, vui lòng kiểm tra thông tin`,
+              notificationDate: new Date().toISOString(),
+              recevierId: 2,
+              notificationTypeId: 4,
+              targetId: -1,
+            };
+            notiMutation(paramsNoti, {
+              onSuccess: () => {
+                console.log("Thông báo đã gửi đến ban tổ chức");
+              },
+              onError: (error) => {
+                console.error("Lỗi khi gửi thông báo:", error);
+              },
+            });
             route.push("/competitions");
             setIsOpen(false);
             setFile(undefined);
@@ -129,6 +166,16 @@ const ModalCompetitionRegistration = (props: IProps) => {
                   Hủy
                 </Button>
               </Dialog.Close>
+              <Button
+                onClick={() => {
+                  toast({
+                    title: "Scheduled: Catch up",
+                    description: "Friday, February 10, 2023 at 5:57 PM",
+                  });
+                }}
+              >
+                Show Toast
+              </Button>
             </div>
           </div>
         </Dialog.Content>

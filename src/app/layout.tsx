@@ -5,6 +5,7 @@ import AppHeader from "@/components/Layout/Header/AppHeader";
 import AppFooter from "@/components/Layout/Footer/AppFooter";
 import AppContainer from "@/components/Layout/Container/AppContainer";
 import { AppProvider } from "@/providers/app-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,6 +37,7 @@ export default function RootLayout({
           <AppHeader />
           <AppContainer>{children}</AppContainer>
           <AppFooter />
+          <Toaster />
         </AppProvider>
       </body>
     </html>

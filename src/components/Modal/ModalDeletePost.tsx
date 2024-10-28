@@ -7,6 +7,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { QueryClient } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import { usePostManagementContext } from "../UseContextProvider/PostManagementContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface IProps {
   isOpen: boolean;
@@ -16,7 +17,7 @@ interface IProps {
 const ModalDeletePost = (props: IProps) => {
   // STATE
   const { isOpen, setIsOpen, postID } = props;
-
+  const { toast } = useToast();
   // USE PROVIDER CONTEXT
   const { setIsChange } = usePostManagementContext();
 
@@ -36,7 +37,11 @@ const ModalDeletePost = (props: IProps) => {
   const handleOnDelete = () => {
     deletePostMutation.mutate(postID, {
       onSuccess: () => {
-        console.log("Delete post thành công");
+        toast({
+          title: "Thông báo",
+          variant: "default",
+          description: "Bạn đã xóa bài viết thành công",
+        });
         setIsOpen(false);
         setIsChange(true);
       },

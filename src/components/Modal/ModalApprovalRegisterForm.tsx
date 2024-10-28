@@ -9,6 +9,13 @@ import { useForm } from "react-hook-form";
 import { FormApprovalRegistration } from "../FormCard/ZodSchema";
 import { TFormApprovalRegistration } from "../FormCard/FormInputsData";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "@/hooks/use-toast";
+import {
+  ParamsCreateNotification,
+  useCreateNotificationMutation,
+} from "@/hooks-query/mutations/use-create-notification-mutation";
+import { useSession } from "next-auth/react";
+import { NotificationContentSample } from "@/lib/notification-content-sample ";
 
 interface IProps {
   isOpen: boolean;
@@ -20,6 +27,15 @@ const approvalStatus = [
   { id: 2, name: "Từ chối" },
 ];
 const ModalApprovalRegisterForm = (props: IProps) => {
+  const { toast } = useToast();
+  const { data: session } = useSession();
+
+  const {
+    mutate: notiMutation,
+    isSuccess: isNotiSuccess,
+    isError: isNotiError,
+    error: notiError,
+  } = useCreateNotificationMutation();
   // REACT HOOK FORM
   const {
     register,
@@ -40,6 +56,24 @@ const ModalApprovalRegisterForm = (props: IProps) => {
 
   // HANDLE LOGIC
   const onSubmit = (data: TFormApprovalRegistration) => {
+    console.log("checking approval status: ", data.approvalStatus);
+    console.log(
+      "checking typeof approval status: ",
+      typeof data.approvalStatus
+    );
+    // tạo content cho noti
+    let contentNoti = "";
+    if (data.approvalStatus === "1") {
+      contentNoti =
+        NotificationContentSample.NotificationType.registration.organizer
+          .accept;
+    } else if (data.approvalStatus === "2") {
+      contentNoti =
+        NotificationContentSample.NotificationType.registration.organizer
+          .reject;
+    }
+
+    // gửi request đến API phê duyệt đăng kí
     const bodyRequest: ParamsUpdateRegistrationForm = {
       isAccepted: data.approvalStatus,
     };
@@ -47,7 +81,29 @@ const ModalApprovalRegisterForm = (props: IProps) => {
       { id: registrationFormID, requestbody: bodyRequest },
       {
         onSuccess: () => {
-          alert("Phê duyệt thành công");
+          // alert("Phê duyệt thành công");
+          toast({
+            title: "Xác nhận",
+            variant: "default",
+            description:
+              "Phiếu đăng ký đã được phê duyệt thành công! Người dùng sẽ nhận được thông báo về tình trạng đăng ký của họ.",
+          });
+          // gửi thông báo cho người đăng kí
+          const paramsNoti: ParamsCreateNotification = {
+            notificationContent: contentNoti,
+            notificationDate: new Date().toISOString(),
+            recevierId: 4,
+            notificationTypeId: 4,
+            targetId: -1,
+          };
+          notiMutation(paramsNoti, {
+            onSuccess: () => {
+              console.log("Thông báo đã gửi");
+            },
+            onError: (error) => {
+              console.error("Lỗi khi gửi thông báo:", error);
+            },
+          });
           setIsOpen(false);
         },
         onError: (error) => {

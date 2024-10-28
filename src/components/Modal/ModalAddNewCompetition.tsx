@@ -22,6 +22,7 @@ import {
   ParamsCreateCompetition,
   useCreateCompetitionMutation,
 } from "@/hooks-query/mutations/use-create-competition-mutation";
+import { useToast } from "@/hooks/use-toast";
 
 const ModalAddNewCompetition = () => {
   // STATE
@@ -36,7 +37,7 @@ const ModalAddNewCompetition = () => {
   const { mutate, isSuccess, isError, error } = useCreateCompetitionMutation();
   // State để điều khiển modal
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
+  const { toast } = useToast();
   // USE PROVIDER CONTEXT
   const { setIsChange } = useCompetitionManagementContext();
   // REACT HOOK FORM
@@ -65,7 +66,12 @@ const ModalAddNewCompetition = () => {
     };
     mutate(dataSender, {
       onSuccess: () => {
-        alert("Create competition successfully");
+        toast({
+          title: "Thành công",
+          variant: "default",
+          description:
+            "Chúc mừng! Cuộc thi đã được thiết lập, đừng quên triển khai đến sinh viên và quản lý tiến độ.",
+        });
         setIsChange(true);
         setIsOpen(false);
 

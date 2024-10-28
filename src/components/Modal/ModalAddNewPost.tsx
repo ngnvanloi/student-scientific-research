@@ -20,13 +20,14 @@ import { usePostManagementContext } from "../UseContextProvider/PostManagementCo
 import { useUploadFileMutation } from "@/hooks-query/mutations/use-upload-file-mutation";
 import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-firebase";
 import { ParamsRegisterCompetiton } from "@/hooks-query/mutations/use-register-competition";
+import { useToast } from "@/hooks/use-toast";
 
 const ModalAddNewPost = () => {
   // STATE
   const [content, setContent] = useState<string>("");
   const [file, setFile] = useState<File>();
   const [date, setDate] = useState<Date | undefined>(new Date());
-
+  const { toast } = useToast();
   const { mutate, isSuccess, isError, error } = useCreatePostMutation();
   const {
     mutate: fileMutation,
@@ -72,7 +73,12 @@ const ModalAddNewPost = () => {
         };
         mutate(bodyRequest, {
           onSuccess: () => {
-            alert("Create post successfully");
+            toast({
+              title: "Thành công",
+              variant: "default",
+              description:
+                "Chúc mừng! Bài viết đã được tạo thành công và đăng tải trên hệ thống, bạn có thể kiểm tra hoặc chỉnh sửa nếu cần.",
+            });
             setIsChange(true);
             setIsOpen(false);
 

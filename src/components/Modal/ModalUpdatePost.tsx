@@ -17,6 +17,7 @@ import {
   ParamsUpdatePost,
   useUpdatePostMutation,
 } from "@/hooks-query/mutations/use-update-post-mutation";
+import { useToast } from "@/hooks/use-toast";
 
 interface IProps {
   isOpen: boolean;
@@ -31,6 +32,7 @@ const ModalUpdatePost = (props: IProps) => {
   const [fileList, setFileList] = useState<File[]>([]);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const { mutate, isSuccess, isError, error } = useUpdatePostMutation();
+  const { toast } = useToast();
   // USE PROVIDER CONTEXT
   const { setIsChange } = usePostManagementContext();
 
@@ -89,7 +91,12 @@ const ModalUpdatePost = (props: IProps) => {
       },
       {
         onSuccess: () => {
-          alert("Update post successfully");
+          // alert("Update post successfully");
+          toast({
+            title: "Thông báo",
+            variant: "default",
+            description: "Chúc mừng! Bạn đã cập nhật bài viết thành công",
+          });
           setIsChange(true);
           setIsOpen(false);
 

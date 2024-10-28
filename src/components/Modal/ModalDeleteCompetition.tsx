@@ -9,6 +9,7 @@ import React, { useEffect } from "react";
 import { useCompetitionManagementContext } from "../UseContextProvider/CompetitionManagementContext";
 import { useGetCompetitionDetail } from "@/hooks-query/queries/use-get-competition";
 import { useDeleteCompetitionMutation } from "@/hooks-query/mutations/use-delete-competition-mutation";
+import { useToast } from "@/hooks/use-toast";
 
 interface IProps {
   isOpen: boolean;
@@ -18,7 +19,7 @@ interface IProps {
 const ModalDeleteCompetition = (props: IProps) => {
   // STATE
   const { isOpen, setIsOpen, competitionID } = props;
-
+  const { toast } = useToast();
   // USE PROVIDER CONTEXT
   const { setIsChange } = useCompetitionManagementContext();
 
@@ -45,6 +46,11 @@ const ModalDeleteCompetition = (props: IProps) => {
     deletePostMutation.mutate(competitionID, {
       onSuccess: () => {
         alert("Delete competition thành công");
+        toast({
+          title: "Thông báo",
+          variant: "default",
+          description: "Bạn đã xóa cuộc thi thành công",
+        });
         setIsOpen(false);
         setIsChange(true);
       },
