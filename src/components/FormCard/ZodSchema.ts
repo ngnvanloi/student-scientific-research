@@ -1,6 +1,7 @@
 import { string, z, ZodType } from "zod";
 import {
   TFormAddCompetition,
+  TFormAddContributor,
   TFormAddPost,
   TFormApprovalRegistration,
   TFormLoginData,
@@ -59,4 +60,13 @@ export const FormAddCompetitonSchema: ZodType<TFormAddCompetition> = z.object({
   competitionName: z.string(),
   description: z.string(),
   destination: z.string(),
+});
+
+export const FormAddContributorSchema: ZodType<TFormAddContributor> = z.object({
+  name: z.string(),
+  email: z.string(),
+  numberPhone: z.string(),
+  // dateOfBirth: z.string(),
+  sex: z.string(),
+  // roleName: z.string(),
 });

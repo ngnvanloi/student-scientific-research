@@ -42,3 +42,12 @@ export type TFormAddCompetition = {
   description: string;
   destination: string;
 };
+
+export type TFormAddContributor = {
+  name: string;
+  email: string;
+  numberPhone: string;
+  dateOfBirth?: string;
+  sex?: string;
+  roleName?: string;
+};

@@ -4,4 +4,5 @@ export type CoAuthor = {
   numberPhone: string;
   dateOfBirth: string;
   sex: string;
+  roleName: string;
 };

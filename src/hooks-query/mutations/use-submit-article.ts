@@ -1,9 +1,8 @@
-import { communityRequest, setAuthToken } from "@/web-configs/community-api";
+import { communityRequest } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
 import type { IResponseFromAPI } from "@/types/Meta";
-import { UploadFile } from "antd";
-import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
+import { CoAuthor } from "@/types/CoAuthor";
 
 export type ParamsSubmitArticle = {
   title: string;
@@ -11,7 +10,8 @@ export type ParamsSubmitArticle = {
   keywords: string[];
   filePath: string;
   dateUpload: string | Date;
-  disciplineId: number;
+  disciplineId: number | undefined | string;
+  coAuthors?: CoAuthor[];
 };
 
 export const useSubmitArticleMutation = () => {

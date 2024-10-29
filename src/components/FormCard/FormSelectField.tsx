@@ -35,7 +35,8 @@ const FormSelect = <T extends SelectItem>({
         {label}
       </label>
     )}
-    <div className="relative z-20">
+    {/* relative z-20 */}
+    <div className="">
       <select
         id={name}
         {...register(name)}
@@ -49,7 +50,7 @@ const FormSelect = <T extends SelectItem>({
           </option>
         ))}
       </select>
-      <span className="absolute right-4 top-1/2 z-10 mt-[-2px] h-[10px] w-[10px] -translate-y-1/2 rotate-45 border-r-2 border-b-2 border-body-color"></span>
+      {/* <span className="absolute right-4 top-1/2 z-10 mt-[-2px] h-[10px] w-[10px] -translate-y-1/2 rotate-45 border-r-2 border-b-2 border-body-color"></span> */}
     </div>
     {error && <span className="text-red-500">{error.message}</span>}
   </div>
