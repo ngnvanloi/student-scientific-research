@@ -2,6 +2,7 @@ import { IDataResponseFromAPI, IListDataResponseFromAPI } from "@/types/Meta";
 import { communityRequest } from "@/web-configs/community-api";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "./query-keys";
+import { Competition } from "@/types/Competition";
 
 export const useGetCompetitionDetail = (id: number) => {
   return useQuery<IDataResponseFromAPI<Competition>, Error>({

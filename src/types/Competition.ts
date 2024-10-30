@@ -1,4 +1,4 @@
-type Competition = {
+export type Competition = {
   id: number;
   competitionName: string;
   dateStart: string;
@@ -7,6 +7,7 @@ type Competition = {
   description: string;
   destination: string;
   organizerId: number;
+  accountId: number;
   organizerName: string;
-  status: string;
+  status?: string;
 };

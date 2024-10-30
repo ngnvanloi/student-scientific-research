@@ -1,8 +1,9 @@
 export type RegistrationForm = {
   id: number;
   authorId: number;
+  accountId: number;
   authorName: string;
-  internalCode: any;
+  internalCode?: any;
   competitionId: number;
   competitionName: string;
   dateStart: string;

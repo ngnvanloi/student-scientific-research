@@ -9,6 +9,6 @@ export type ArticleWithContributors = {
   dateUpload: string;
   disciplineId: number;
   disciplineName: string;
-  isAcceptedForPublication: true;
+  isAcceptedForPublication: boolean;
   coAuthors: Contributor[];
 };

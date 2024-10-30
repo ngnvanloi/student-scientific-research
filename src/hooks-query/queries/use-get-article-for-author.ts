@@ -8,19 +8,22 @@ import { queryKeys } from "./query-keys";
 import { Article } from "@/types/Article";
 import { ArticleWithContributors } from "@/types/ArticleWithContributor";
 
-// lấy bài báo đã public gồm bài không bao gồm danh sách tác giả
-export const useGetAllArticleAuthor = () => {
+// lấy bài báo phân loại theo publication, không bao gồm danh sách tác giả
+export const useGetArticleAuthorByPublicationNoneContributor = (
+  isAcceptedForPublication: boolean
+) => {
   return useQuery<IDataRetrievedResponseFromAPI<Article>, Error>({
     queryKey: queryKeys.listAuthorArticle,
-    queryFn: () => GetAllArticleAuthor(),
+    queryFn: () =>
+      GetArticleAuthorByPublicationNoneContributor(isAcceptedForPublication),
   });
 };
 
-export async function GetAllArticleAuthor(): Promise<
-  IDataRetrievedResponseFromAPI<Article>
-> {
+export async function GetArticleAuthorByPublicationNoneContributor(
+  isAcceptedForPublication: boolean
+): Promise<IDataRetrievedResponseFromAPI<Article>> {
   const response = (await communityRequest)(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article/author`,
+    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article/author?isAcceptedForPublication=${isAcceptedForPublication}`,
     {
       method: "GET",
     }
@@ -28,16 +31,15 @@ export async function GetAllArticleAuthor(): Promise<
   return response as unknown as IDataRetrievedResponseFromAPI<Article>;
 }
 
-// lấy bài báo đã public gồm bài ĐÃ bao gồm danh sách tác giả
-export type ParamsGetPublictationArticleAuthor = {
+// lấy bài báo đã public ĐÃ bao gồm danh sách đồng tác giả
+export type ParamsGetPublicationArticleAuthorIncludeContributor = {
   index: number;
   pageSize: number;
   nameSearch?: string;
   organizerName?: string;
 };
-// Hook để sử dụng useQuery cho việc lấy danh sách cuộc thi
-export const useGetPublictationArticleAuthor = (
-  params: ParamsGetPublictationArticleAuthor
+export const useGetPublicationArticleAuthorIncludeContributor = (
+  params: ParamsGetPublicationArticleAuthorIncludeContributor
 ) => {
   return useQuery<
     IDataRetrievedResponseFromAPI<
@@ -46,12 +48,12 @@ export const useGetPublictationArticleAuthor = (
     Error
   >({
     queryKey: queryKeys.listAuthorArticle,
-    queryFn: () => GetPublictationArticleAuthor(params),
+    queryFn: () => GetPublicationArticleAuthorIncludeContributor(params),
   });
 };
 
-export async function GetPublictationArticleAuthor(
-  param: ParamsGetPublictationArticleAuthor
+export async function GetPublicationArticleAuthorIncludeContributor(
+  param: ParamsGetPublicationArticleAuthorIncludeContributor
 ): Promise<
   IDataRetrievedResponseFromAPI<
     IListDataResponseFromAPI<ArticleWithContributors>

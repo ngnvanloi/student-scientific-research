@@ -2,6 +2,7 @@ import { IDataResponseFromAPI, IListDataResponseFromAPI } from "@/types/Meta";
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "./query-keys";
+import { Competition } from "@/types/Competition";
 
 export type ParamsGetListCompetition = {
   index: number;

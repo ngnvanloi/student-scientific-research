@@ -7,5 +7,6 @@ export type Contributor = {
   numberPhone: string;
   facultyName: string;
   internalCode: string;
+  accountId: number;
   email: string;
 };
