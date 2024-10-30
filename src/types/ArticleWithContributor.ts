@@ -10,5 +10,5 @@ export type ArticleWithContributors = {
   disciplineId: number;
   disciplineName: string;
   isAcceptedForPublication: boolean;
-  coAuthors: Contributor[];
+  coAuthors?: Contributor[];
 };

@@ -13,7 +13,7 @@ export const useGetArticleAuthorByPublicationNoneContributor = (
   isAcceptedForPublication: boolean
 ) => {
   return useQuery<IDataRetrievedResponseFromAPI<Article>, Error>({
-    queryKey: queryKeys.listAuthorArticle,
+    queryKey: [queryKeys.listAuthorArticle, isAcceptedForPublication],
     queryFn: () =>
       GetArticleAuthorByPublicationNoneContributor(isAcceptedForPublication),
   });

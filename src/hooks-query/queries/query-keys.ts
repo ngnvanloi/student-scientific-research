@@ -18,4 +18,6 @@ export const queryKeys = {
   listNotification: ["listNotification"],
   listDiscipline: ["listDiscipline"],
   listAuthorArticle: ["listAuthorArticle"],
+  listForAdminArticle: ["listForAdminArticle"],
+  articleDetail: ["articleDetail"],
 };
