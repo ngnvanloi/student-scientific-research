@@ -63,6 +63,7 @@ const ModalCompetitionRegistration = (props: IProps) => {
 
   // HANDLE LOGIC
   const onSubmit = () => {
+    console.log("checking competition details: ", competition?.data);
     console.log("checking file upload: ", file);
     const formDataUploadFile = new FormData();
     if (file) {
@@ -95,7 +96,7 @@ const ModalCompetitionRegistration = (props: IProps) => {
             const paramsNoti: ParamsCreateNotification = {
               notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.registration.author} ${competition?.data.competitionName}, vui lòng kiểm tra thông tin`,
               notificationDate: new Date().toISOString(),
-              recevierId: 2,
+              recevierId: competition?.data.accountId || -1,
               notificationTypeId: 4,
               targetId: -1,
             };

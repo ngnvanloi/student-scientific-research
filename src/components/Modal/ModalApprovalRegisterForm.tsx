@@ -16,6 +16,7 @@ import {
 } from "@/hooks-query/mutations/use-create-notification-mutation";
 import { useSession } from "next-auth/react";
 import { NotificationContentSample } from "@/lib/notification-content-sample ";
+import { useGetRegistrationCompetitionDetail } from "@/hooks-query/queries/use-get-registration-competition-detail";
 
 interface IProps {
   isOpen: boolean;
@@ -27,9 +28,13 @@ const approvalStatus = [
   { id: 2, name: "Từ chối" },
 ];
 const ModalApprovalRegisterForm = (props: IProps) => {
+  // STATE
+  const { isOpen, setIsOpen, registrationFormID } = props;
   const { toast } = useToast();
   const { data: session } = useSession();
-
+  // GET DATA
+  const { data: registationDetail } =
+    useGetRegistrationCompetitionDetail(registrationFormID);
   const {
     mutate: notiMutation,
     isSuccess: isNotiSuccess,
@@ -45,8 +50,6 @@ const ModalApprovalRegisterForm = (props: IProps) => {
   } = useForm<TFormApprovalRegistration>({
     resolver: zodResolver(FormApprovalRegistration),
   });
-  // STATE
-  const { isOpen, setIsOpen, registrationFormID } = props;
 
   // POST DETAILS
   console.log("check delete registrationFormID: ", registrationFormID);
@@ -92,7 +95,7 @@ const ModalApprovalRegisterForm = (props: IProps) => {
           const paramsNoti: ParamsCreateNotification = {
             notificationContent: contentNoti,
             notificationDate: new Date().toISOString(),
-            recevierId: 4,
+            recevierId: registationDetail?.data.accountId || -1,
             notificationTypeId: 4,
             targetId: -1,
           };
