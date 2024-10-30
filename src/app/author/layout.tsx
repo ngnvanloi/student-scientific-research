@@ -68,7 +68,13 @@ export default function AdminLayout({
         undefined,
         "/author/submit-article"
       ),
-      getItem("Bài báo của tôi", "4", <CommentOutlined />, undefined, "#"),
+      getItem(
+        "Bài báo của tôi",
+        "4",
+        <CommentOutlined />,
+        undefined,
+        "/author/my-article"
+      ),
     ]),
     getItem("Đề tài của tôi", "5", <ReconciliationOutlined />, [
       getItem("Đề tài đã công bố", "6", <TrophyOutlined />, undefined, "#"),

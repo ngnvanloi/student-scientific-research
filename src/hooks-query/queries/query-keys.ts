@@ -17,4 +17,5 @@ export const queryKeys = {
   listRegistrationForm: ["listRegistrationForm"],
   listNotification: ["listNotification"],
   listDiscipline: ["listDiscipline"],
+  listAuthorArticle: ["listAuthorArticle"],
 };
