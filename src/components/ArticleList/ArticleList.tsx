@@ -3,14 +3,14 @@ import { useGetArticleAuthorByPublicationNoneContributor } from "@/hooks-query/q
 import { ArticleCardForAuthor } from "../ArticleCard/ArticleCard";
 import { Article } from "@/types/Article";
 import { Divider } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArticleManagementContext } from "../UseContextProvider/ArticleManagementContext";
 
 const ArticleListContainerForAuthor = () => {
   const [isChange, setIsChange] = useState<boolean>(false);
 
   const { data } = useGetArticleAuthorByPublicationNoneContributor(true);
-  const { data: dataa } =
+  const { data: dataa, refetch: refetchListArticleUnpublic } =
     useGetArticleAuthorByPublicationNoneContributor(false);
   console.log(
     "checking useGetArticleAuthorByPublicationNoneContributor = true: ",
@@ -18,6 +18,13 @@ const ArticleListContainerForAuthor = () => {
   );
   let listArticlePublic: Article[] | undefined = data?.data;
   let listArticleUnpublic: Article[] | undefined = dataa?.data;
+
+  // refetch data
+  useEffect(() => {
+    refetchListArticleUnpublic();
+  }, [isChange]);
+
+  // render UI
   return (
     <ArticleManagementContext.Provider value={{ isChange, setIsChange }}>
       <div>
