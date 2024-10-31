@@ -27,8 +27,15 @@ import {
 import { useUploadFileMutation } from "@/hooks-query/mutations/use-upload-file-mutation";
 import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-firebase";
 import { useToast } from "@/hooks/use-toast";
+import {
+  ParamsCreateNotification,
+  useCreateNotificationMutation,
+} from "@/hooks-query/mutations/use-create-notification-mutation";
+import { NotificationContentSample } from "@/lib/notification-content-sample ";
+import { useSession } from "next-auth/react";
 
 const SubmitArticleComponent = () => {
+  const { data: session } = useSession();
   // STATE
   const [description, setDescription] = useState<string>("");
   const [keywords, setKeywords] = useState<string[]>([]);
@@ -48,7 +55,12 @@ const SubmitArticleComponent = () => {
     isError: fileIsError,
     error: fileError,
   } = useUploadFileMutation();
-
+  const {
+    mutate: notiMutation,
+    isSuccess: isNotiSuccess,
+    isError: isNotiError,
+    error: notiError,
+  } = useCreateNotificationMutation();
   const listDiscipline: SelectItem[] | undefined = disciplines?.data.map(
     (discipline) => ({
       id: discipline.id,
@@ -117,6 +129,24 @@ const SubmitArticleComponent = () => {
             setKeywords([]);
             setListContributors([]);
             setDate(new Date());
+
+            // gửi thông báo cho super admin
+            const paramsNoti: ParamsCreateNotification = {
+              notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.article.author}`,
+              notificationDate: new Date().toISOString(),
+              // recevierId: articleDetail?.data.accountID || -1,
+              recevierId: 1,
+              notificationTypeId: 1,
+              targetId: -1,
+            };
+            notiMutation(paramsNoti, {
+              onSuccess: () => {
+                console.log("Thông báo đã gửi");
+              },
+              onError: (error) => {
+                console.error("Lỗi khi gửi thông báo:", error);
+              },
+            });
           },
           onError: (error) => {
             console.error("Lỗi khi tạo bài báo:", error);

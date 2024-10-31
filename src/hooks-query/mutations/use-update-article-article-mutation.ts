@@ -4,7 +4,7 @@ import type { IResponseFromAPI } from "@/types/Meta";
 import { getSession } from "next-auth/react";
 
 export type ParamsUpdateArticleForPublic = {
-  isAccepted: number | string | boolean;
+  isAcceptedForPublication: number | string | boolean;
 };
 
 export const useApprovalArticleForPublicMutation = () => {

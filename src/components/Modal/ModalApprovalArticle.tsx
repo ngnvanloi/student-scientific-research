@@ -17,7 +17,10 @@ import {
 import { useSession } from "next-auth/react";
 import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { useGetRegistrationCompetitionDetail } from "@/hooks-query/queries/use-get-registration-competition-detail";
-import { useApprovalArticleForPublicMutation } from "@/hooks-query/mutations/use-update-article-article-mutation";
+import {
+  ParamsUpdateArticleForPublic,
+  useApprovalArticleForPublicMutation,
+} from "@/hooks-query/mutations/use-update-article-article-mutation";
 import { useGetArticleDetail } from "@/hooks-query/queries/use-get-article-detail";
 
 interface IProps {
@@ -80,8 +83,8 @@ const ModalApprovalArticle = (props: IProps) => {
     if (data.approvalStatus === "1") {
       approvl = true;
     }
-    const bodyRequest: ParamsUpdateRegistrationForm = {
-      isAccepted: approvl,
+    const bodyRequest: ParamsUpdateArticleForPublic = {
+      isAcceptedForPublication: approvl,
     };
     approvalArticleMutation.mutate(
       { id: articleID, requestbody: bodyRequest },
@@ -100,7 +103,7 @@ const ModalApprovalArticle = (props: IProps) => {
             notificationDate: new Date().toISOString(),
             // recevierId: articleDetail?.data.accountID || -1,
             recevierId: 6,
-            notificationTypeId: 4,
+            notificationTypeId: 1,
             targetId: -1,
           };
           notiMutation(paramsNoti, {

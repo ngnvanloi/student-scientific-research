@@ -3,12 +3,12 @@ export const NotificationContentSample = {
     // Bài báo
     article: {
       author:
-        " đã gửi yêu cầu đăng tải bài báo lên hệ thống. Vui lòng chờ phê duyệt từ quản trị viên. ",
+        " đã gửi yêu cầu đăng tải bài báo lên hệ thống. Vui lòng kiểm tra và phê duyệt. ",
       admin: {
         accept:
           " đã phê duyệt bài báo của bạn. Cảm ơn bạn vì những đóng góp giá trị cho lĩnh vực khoa học! ",
         reject:
-          " Bài báo của bạn chưa được phê duyệt. Vui lòng kiểm tra lại nội dung hoặc liên hệ với quản trị viên để biết thêm chi tiết. ",
+          " rất lấy làm tiếc khi bài báo của bạn chưa được phê duyệt. Vui lòng kiểm tra lại nội dung hoặc liên hệ với quản trị viên để biết thêm chi tiết. ",
       },
     },
 
