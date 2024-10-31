@@ -81,7 +81,7 @@ export default function AdminLayout({
       "9",
       <UserOutlined />,
       undefined,
-      "/super-admin"
+      "/super-admin/user-administration"
     ),
   ];
 

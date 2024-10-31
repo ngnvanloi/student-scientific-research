@@ -1,21 +1,21 @@
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
-import type { IDataResponseFromAPI } from "@/types/Meta";
+import type { IResponseFromAPI } from "@/types/Meta";
 import { getSession } from "next-auth/react";
 
-export type ParamsUpdateRegistrationForm = {
+export type ParamsUpdateArticleForPublic = {
   isAccepted: number | string | boolean;
 };
 
-export const useApprovalRegistrationFormMutation = () => {
+export const useApprovalArticleForPublicMutation = () => {
   return useMutation<
-    IDataResponseFromAPI<null>,
+    IResponseFromAPI,
     Error,
-    { id: number; requestbody: ParamsUpdateRegistrationForm },
+    { id: number; requestbody: ParamsUpdateArticleForPublic },
     unknown
   >({
     mutationFn: ({ id, requestbody }) =>
-      updateRegistrationForm(id, requestbody),
+      updateArticleForPublic(id, requestbody),
     onMutate: () => {},
     onSuccess: (result) => {
       console.log("Check result if successfully: ", JSON.stringify(result));
@@ -26,10 +26,10 @@ export const useApprovalRegistrationFormMutation = () => {
   });
 };
 
-export async function updateRegistrationForm(
+export async function updateArticleForPublic(
   id: number,
-  requestbody: ParamsUpdateRegistrationForm
-): Promise<IDataResponseFromAPI<null>> {
+  requestbody: ParamsUpdateArticleForPublic
+): Promise<IResponseFromAPI> {
   const session = await getSession();
   if (!session) {
     throw new Error("User not authenticated");
@@ -41,8 +41,8 @@ export async function updateRegistrationForm(
   console.log("Checking getSession() from Server side: ", session.user);
 
   try {
-    const response = await communityRequest<IDataResponseFromAPI<null>>(
-      `api/RegistrationForm/${id}`, //&DateUpload=${"2024-07-21T00:00:00"}&FilePath=${params.FilePath || ""}
+    const response = await communityRequest<IResponseFromAPI>(
+      `api/Article/approve?id=${id}`, //&DateUpload=${"2024-07-21T00:00:00"}&FilePath=${params.FilePath || ""}
       {
         method: "PATCH",
         headers: {

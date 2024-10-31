@@ -3,12 +3,14 @@
 import { Article } from "@/types/Article";
 import iconPDF from "../../assets/img/pdf-iconn.jpg";
 import { formatDate } from "@/helper/extension-function";
-import { Dropdown, MenuProps, Space, Tag } from "antd";
+import { Button, Dropdown, MenuProps, Space, Tag } from "antd";
 import { DownOutlined, TagOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { ModalDeleteArticle } from "../Modal/ModalDeleteArticle";
 import { ArticleWithContributors } from "@/types/ArticleWithContributor";
 import { FolderArrowDownIcon } from "@heroicons/react/24/outline";
+import { ModalShowArticleDetails } from "../Modal/ModalDetailArticle";
+import { ModalApprovalArticle } from "../Modal/ModalApprovalArticle";
 interface IPropsAuthorArticle {
   articleItem: Article;
   isAcceptedForPublication: boolean;
@@ -122,12 +124,11 @@ const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
   );
 };
 
-interface IPropsGuestArticle {
+interface IProps {
   articleItem: ArticleWithContributors;
 }
-const ArticleCardForGuest = (props: IPropsGuestArticle) => {
+const ArticleCardForGuest = (props: IProps) => {
   const { articleItem } = props;
-  // get danh sách đồng tác giả
   return (
     <a
       key={articleItem.id}
@@ -171,4 +172,55 @@ const ArticleCardForGuest = (props: IPropsGuestArticle) => {
     </a>
   );
 };
-export { ArticleCardForAuthor, ArticleCardForGuest };
+
+const ArticleCardForAdmin = (props: IProps) => {
+  const { articleItem } = props;
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isAppOpen, setIsAppOpen] = useState<boolean>(false);
+  const handleShowArticleDetail = () => {
+    setIsOpen(true);
+  };
+  const handleShowModalApproval = () => {
+    // Open modal for approval
+    setIsAppOpen(true);
+  };
+  return (
+    <a
+      key={articleItem.id}
+      className="flex justify-between gap-x-6 py-5 border-b border-[#ccc] hover:shadow-md p-3 hover:cursor-pointer mt-3"
+    >
+      <div className="flex min-w-0 gap-x-4">
+        <div className="min-w-0 flex flex-col gap-1">
+          <p className="text-lg font-semibold text-gray-900">
+            {articleItem.title}
+          </p>
+          <p className="truncate text-xs/5 text-gray-500">
+            {articleItem.coAuthors?.map((author) => author.name).join(", ")}
+          </p>
+          <a
+            className="text-blue-500 mt-2 hover:underline"
+            onClick={() => handleShowArticleDetail()}
+          >
+            Xem chi tiết bài báo ở đây
+            <ModalShowArticleDetails
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              articleID={articleItem.id}
+            />
+          </a>
+        </div>
+      </div>
+      <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+        <Button variant="filled" onClick={() => handleShowModalApproval()}>
+          Approval
+          <ModalApprovalArticle
+            isOpen={isAppOpen}
+            setIsOpen={setIsAppOpen}
+            articleID={articleItem.id}
+          />
+        </Button>
+      </div>
+    </a>
+  );
+};
+export { ArticleCardForAuthor, ArticleCardForGuest, ArticleCardForAdmin };

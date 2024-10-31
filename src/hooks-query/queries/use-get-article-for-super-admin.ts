@@ -1,7 +1,4 @@
-import {
-  IDataRetrievedResponseFromAPI,
-  IListDataResponseFromAPI,
-} from "@/types/Meta";
+import { IDataResponseFromAPI, IListDataResponseFromAPI } from "@/types/Meta";
 import { communityRequest } from "@/web-configs/community-api";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "./query-keys";
@@ -18,9 +15,7 @@ export const useGetPublicationArticleForAdminIncludeContributor = (
   params: ParamsGetPublicationArticleForAdminIncludeContributor
 ) => {
   return useQuery<
-    IDataRetrievedResponseFromAPI<
-      IListDataResponseFromAPI<ArticleWithContributors>
-    >,
+    IDataResponseFromAPI<IListDataResponseFromAPI<ArticleWithContributors>>,
     Error
   >({
     queryKey: queryKeys.listForAdminArticle,
@@ -31,9 +26,7 @@ export const useGetPublicationArticleForAdminIncludeContributor = (
 export async function GetPublicationArticleForAdminIncludeContributor(
   param: ParamsGetPublicationArticleForAdminIncludeContributor
 ): Promise<
-  IDataRetrievedResponseFromAPI<
-    IListDataResponseFromAPI<ArticleWithContributors>
-  >
+  IDataResponseFromAPI<IListDataResponseFromAPI<ArticleWithContributors>>
 > {
   const response = (await communityRequest)(
     `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article/paging-admin?index=${param.index}&pageSize=${param.pageSize}`,
@@ -41,7 +34,7 @@ export async function GetPublicationArticleForAdminIncludeContributor(
       method: "GET",
     }
   );
-  return response as unknown as IDataRetrievedResponseFromAPI<
+  return response as unknown as IDataResponseFromAPI<
     IListDataResponseFromAPI<ArticleWithContributors>
   >;
 }
