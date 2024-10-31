@@ -1,4 +1,5 @@
 import {
+  IDataResponseFromAPI,
   IDataRetrievedResponseFromAPI,
   IListDataResponseFromAPI,
 } from "@/types/Meta";
@@ -42,9 +43,7 @@ export const useGetPublicationArticleAuthorIncludeContributor = (
   params: ParamsGetPublicationArticleAuthorIncludeContributor
 ) => {
   return useQuery<
-    IDataRetrievedResponseFromAPI<
-      IListDataResponseFromAPI<ArticleWithContributors>
-    >,
+    IDataResponseFromAPI<IListDataResponseFromAPI<ArticleWithContributors>>,
     Error
   >({
     queryKey: queryKeys.listAuthorArticle,
@@ -55,9 +54,7 @@ export const useGetPublicationArticleAuthorIncludeContributor = (
 export async function GetPublicationArticleAuthorIncludeContributor(
   param: ParamsGetPublicationArticleAuthorIncludeContributor
 ): Promise<
-  IDataRetrievedResponseFromAPI<
-    IListDataResponseFromAPI<ArticleWithContributors>
-  >
+  IDataResponseFromAPI<IListDataResponseFromAPI<ArticleWithContributors>>
 > {
   const response = (await communityRequest)(
     `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article/paging-user?index=${param.index}&pageSize=${param.pageSize}`,
@@ -65,7 +62,7 @@ export async function GetPublicationArticleAuthorIncludeContributor(
       method: "GET",
     }
   );
-  return response as unknown as IDataRetrievedResponseFromAPI<
+  return response as unknown as IDataResponseFromAPI<
     IListDataResponseFromAPI<ArticleWithContributors>
   >;
 }

@@ -7,6 +7,7 @@ import {
 } from "./hooks-query/queries/use-login-mutation";
 import { setAuthToken } from "./web-configs/community-api";
 import { getProfile } from "./hooks-query/queries/use-get-user-profile";
+// import { User } from "lucide-react";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   // trustHost: true,
@@ -19,8 +20,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   // },
   providers: [
     Credentials({
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
       credentials: {
         email: {},
         password: {},
@@ -31,16 +30,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           password: credentials.password as string,
         };
 
-        // logic login
-        // const { mutate, isSuccess, isError, error } = useLoginMutation();
-        // mutate(params, {
-        //   onSuccess: (data) => {
-        //     console.log("Login success with mutation:", data);
-        //   },
-        //   onError: (error) => {
-        //     console.error("Login failed with mutation:", error);
-        //   },
-        // });
         const res = await login(params);
         console.log("Checking res: ", res);
 
@@ -48,30 +37,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
-        // login success => set access token
+        // Đặt access token sau khi đăng nhập thành công
         setAuthToken(res.data.tokenResponse?.accessToken);
 
-        // get user profile if the user exists
-        const user_profile = await getProfile();
-        console.log("User profile: ", user_profile.data);
-
-        // Kiểm tra chắc chắn dữ liệu hợp lệ
-        if (!user_profile?.data || !res.data?.tokenResponse?.account) {
-          return null;
+        let user_profile = null;
+        if (res.data.tokenResponse.account.roleName !== "superadmin") {
+          // Chỉ lấy user profile nếu role không phải là super-admin
+          try {
+            user_profile = await getProfile();
+            console.log("User profile: ", user_profile.data);
+          } catch (error) {
+            console.error("Error fetching user profile: ", error);
+            // Nếu gặp lỗi khác ngoài lỗi không có thông tin cá nhân, throw error để xử lý
+            throw new Error("Failed to fetch user profile.");
+          }
         }
 
-        // Sau khi lấy user_profile
+        // Xác định thông tin user để trả về tùy thuộc vào vai trò
         const user: User = {
-          userId: user_profile.data.id,
+          userId: user_profile?.data?.id || null,
           accountId: res.data.tokenResponse.account.id,
-          name: user_profile.data.name,
+          name: user_profile?.data?.name || "Quản trị viên",
           roleName: res.data.tokenResponse.account.roleName,
-          numberPhone: user_profile.data.numberPhone,
-          facultyId: user_profile.data.facultyId,
-          facultyName: user_profile.data.facultyName,
-          internalCode: user_profile.data.internalCode,
+          numberPhone: user_profile?.data?.numberPhone || "",
+          facultyId: user_profile?.data?.facultyId || null,
+          facultyName: user_profile?.data?.facultyName || null,
+          internalCode: user_profile?.data?.internalCode || "",
           email: credentials.email as string,
-
           accessToken: res.data.tokenResponse.accessToken,
           refreshToken: res.data.tokenResponse.refreshToken,
           expiresAt: res.data.tokenResponse.expires,
@@ -86,6 +78,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+
   callbacks: {
     signIn({ account, user, credentials, profile }) {
       // console.log(

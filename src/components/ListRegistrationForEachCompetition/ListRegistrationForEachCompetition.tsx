@@ -12,6 +12,7 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { Badge } from "antd";
+import { Competition } from "@/types/Competition";
 
 interface IProps {
   competition: Competition;

@@ -1,4 +1,4 @@
-import { signOut, useSession } from "next-auth/react";
+import { getSession, signOut, useSession } from "next-auth/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,12 +16,27 @@ import {
   ChevronDownIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
+import { redirect, useRouter } from "next/navigation";
+import { auth } from "@/auth";
 
 interface IProps {
   userName: string | any;
 }
 export function MyAccount(props: IProps) {
   const { userName } = props;
+  const router = useRouter();
+  // LOGIC
+  const handleRedirectToMyWorkSpace = async () => {
+    const session = await getSession();
+    // alert("check roleName:" + session?.user?.roleName);
+    if (session?.user?.roleName === "author") {
+      router.push("/author");
+    } else if (session?.user?.roleName === "organizer") {
+      router.push("/admin");
+    }
+  };
+
+  // UI
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -36,7 +51,12 @@ export function MyAccount(props: IProps) {
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <UserCircleIcon width={18} /> &nbsp;
-            <p className="text-black">Trang cá nhân</p>
+            <p
+              className="text-black"
+              onClick={() => handleRedirectToMyWorkSpace()}
+            >
+              Trang cá nhân
+            </p>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <ArrowRightStartOnRectangleIcon width={18} /> &nbsp;
@@ -44,8 +64,8 @@ export function MyAccount(props: IProps) {
               href=""
               className=" text-black"
               onClick={() => {
-                signOut();
                 setAuthToken(undefined);
+                signOut();
               }}
             >
               Đăng xuất

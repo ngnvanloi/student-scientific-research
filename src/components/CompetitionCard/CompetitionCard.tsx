@@ -11,6 +11,7 @@ import { ModalCompetitionRegistration } from "../Modal/ModalCompeRegistration";
 import { useGetRegistrationCompetitionDetail } from "@/hooks-query/queries/use-get-registration-competition-detail";
 import { useGetRegistrationCompetitionDetailForAuthor } from "@/hooks-query/queries/use-get-registration-competition-detail-author";
 import { isCurrentDateInRange } from "@/helper/extension-function";
+import { Competition } from "@/types/Competition";
 
 interface IProps {
   competition: Competition | undefined;
@@ -102,6 +103,13 @@ const CompetitionCard = (props: IProps) => {
                         Đăng kí tham gia
                       </Button>
                     );
+                  } else if (
+                    !isCurrentDateInRange(
+                      competition?.dateStart,
+                      competition?.dateEndSubmit
+                    )
+                  ) {
+                    return <p>Cuộc thi hết hạn đăng kí</p>;
                   } else if (isRegistrationPending(competition?.id)) {
                     return <p>Đang chờ phê duyệt</p>;
                   } else if (isRegistrationReject(competition?.id)) {
@@ -111,13 +119,17 @@ const CompetitionCard = (props: IProps) => {
                         className=""
                         onClick={() => handleRegistrationForm(competition?.id)}
                       >
-                        Thử đăng kí lại
+                        Đăng kí lại
                       </Button>
                     );
-                  } else if (isRegistrationApproved(competition?.id)) {
+                  } else if (
+                    isRegistrationApproved(competition?.id) &&
+                    isCurrentDateInRange(
+                      competition?.dateStart,
+                      competition?.dateEndSubmit
+                    )
+                  ) {
                     return <p>Nộp bài</p>;
-                  } else {
-                    return <p>Cuộc thi hết hạn đăng kí</p>;
                   }
                 })()}
                 <ModalCompetitionRegistration

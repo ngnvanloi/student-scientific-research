@@ -11,8 +11,8 @@ import { ArticleWithContributors } from "@/types/ArticleWithContributor";
 export type ParamsGetPublicationArticleForAdminIncludeContributor = {
   index: number;
   pageSize: number;
+  idSearch?: string;
   nameSearch?: string;
-  organizerName?: string;
 };
 export const useGetPublicationArticleForAdminIncludeContributor = (
   params: ParamsGetPublicationArticleForAdminIncludeContributor

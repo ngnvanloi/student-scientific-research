@@ -161,10 +161,10 @@ export default function AppHeader() {
             Trang chủ
           </Link>
           <Link
-            href="/author/submit-research-project"
+            href="/article"
             className="text-sm font-semibold leading-6 text-gray-900"
           >
-            Nộp bài
+            Bài báo khoa học
           </Link>
           <Link
             href="/posts"

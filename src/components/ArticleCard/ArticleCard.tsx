@@ -4,9 +4,11 @@ import { Article } from "@/types/Article";
 import iconPDF from "../../assets/img/pdf-iconn.jpg";
 import { formatDate } from "@/helper/extension-function";
 import { Dropdown, MenuProps, Space, Tag } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { DownOutlined, TagOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { ModalDeleteArticle } from "../Modal/ModalDeleteArticle";
+import { ArticleWithContributors } from "@/types/ArticleWithContributor";
+import { FolderArrowDownIcon } from "@heroicons/react/24/outline";
 interface IPropsAuthorArticle {
   articleItem: Article;
   isAcceptedForPublication: boolean;
@@ -120,4 +122,53 @@ const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
   );
 };
 
-export { ArticleCardForAuthor };
+interface IPropsGuestArticle {
+  articleItem: ArticleWithContributors;
+}
+const ArticleCardForGuest = (props: IPropsGuestArticle) => {
+  const { articleItem } = props;
+  // get danh sách đồng tác giả
+  return (
+    <a
+      key={articleItem.id}
+      href={`/article/${articleItem.id}`}
+      className="flex justify-between gap-x-6 py-5 border-b border-[#ccc] hover:shadow-md p-3 hover:cursor-pointer mt-3"
+    >
+      <div className="flex min-w-0 gap-x-4">
+        <div className="min-w-0 flex-auto">
+          <p className="text-sm/6 font-semibold text-gray-900">
+            {articleItem.title}
+          </p>
+          <p className="mt-1 truncate text-xs/5 text-gray-500">
+            {formatDate(articleItem.dateUpload)}
+          </p>
+          <p className="mt-1 truncate text-xs/5 text-gray-500">
+            {articleItem.coAuthors?.map((author) => author.name).join(", ")}
+          </p>
+        </div>
+      </div>
+      <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+        <p className="text-sm/6 text-gray-900">
+          {articleItem?.keyWord.split(",").map((item, idex) => {
+            return (
+              <Tag icon={<TagOutlined />} color="default">
+                {item}
+              </Tag>
+            );
+          })}
+        </p>
+        <p className="mt-1 text-xs/5 text-gray-500">
+          {articleItem.disciplineName}
+        </p>
+        <a
+          className="hover:text-blue-500 mt-2"
+          href={articleItem.filePath}
+          target="_blank"
+        >
+          <FolderArrowDownIcon width={24} />
+        </a>
+      </div>
+    </a>
+  );
+};
+export { ArticleCardForAuthor, ArticleCardForGuest };
