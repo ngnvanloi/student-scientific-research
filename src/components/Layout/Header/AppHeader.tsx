@@ -99,7 +99,7 @@ export default function AppHeader() {
           </button>
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-          <Popover className="relative">
+          {/* <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
               Product
               <ChevronDownIcon
@@ -153,19 +153,14 @@ export default function AppHeader() {
                 ))}
               </div>
             </PopoverPanel>
-          </Popover>
+          </Popover> */}
           <Link
             href="/"
             className="text-sm font-semibold leading-6 text-gray-900"
           >
             Trang chủ
           </Link>
-          <Link
-            href="/article"
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Bài báo khoa học
-          </Link>
+
           <Link
             href="/posts"
             className="text-sm font-semibold leading-6 text-gray-900"
@@ -179,10 +174,16 @@ export default function AppHeader() {
             Cuộc thi
           </Link>
           <Link
+            href="/article"
+            className="text-sm font-semibold leading-6 text-gray-900"
+          >
+            Bài báo khoa học
+          </Link>
+          <Link
             href="/"
             className="text-sm font-semibold leading-6 text-gray-900"
           >
-            Nghiệm thu
+            Đề tài khoa học
           </Link>
         </PopoverGroup>
 

@@ -7,7 +7,7 @@ import { formatDate } from "@/helper/extension-function";
 import { Avatar, List, Tag } from "antd";
 import avatarMale from "../../assets/icon/icons8-writer-male-48.png";
 import avatarFemale from "../../assets/icon/icons8-writer-female-48.png";
-import { BookOutlined, CalendarOutlined } from "@ant-design/icons";
+import { BookOutlined, CalendarOutlined, TagOutlined } from "@ant-design/icons";
 interface IProps {
   articleID: number;
 }
@@ -27,7 +27,7 @@ const ArticleDetailContainer = (props: IProps) => {
           <span className="font-bold">Từ khóa: </span>{" "}
           {article?.data.keyWord.split(",").map((item, idex) => {
             return (
-              <Tag color="geekblue" key={idex}>
+              <Tag icon={<TagOutlined />} color="default" key={idex}>
                 {item}
               </Tag>
             );
@@ -43,7 +43,7 @@ const ArticleDetailContainer = (props: IProps) => {
           {article?.data.disciplineName}
         </div>
         <div>
-          <span className="font-bold">Ngày đăng tải:</span>
+          <span className="font-bold">Ngày đăng tải:</span>{" "}
           {formatDate(article?.data.dateUpload || "")}
         </div>
         <div>

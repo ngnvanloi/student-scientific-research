@@ -25,6 +25,8 @@ import {
   useMarkAsReadOrUnreadMutation,
 } from "@/hooks-query/mutations/use-update-markasread-notification-mutation";
 import { useDeleteNotificationMutation } from "@/hooks-query/mutations/use-delete-notification-mutation";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   notification: Notification;
@@ -35,7 +37,7 @@ const NotificationCard = (props: IProps) => {
   const { notification, isChanged, setIsChanged } = props;
   const markAsReadMutation = useMarkAsReadOrUnreadMutation();
   const deleteNotification = useDeleteNotificationMutation();
-
+  const router = useRouter();
   // LOGIC
   const handleMarkAsRead = () => {
     // TODO: Mark notification as read
@@ -46,7 +48,7 @@ const NotificationCard = (props: IProps) => {
       { id: notification.id, requestbody: bodyRequest },
       {
         onSuccess: () => {
-          alert("Đánh dấu đã đọc thành công");
+          // alert("Đánh dấu đã đọc thành công");
           setIsChanged(!isChanged);
         },
         onError: (error) => {
@@ -64,7 +66,7 @@ const NotificationCard = (props: IProps) => {
       { id: notification.id, requestbody: bodyRequest },
       {
         onSuccess: () => {
-          alert("Đánh dấu chưa đọc thành công");
+          // alert("Đánh dấu chưa đọc thành công");
           setIsChanged(!isChanged);
         },
         onError: (error) => {
@@ -77,13 +79,73 @@ const NotificationCard = (props: IProps) => {
     // TODO: Delete notification
     deleteNotification.mutate(notification.id, {
       onSuccess: () => {
-        alert("Delete thông báo thành công");
+        // alert("Delete thông báo thành công");
         setIsChanged(!isChanged);
       },
       onError: (error) => {
         console.error("Lỗi khi xóa thông báo:", error);
       },
     });
+  };
+
+  const handleShowDetailsNoti = async () => {
+    const session = await getSession();
+    // TODO: Show details notification | redirect to ...
+    // REDIRECT TO ARTICLE
+    if (notification.notificationTypeId === 1) {
+      if (session?.user?.roleName === "author") {
+        router.push("/author/my-article");
+        handleMarkAsRead();
+      }
+      if (session?.user?.roleName === "supperadmin") {
+        router.push("/super-admin/pending-approval-article");
+        handleMarkAsRead();
+      }
+    }
+    // REDICRECT TO TOPIC
+    else if (notification.notificationTypeId === 2) {
+      if (session?.user?.roleName === "author") {
+        router.push("/author/");
+        handleMarkAsRead();
+      }
+      if (session?.user?.roleName === "organizer") {
+        router.push("/admin/");
+        handleMarkAsRead();
+      }
+    }
+    // REDIRECT TO REVIEWER
+    else if (notification.notificationTypeId === 3) {
+      if (session?.user?.roleName === "author") {
+        router.push("/author/");
+        handleMarkAsRead();
+      }
+      if (session?.user?.roleName === "reviewer") {
+        router.push("/reviewer/");
+        handleMarkAsRead();
+      }
+    }
+    // REDIRECT TO REGISTER (NỘP BÀI)
+    else if (notification.notificationTypeId === 4) {
+      if (session?.user?.roleName === "author") {
+        router.push("/author/");
+        handleMarkAsRead();
+      }
+      if (session?.user?.roleName === "organizer") {
+        router.push("/admin/pending-approval-research-topic");
+        handleMarkAsRead();
+      }
+    }
+    // REDIRECT TO PHÂN CÔNG PHẢN BIỆN
+    else if (notification.notificationTypeId === 5) {
+      if (session?.user?.roleName === "reviewer") {
+        router.push("/reviewer/");
+        handleMarkAsRead();
+      }
+      if (session?.user?.roleName === "organizer") {
+        router.push("/admin/");
+        handleMarkAsRead();
+      }
+    }
   };
 
   // UI
@@ -107,7 +169,7 @@ const NotificationCard = (props: IProps) => {
           }
         })()}
       </div>
-      <div className=" flex-1">
+      <div className="flex-1" onClick={() => handleShowDetailsNoti()}>
         <p className="text-sm font-medium leading-none">
           {formatDate(notification.notificationDate)}
         </p>
