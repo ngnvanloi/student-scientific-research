@@ -19,7 +19,7 @@ const ErrorScreen404 = () => {
       ),
       title: "Resources",
       desc: "Lorem Ipsum is simply dummy text of the printing",
-      href: "javascript:void(0)",
+      href: "/",
     },
     {
       icon: (
@@ -40,7 +40,7 @@ const ErrorScreen404 = () => {
       ),
       title: "Guides",
       desc: "Lorem Ipsum is simply dummy text of the printing",
-      href: "javascript:void(0)",
+      href: "/",
     },
     {
       icon: (
@@ -61,7 +61,7 @@ const ErrorScreen404 = () => {
       ),
       title: "Support",
       desc: "Lorem Ipsum is simply dummy text of the printing",
-      href: "javascript:void(0)",
+      href: "/",
     },
   ];
 

@@ -33,6 +33,7 @@ import {
 } from "@/hooks-query/mutations/use-create-notification-mutation";
 import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { useSession } from "next-auth/react";
+import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 
 const SubmitArticleComponent = () => {
   const { data: session } = useSession();
@@ -54,12 +55,14 @@ const SubmitArticleComponent = () => {
     isSuccess: fileIsSuccess,
     isError: fileIsError,
     error: fileError,
+    isPending: fileIsPending,
   } = useUploadFileMutation();
   const {
     mutate: notiMutation,
     isSuccess: isNotiSuccess,
     isError: isNotiError,
     error: notiError,
+    isPending: notiIsPending,
   } = useCreateNotificationMutation();
   const listDiscipline: SelectItem[] | undefined = disciplines?.data.map(
     (discipline) => ({
@@ -98,7 +101,7 @@ const SubmitArticleComponent = () => {
 
     fileMutation(formDataUploadFile, {
       onSuccess: (result) => {
-        alert("Upload file successfully");
+        // alert("Upload file successfully");
         // TẠO REQUEST BODY
         const requestBody: ParamsSubmitArticle = {
           title: data.title ? data.title : "",
@@ -166,6 +169,8 @@ const SubmitArticleComponent = () => {
   // console.log("cheking preview list contributors:", listContributors);
   return (
     <div>
+      {fileIsPending ? <SpinnerLoading /> : ""}
+      {notiIsPending ? <SpinnerLoading /> : ""}
       <section className="py-3 dark:bg-dark">
         <div className="">
           <div className="">
