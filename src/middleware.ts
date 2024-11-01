@@ -4,7 +4,7 @@ import { auth } from "./auth";
 const roleRoutes = {
   author: "/author",
   reviewer: "/reviewer",
-  superadmin: "/super-admin",
+  supperadmin: "/super-admin",
   organizer: "/admin",
 };
 
@@ -41,7 +41,7 @@ export default async function middleware(req: NextRequest) {
     path.startsWith(route)
   );
 
-  if (isRoleRoute && (!session || path !== allowedRoute)) {
+  if (isRoleRoute && (!session || !path.startsWith(allowedRoute))) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 

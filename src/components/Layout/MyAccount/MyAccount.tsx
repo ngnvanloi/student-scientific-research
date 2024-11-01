@@ -33,6 +33,8 @@ export function MyAccount(props: IProps) {
       router.push("/author");
     } else if (session?.user?.roleName === "organizer") {
       router.push("/admin");
+    } else if (session?.user?.roleName === "supperadmin") {
+      router.push("/super-admin");
     }
   };
 
@@ -49,7 +51,7 @@ export function MyAccount(props: IProps) {
         {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="hover:cursor-pointer">
             <UserCircleIcon width={18} /> &nbsp;
             <p
               className="text-black"

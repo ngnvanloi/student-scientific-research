@@ -36,6 +36,7 @@ const LoginForm = () => {
     await authenticate(formData);
     if (!session?.expires) {
       router.push("/");
+      window.location.reload();
     } else {
       console.log("Login failed");
     }

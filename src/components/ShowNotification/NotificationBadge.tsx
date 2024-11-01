@@ -37,6 +37,7 @@ export function NotificationBadge() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Badge
+            className="hover:cursor-pointer"
             count={
               listNotification?.data
                 ? countUnreadNotifications(listNotification.data)
