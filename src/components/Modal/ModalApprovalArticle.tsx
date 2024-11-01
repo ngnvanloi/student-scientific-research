@@ -102,7 +102,10 @@ const ModalApprovalArticle = (props: IProps) => {
             notificationContent: "Nhà trường " + contentNoti,
             notificationDate: new Date().toISOString(),
             // recevierId: articleDetail?.data.accountID || -1,
-            recevierId: 6,
+            recevierId:
+              articleDetail?.data?.coAuthors?.find(
+                (author) => author.roleName === "author"
+              )?.accountId || -1,
             notificationTypeId: 1,
             targetId: -1,
           };
