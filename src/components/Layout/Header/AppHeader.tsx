@@ -38,6 +38,7 @@ import { MyAccount } from "../MyAccount/MyAccount";
 export default function AppHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { data: session } = useSession();
+  const [currentTab, setCurrentTab] = useState("home");
   // const session = useApplicationGlobalContext();
   // console.log("check session in AppHeader: ", JSON.stringify(session, null, 2));
   return (
@@ -65,39 +66,44 @@ export default function AppHeader() {
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           <Link
             href="/"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "home" ? "border-b-2 border-b-blue-900 text-blue-900" : ""}`}
+            onClick={() => setCurrentTab("home")}
           >
             Trang chủ
           </Link>
 
           <Link
             href="/posts"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "post" ? "border-b-2 border-b-blue-900 text-blue-900" : ""}`}
+            onClick={() => setCurrentTab("post")}
           >
             Bài viết
           </Link>
           <Link
             href="/competitions"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "competition" ? "border-b-2 border-b-blue-900 text-blue-900" : ""}`}
+            onClick={() => setCurrentTab("competition")}
           >
             Cuộc thi
           </Link>
           <Link
             href="/article"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "article" ? "border-b-2 border-b-blue-900 text-blue-900" : ""}`}
+            onClick={() => setCurrentTab("article")}
           >
             Bài báo khoa học
           </Link>
           <Link
             href="/"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "topic" ? "border-b-2 border-b-blue-900 text-blue-900" : ""}`}
+            onClick={() => setCurrentTab("topic")}
           >
             Đề tài khoa học
           </Link>
         </PopoverGroup>
 
         {!session?.user ? (
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end ">
             <Link
               href="/login"
               className="text-sm font-semibold leading-6 text-gray-900"
@@ -123,7 +129,7 @@ export default function AppHeader() {
         <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
+              <span className="sr-only">HUIT</span>
               <img alt="" src={iconHUIT2.src} className="h-12 w-auto" />
             </a>
             <button
