@@ -46,7 +46,7 @@ export const useGetPublicationArticleAuthorIncludeContributor = (
     IDataResponseFromAPI<IListDataResponseFromAPI<ArticleWithContributors>>,
     Error
   >({
-    queryKey: queryKeys.listAuthorArticle,
+    queryKey: [queryKeys.listAuthorArticle, params.index, params.pageSize],
     queryFn: () => GetPublicationArticleAuthorIncludeContributor(params),
   });
 };
