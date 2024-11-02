@@ -92,7 +92,34 @@ const ModalAddNewPost = () => {
         });
       },
       onError: (error) => {
-        console.error("Lỗi khi upload file:", error);
+        // console.error("Lỗi khi upload file:", error);
+        alert("Create post without file");
+        // gọi API thêm Post
+        let bodyRequest: ParamsCreatePost = {
+          title: data.title,
+          content: content,
+          dateUpload: date?.toISOString(),
+          // filePath: "",
+        };
+        mutate(bodyRequest, {
+          onSuccess: () => {
+            toast({
+              title: "Thành công",
+              variant: "default",
+              description:
+                "Chúc mừng! Bài viết đã được tạo thành công và đăng tải trên hệ thống, bạn có thể kiểm tra hoặc chỉnh sửa nếu cần.",
+            });
+            setIsChange(true);
+            setIsOpen(false);
+
+            setContent("");
+            setDate(new Date());
+            setFile(undefined);
+          },
+          onError: (error) => {
+            console.error("Lỗi khi tạo bài viết:", error);
+          },
+        });
       },
     });
   };
