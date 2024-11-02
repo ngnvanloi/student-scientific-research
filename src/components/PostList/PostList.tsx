@@ -1,5 +1,8 @@
 "use client";
-import PostCard, { PostCardForAdmin } from "@/components/PostCard/PostCard";
+import PostCard, {
+  PostCardForAdmin,
+  PostCardForHomepage,
+} from "@/components/PostCard/PostCard";
 import {
   GetListPost,
   ParamsGetListPost,
@@ -73,4 +76,23 @@ const PostListForAdmin = () => {
     </div>
   );
 };
-export { PostList, PostListForAdmin };
+const PostListForHomepage = () => {
+  // PARAMS
+  let params: ParamsGetListPost = {
+    index: 1,
+    pageSize: 5,
+  };
+
+  // REACT QUERY - GET POSTS
+  const { data, refetch } = useGetListPost(params);
+
+  // RENDER UI
+  return (
+    <div className="w-full mt-3 divide-y md:divide-y-0 flex flex-col gap-3">
+      {data?.data.items?.map((item, idx) => (
+        <PostCardForHomepage key={idx} post={item} />
+      ))}
+    </div>
+  );
+};
+export { PostList, PostListForAdmin, PostListForHomepage };

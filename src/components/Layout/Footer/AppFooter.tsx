@@ -1,4 +1,5 @@
 "use client";
+import logoImg from "../../../assets/img/Education-Logo-Graphics-1-11-580x386.jpg";
 const AppFooter = () => {
   const footerNavs = [
     {
@@ -32,7 +33,8 @@ const AppFooter = () => {
     <footer className="text-gray-500 bg-white px-4 py-5 max-w-screen-xl mx-auto md:px-8">
       <div className="max-w-lg sm:mx-auto sm:text-center">
         <img
-          src="https://www.floatui.com/logo.svg"
+          // src="https://www.floatui.com/logo.svg"
+          src={logoImg.src}
           className="w-32 sm:mx-auto"
         />
         <p className="leading-relaxed mt-2 text-[15px]">

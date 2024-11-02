@@ -2,6 +2,7 @@ import { CalendarDaysIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import postIcon from "../../assets/icon/icons8-bell-96.png";
 import { Button, Card, Dropdown, MenuProps, Popover, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import { formatDate } from "@/helper/extension-function";
 interface IProps {
   post: Post | undefined;
 }
@@ -71,5 +72,22 @@ const PostCardForAdmin = (props: IProps) => {
     </article>
   );
 };
-export { PostCardForAdmin };
+
+const PostCardForHomepage = (props: IProps) => {
+  const { post } = props;
+  return (
+    <a className=" hover:cursor-pointer" href={`/posts/${post?.id}`}>
+      <h3 className="text-base text-gray-800 font-semibold mt-1 hover:text-blue-500 hover:underline">
+        {props.post?.title}
+      </h3>
+      <div className="text-sm text-gray-600 flex items-center gap-6 mt-2">
+        <span className="flex items-center gap-2">
+          <CalendarDaysIcon width={"16px"} />
+          {formatDate(props.post?.dateUpLoad || "")}
+        </span>
+      </div>
+    </a>
+  );
+};
+export { PostCardForAdmin, PostCardForHomepage };
 export default PostCard;

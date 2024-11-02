@@ -11,6 +11,8 @@ import { ArticleWithContributors } from "@/types/ArticleWithContributor";
 import { FolderArrowDownIcon } from "@heroicons/react/24/outline";
 import { ModalShowArticleDetails } from "../Modal/ModalDetailArticle";
 import { ModalApprovalArticle } from "../Modal/ModalApprovalArticle";
+import { useRouter } from "next/navigation";
+
 interface IPropsAuthorArticle {
   articleItem: Article;
   isAcceptedForPublication: boolean;
@@ -20,7 +22,8 @@ const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
   const { articleItem, isAcceptedForPublication } = props;
   const [isModalDelOpen, setModelDelOpen] = useState<boolean>(false);
   const [isModalUpdateOpen, setModelUpdateOpen] = useState<boolean>(false);
-
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const router = useRouter();
   // function
   const handleClickUpdateButton = (e: any, acticleID: number) => {
     e.stopPropagation();
@@ -32,8 +35,18 @@ const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
     e.stopPropagation();
     setModelDelOpen(true);
   };
+  const handleShowDetailArticle = () => {
+    if (isAcceptedForPublication === true) {
+      router.push(`/article/${articleItem.articleId}`);
+    } else {
+      setIsOpen(true);
+    }
+  };
   return (
-    <div className="w-full mx-auto px-4 md:px-8 outline outline-1 outline-[#ccc] p-4 rounded-md duration-150 hover:shadow-lg">
+    <div
+      className="w-full mx-auto px-4 md:px-8 outline outline-1 outline-[#ccc] p-4 rounded-md duration-150 hover:shadow-lg hover:cursor-pointer"
+      onClick={() => handleShowDetailArticle()}
+    >
       <div className="w-full mx-auto group sm:max-w-sm">
         <div className="flex items-center justify-center">
           <img
@@ -116,6 +129,11 @@ const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
           <ModalDeleteArticle
             isOpen={isModalDelOpen}
             setIsOpen={setModelDelOpen}
+            articleID={articleItem.articleId}
+          />
+          <ModalShowArticleDetails
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
             articleID={articleItem.articleId}
           />
         </div>
