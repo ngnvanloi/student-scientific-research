@@ -66,7 +66,7 @@ export default function AppHeader() {
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           <Link
             href="/"
-            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "home" ? "border-b-2 border-b-blue-900 text-blue-900" : ""}`}
+            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "home" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
             onClick={() => setCurrentTab("home")}
           >
             Trang chủ
@@ -74,28 +74,28 @@ export default function AppHeader() {
 
           <Link
             href="/posts"
-            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "post" ? "border-b-2 border-b-blue-900 text-blue-900" : ""}`}
+            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "post" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
             onClick={() => setCurrentTab("post")}
           >
             Bài viết
           </Link>
           <Link
             href="/competitions"
-            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "competition" ? "border-b-2 border-b-blue-900 text-blue-900" : ""}`}
+            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "competition" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
             onClick={() => setCurrentTab("competition")}
           >
             Cuộc thi
           </Link>
           <Link
             href="/article"
-            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "article" ? "border-b-2 border-b-blue-900 text-blue-900" : ""}`}
+            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "article" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
             onClick={() => setCurrentTab("article")}
           >
             Bài báo khoa học
           </Link>
           <Link
             href="/"
-            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "topic" ? "border-b-2 border-b-blue-900 text-blue-900" : ""}`}
+            className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "topic" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
             onClick={() => setCurrentTab("topic")}
           >
             Đề tài khoa học
@@ -106,14 +106,20 @@ export default function AppHeader() {
           <div className="hidden lg:flex lg:flex-1 lg:justify-end ">
             <Link
               href="/login"
-              className="text-sm font-semibold leading-6 text-gray-900"
+              className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "login" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
+              onClick={() => setCurrentTab("login")}
             >
               Đăng nhập <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
         ) : (
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <MyAccount userName={session?.user?.name} />
+          <div className={`hidden lg:flex lg:flex-1 lg:justify-end`}>
+            <div
+              onClick={() => setCurrentTab("profile")}
+              className={`${currentTab === "profile" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
+            >
+              <MyAccount userName={session?.user?.name} />
+            </div>
             &nbsp;
             <NotificationBadge />
             &nbsp;
