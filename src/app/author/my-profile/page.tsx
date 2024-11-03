@@ -1,5 +1,6 @@
 "use client";
 import { ModalUpdateProfile } from "@/components/Modal/ModalUpdateProfile";
+import { formatDate } from "@/helper/extension-function";
 import { useGetProfile } from "@/hooks-query/queries/use-get-user-profile";
 import { Author } from "@/types/Author";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
@@ -9,13 +10,14 @@ import { useState } from "react";
 export default function MyProfile() {
   const { data: user } = useGetProfile();
 
+  console.log("check user author profile: ", user);
   let author: Author = {
     name: user?.data.name || "",
     email: user?.data.email || "",
     numberPhone: user?.data.numberPhone || "",
     internalCode: user?.data.internalCode || "",
-    dateOfBirth: "",
-    sex: "",
+    dateOfBirth: user?.data.dateOfBirth || "",
+    sex: user?.data.sex || "",
     facultyId: user?.data.facultyId || -1,
   };
 
@@ -53,11 +55,15 @@ export default function MyProfile() {
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm/6 font-medium text-gray-900">Ngày sinh</dt>
-            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"></dd>
+            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {formatDate(user?.data.dateOfBirth || "")}
+            </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm/6 font-medium text-gray-900">Giới tính</dt>
-            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"></dd>
+            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {user?.data.sex}
+            </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm/6 font-medium text-gray-900">Email</dt>

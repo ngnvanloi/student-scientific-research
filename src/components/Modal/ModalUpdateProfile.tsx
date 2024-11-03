@@ -58,6 +58,7 @@ const ModalUpdateProfile = (props: IProps) => {
       numberPhone: author?.numberPhone || "",
       sex: author?.sex || "Nam",
       facultyId: author?.facultyId || 0,
+      dateOfBirth: author?.dateOfBirth,
     },
   });
 
@@ -70,6 +71,7 @@ const ModalUpdateProfile = (props: IProps) => {
         numberPhone: author.numberPhone,
         sex: author.sex,
         facultyId: author.facultyId,
+        dateOfBirth: author.dateOfBirth,
       });
       setDateOfBirth(
         author.dateOfBirth ? new Date(author.dateOfBirth) : undefined
