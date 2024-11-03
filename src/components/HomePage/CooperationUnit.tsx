@@ -8,8 +8,8 @@ import { ZoomLogo } from "@/assets/svg/zoom.logo";
 import { SlackLogo } from "@/assets/svg/slack.logo";
 const CooperationUnit = () => {
   return (
-    <div className="mt-12 flex justify-center">
-      <ul className="inline-grid grid-cols-2 gap-x-10 gap-y-6 md:gap-x-16">
+    <div className="mt-12">
+      <ul className="grid grid-cols-2 gap-x-10 gap-y-6 md:gap-x-16 justify-center content-center items-center">
         {/* LOGO 1 */}
         <DropboxLogo />
         {/* LOGO 2 */}

@@ -8,6 +8,7 @@ import {
   TFormSubmitArticle,
   TFormSubmitResearchProjectTabGoalResult,
   TFormSubmitResearchProjectTabOveriew,
+  TFormUpdateAuthor,
 } from "./FormInputsData";
 import { title } from "process";
 
@@ -63,6 +64,15 @@ export const FormAddCompetitonSchema: ZodType<TFormAddCompetition> = z.object({
 });
 
 export const FormAddContributorSchema: ZodType<TFormAddContributor> = z.object({
+  name: z.string(),
+  email: z.string(),
+  numberPhone: z.string(),
+  // dateOfBirth: z.string(),
+  sex: z.string(),
+  // roleName: z.string(),
+});
+
+export const FormUpdateAuthorSchema: ZodType<TFormUpdateAuthor> = z.object({
   name: z.string(),
   email: z.string(),
   numberPhone: z.string(),

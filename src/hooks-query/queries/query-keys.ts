@@ -20,4 +20,5 @@ export const queryKeys = {
   listAuthorArticle: ["listAuthorArticle"],
   listForAdminArticle: ["listForAdminArticle"],
   articleDetail: ["articleDetail"],
+  listFaculty: ["listFaculty"],
 };

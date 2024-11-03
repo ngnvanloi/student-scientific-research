@@ -51,3 +51,13 @@ export type TFormAddContributor = {
   sex?: string;
   roleName?: string;
 };
+
+export type TFormUpdateAuthor = {
+  name: string;
+  email: string;
+  numberPhone: string;
+  dateOfBirth?: string;
+  sex?: string;
+  roleName?: string;
+  facultyId?: number;
+};

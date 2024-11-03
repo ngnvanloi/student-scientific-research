@@ -1,110 +1,93 @@
+"use client";
+import { ModalUpdateProfile } from "@/components/Modal/ModalUpdateProfile";
+import { useGetProfile } from "@/hooks-query/queries/use-get-user-profile";
+import { Author } from "@/types/Author";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
+import { Button } from "antd";
+import { useState } from "react";
 
 export default function MyProfile() {
+  const { data: user } = useGetProfile();
+
+  let author: Author = {
+    name: user?.data.name || "",
+    email: user?.data.email || "",
+    numberPhone: user?.data.numberPhone || "",
+    internalCode: user?.data.internalCode || "",
+    dateOfBirth: "",
+    sex: "",
+    facultyId: user?.data.facultyId || -1,
+  };
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isChange, setIsChange] = useState<boolean>(false);
+
   return (
     <div>
       <div className="px-4 sm:px-0">
-        <h3 className="text-base/7 font-semibold text-gray-900">
-          Applicant Information
-        </h3>
+        <div className="flex justify-between items-center">
+          <h3 className="text-base/7 font-semibold text-gray-900">
+            Thông tin cá nhân
+          </h3>
+          <div>
+            <Button onClick={() => setIsOpen(true)}>Cập nhật hồ sơ</Button>
+            <ModalUpdateProfile
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              author={author}
+              setIsChange={setIsChange}
+            />
+          </div>
+        </div>
         <p className="mt-1 max-w-2xl text-sm/6 text-gray-500">
-          Personal details and application.
+          Hoàn thiện hồ sơ cá nhân của bạn
         </p>
       </div>
       <div className="mt-6 border-t border-gray-100">
         <dl className="divide-y divide-gray-100">
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm/6 font-medium text-gray-900">Full name</dt>
+            <dt className="text-sm/6 font-medium text-gray-900">Họ tên</dt>
             <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-              Margot Foster
+              {user?.data.name}
+            </dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm/6 font-medium text-gray-900">Ngày sinh</dt>
+            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"></dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm/6 font-medium text-gray-900">Giới tính</dt>
+            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0"></dd>
+          </div>
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm/6 font-medium text-gray-900">Email</dt>
+            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {user?.data.email}
             </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm/6 font-medium text-gray-900">
-              Application for
+              Số điện thoại
             </dt>
             <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-              Backend Developer
+              {user?.data.numberPhone}
+            </dd>
+          </div>
+
+          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm/6 font-medium text-gray-900">Khoa</dt>
+            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+              {user?.data.facultyName}
             </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm/6 font-medium text-gray-900">
-              Email address
-            </dt>
-            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-              margotfoster@example.com
-            </dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm/6 font-medium text-gray-900">
-              Salary expectation
-            </dt>
-            <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-              $120,000
-            </dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm/6 font-medium text-gray-900">About</dt>
+            <dt className="text-sm/6 font-medium text-gray-900">Giới thiệu</dt>
             <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
               Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim
               incididunt cillum culpa consequat. Excepteur qui ipsum aliquip
               consequat sint. Sit id mollit nulla mollit nostrud in ea officia
               proident. Irure nostrud pariatur mollit ad adipisicing
               reprehenderit deserunt qui eu.
-            </dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm/6 font-medium text-gray-900">Attachments</dt>
-            <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              <ul
-                role="list"
-                className="divide-y divide-gray-100 rounded-md border border-gray-200"
-              >
-                <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm/6">
-                  <div className="flex w-0 flex-1 items-center">
-                    <PaperClipIcon
-                      aria-hidden="true"
-                      className="h-5 w-5 flex-shrink-0 text-gray-400"
-                    />
-                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                      <span className="truncate font-medium">
-                        resume_back_end_developer.pdf
-                      </span>
-                      <span className="flex-shrink-0 text-gray-400">2.4mb</span>
-                    </div>
-                  </div>
-                  <div className="ml-4 flex-shrink-0">
-                    <a
-                      href="#"
-                      className="font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      Download
-                    </a>
-                  </div>
-                </li>
-                <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm/6">
-                  <div className="flex w-0 flex-1 items-center">
-                    <PaperClipIcon
-                      aria-hidden="true"
-                      className="h-5 w-5 flex-shrink-0 text-gray-400"
-                    />
-                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                      <span className="truncate font-medium">
-                        coverletter_back_end_developer.pdf
-                      </span>
-                      <span className="flex-shrink-0 text-gray-400">4.5mb</span>
-                    </div>
-                  </div>
-                  <div className="ml-4 flex-shrink-0">
-                    <a
-                      href="#"
-                      className="font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      Download
-                    </a>
-                  </div>
-                </li>
-              </ul>
             </dd>
           </div>
         </dl>
