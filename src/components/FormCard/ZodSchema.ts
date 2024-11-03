@@ -5,6 +5,7 @@ import {
   TFormAddPost,
   TFormApprovalRegistration,
   TFormLoginData,
+  TFormRegisterData,
   TFormSubmitArticle,
   TFormSubmitResearchProjectTabGoalResult,
   TFormSubmitResearchProjectTabOveriew,
@@ -20,6 +21,16 @@ export const FormLoginSchema: ZodType<TFormLoginData> = z.object({
     .max(20, { message: "Password is too long" }),
 });
 
+export const FormRegisterSchema: ZodType<TFormRegisterData> = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  password: z
+    .string()
+    .min(8, { message: "Password is too short" })
+    .max(20, { message: "Password is too long" }),
+  numberPhone: z.string(),
+  roleName: z.string().optional(),
+});
 export const FormTabOverviewSchema: ZodType<TFormSubmitResearchProjectTabOveriew> =
   z.object({
     researchProject_ID: z.number(),
