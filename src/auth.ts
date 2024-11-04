@@ -41,7 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         setAuthToken(res.data.tokenResponse?.accessToken);
 
         let user_profile = null;
-        if (res.data.tokenResponse.account.roleName !== "supperadmin") {
+        if (res.data.tokenResponse.account.roleName !== "superadmin") {
           // Chỉ lấy user profile nếu role không phải là super-admin
           try {
             user_profile = await getProfile();

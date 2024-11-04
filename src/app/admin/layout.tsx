@@ -112,7 +112,13 @@ export default function AdminLayout({
         "/admin"
       ),
     ]),
-    getItem("Quản lý tài khoản", "9", <UserOutlined />, undefined, "/admin"),
+    getItem(
+      "Quản lý tài khoản",
+      "9",
+      <UserOutlined />,
+      undefined,
+      "/admin/my-profile"
+    ),
   ];
 
   return (

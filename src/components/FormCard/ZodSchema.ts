@@ -10,6 +10,7 @@ import {
   TFormSubmitResearchProjectTabGoalResult,
   TFormSubmitResearchProjectTabOveriew,
   TFormUpdateAuthor,
+  TFormUpdateOrganizer,
 } from "./FormInputsData";
 import { title } from "process";
 
@@ -91,3 +92,12 @@ export const FormUpdateAuthorSchema: ZodType<TFormUpdateAuthor> = z.object({
   sex: z.string(),
   // roleName: z.string(),
 });
+
+export const FormUpdateOrganizerSchema: ZodType<TFormUpdateOrganizer> =
+  z.object({
+    name: z.string(),
+    email: z.string(),
+    numberPhone: z.string(),
+    facultyId: z.number() || z.string(),
+    description: z.string(),
+  });

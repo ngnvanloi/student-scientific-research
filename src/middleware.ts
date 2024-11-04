@@ -4,7 +4,7 @@ import { auth } from "./auth";
 const roleRoutes = {
   author: "/author",
   reviewer: "/reviewer",
-  supperadmin: "/super-admin",
+  superadmin: "/super-admin",
   organizer: "/admin",
 };
 

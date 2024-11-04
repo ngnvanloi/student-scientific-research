@@ -33,7 +33,7 @@ export function MyAccount(props: IProps) {
       router.push("/author");
     } else if (session?.user?.roleName === "organizer") {
       router.push("/admin");
-    } else if (session?.user?.roleName === "supperadmin") {
+    } else if (session?.user?.roleName === "superadmin") {
       router.push("/super-admin");
     }
   };

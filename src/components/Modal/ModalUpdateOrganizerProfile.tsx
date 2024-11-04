@@ -3,35 +3,33 @@ import { CloseModalIcon } from "@/assets/svg/close.modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useForm } from "react-hook-form";
-import { TFormUpdateAuthor } from "../FormCard/FormInputsData";
-import { FormUpdateAuthorSchema } from "../FormCard/ZodSchema";
+import {
+  TFormUpdateAuthor,
+  TFormUpdateOrganizer,
+} from "../FormCard/FormInputsData";
+import { FormUpdateOrganizerSchema } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
 import { Button } from "antd";
 import React, { useEffect, useState } from "react";
-import { DatePicker } from "../DatePicker/DatePicker";
 import { useToast } from "@/hooks/use-toast";
 import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
-import { CoAuthor } from "@/types/CoAuthor";
-import { Author } from "@/types/Author";
 import { useGetListFaculty } from "@/hooks-query/queries/use-get-faculties";
+import { Organizer } from "@/types/Organizer";
+import {
+  ParamsUpdateOrganizerProfile,
+  useUpdateOrganizerProfileMutation,
+} from "@/hooks-query/mutations/use-update-organizer-profile-mutation";
 
-const gender: SelectItem[] = [
-  { id: "Nam", name: "Nam" },
-  { id: "Nữ", name: "Nữ" },
-  { id: "Khác", name: "Khác" },
-];
 interface IProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsChange: React.Dispatch<React.SetStateAction<boolean>>;
-  author: Author | null;
+  organizer: Organizer | null;
 }
-const ModalUpdateProfile = (props: IProps) => {
-  const { isOpen, setIsOpen, author, setIsChange } = props;
-  console.log("checking author update: ", author);
-  //   const { data: disciplines } = useQuery("disciplines", () =>
-  //     fetchDisciplines()
-  //   );
+const ModalUpdateOrganizerProfile = (props: IProps) => {
+  const { isOpen, setIsOpen, organizer, setIsChange } = props;
+  console.log("checking organizer update: ", organizer);
+
   const { data: faculties } = useGetListFaculty();
   const listFaculty: SelectItem[] | undefined = faculties?.data.map(
     (faculty) => ({
@@ -39,9 +37,10 @@ const ModalUpdateProfile = (props: IProps) => {
       name: faculty.facultyName,
     })
   );
-  // STATE
-  const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(new Date());
-
+  console.log("checking list faculty: ", listFaculty);
+  // MUTATION
+  const { mutate, isPending, isSuccess, isError } =
+    useUpdateOrganizerProfileMutation();
   const { toast } = useToast();
   // REACT HOOK FORM
   const {
@@ -50,63 +49,73 @@ const ModalUpdateProfile = (props: IProps) => {
     formState: { errors },
     setError,
     reset,
-  } = useForm<TFormUpdateAuthor>({
-    resolver: zodResolver(FormUpdateAuthorSchema),
+  } = useForm<TFormUpdateOrganizer>({
+    resolver: zodResolver(FormUpdateOrganizerSchema),
     defaultValues: {
-      name: author?.name || "",
-      email: author?.email || "",
-      numberPhone: author?.numberPhone || "",
-      sex: author?.sex || "Nam",
-      facultyId: author?.facultyId || 0,
-      dateOfBirth: author?.dateOfBirth,
+      name: organizer?.name || "",
+      email: organizer?.email || "",
+      numberPhone: organizer?.numberPhone || "",
+      facultyId: organizer?.facultyId || 0,
+      description: organizer?.description || "",
     },
   });
 
   useEffect(() => {
-    // Reset form mỗi khi `author` thay đổi
-    if (author) {
+    // Reset form mỗi khi `organizer` thay đổi
+    if (organizer) {
       reset({
-        name: author.name,
-        email: author.email,
-        numberPhone: author.numberPhone,
-        sex: author.sex,
-        facultyId: author.facultyId,
-        dateOfBirth: author.dateOfBirth,
+        name: organizer.name,
+        email: organizer.email,
+        numberPhone: organizer.numberPhone,
+        facultyId: organizer.facultyId,
+        description: organizer.description,
       });
-      setDateOfBirth(
-        author.dateOfBirth ? new Date(author.dateOfBirth) : undefined
-      );
     }
-  }, [author, reset]);
+  }, [organizer, reset]);
 
   // HANDLE LOGIC
-  const onSubmit = (data: TFormUpdateAuthor) => {
-    console.log("Check date of birth: ", dateOfBirth?.toISOString());
+  const onSubmit = (data: TFormUpdateOrganizer) => {
     console.log("Check name: ", data.name);
     console.log("Check email: ", data.email);
-    console.log("Check gender: ", data.sex);
     console.log("check phone: ", data.numberPhone);
     console.log("check faculty: ", data.facultyId);
+    console.log("check description: ", data.description);
 
-    // thêm đồng tác giả và danh sách
-    let contributor: CoAuthor = {
+    // GỌI API CẬP NHẬT USER
+    let bodyRequest: ParamsUpdateOrganizerProfile = {
       name: data.name,
       email: data.email,
       numberPhone: data.numberPhone,
-      dateOfBirth: dateOfBirth?.toISOString() || "",
-      sex: data.sex || "Nam",
-      roleName: "co-author",
+      description: data.description,
+      facultyId: data.facultyId,
     };
-
-    // GỌI API CẬP NHẬT USER
+    mutate(
+      { data: bodyRequest },
+      {
+        onSuccess: () => {
+          // alert("Update post successfully");
+          toast({
+            title: "Thông báo",
+            variant: "default",
+            description: "Bạn đã cập nhật thông tin cá nhân thành công",
+          });
+          setIsChange(true);
+          setIsOpen(false);
+        },
+        onError: (error) => {
+          alert("Lỗi khi cập nhật profile: " + error);
+        },
+      }
+    );
+    // RESET FORM UPDATE
     reset({
       name: "",
       email: "",
       numberPhone: "",
-      sex: "Nam", // nếu cần giá trị mặc định là Nam
+      facultyId: 0,
+      description: "",
     });
     setIsOpen(false);
-    setDateOfBirth(new Date());
   };
 
   const onError = (errors: any) => {
@@ -120,7 +129,7 @@ const ModalUpdateProfile = (props: IProps) => {
           <div className="bg-white rounded-md shadow-lg ">
             <div className="flex items-center justify-between p-4 border-b">
               <Dialog.Title className="text-lg font-medium text-gray-800 ">
-                <strong>Cập nhật thông tin cá nhân</strong>
+                <strong>Cập nhật thông tin ban tổ chức</strong>
               </Dialog.Title>
               <Dialog.Close className="p-2 text-gray-400 rounded-md hover:bg-gray-100">
                 <CloseModalIcon />
@@ -129,7 +138,7 @@ const ModalUpdateProfile = (props: IProps) => {
             <Dialog.Description className="space-y-2 p-4 mt-3 text-[15.5px] leading-relaxed text-gray-500">
               <div>
                 <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-                  Họ tên
+                  Tên ban tổ chức
                 </label>
                 <FormField
                   type="text"
@@ -138,32 +147,6 @@ const ModalUpdateProfile = (props: IProps) => {
                   register={register}
                   error={errors.name}
                   className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="basis-1/2">
-                  <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-                    Ngày sinh
-                  </label>
-                  <DatePicker date={dateOfBirth} setDate={setDateOfBirth} />
-                </div>
-                <FormSelect
-                  name="sex"
-                  items={gender || []}
-                  register={register}
-                  error={errors.sex}
-                  label="Giới tính"
-                  className="relative basis-1/2 z-20 w-full appearance-none rounded-lg border border-stroke dark:border-dark-3 bg-transparent py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2"
-                />
-              </div>
-              <div className="grid grid-cols-1 gap-3">
-                <FormSelect
-                  name="facultyId"
-                  items={listFaculty || []}
-                  register={register}
-                  error={errors.facultyId}
-                  label="Khoa"
-                  className="w-full appearance-none rounded-lg border border-stroke dark:border-dark-3 bg-transparent py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2"
                 />
               </div>
               <div className="mt-5">
@@ -179,6 +162,16 @@ const ModalUpdateProfile = (props: IProps) => {
                   className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
                 />
               </div>
+              <div className="grid grid-cols-1 gap-3">
+                <FormSelect
+                  name="facultyId"
+                  items={listFaculty || []}
+                  register={register}
+                  error={errors.facultyId}
+                  label="Khoa"
+                  className="w-full appearance-none rounded-lg border border-stroke dark:border-dark-3 bg-transparent py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2"
+                />
+              </div>
               <div>
                 <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                   Số điện thoại
@@ -189,6 +182,20 @@ const ModalUpdateProfile = (props: IProps) => {
                   name="numberPhone"
                   register={register}
                   error={errors.numberPhone}
+                  className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
+                />
+              </div>
+              <div>
+                <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
+                  Giới thiệu
+                </label>
+                <FormField
+                  type="text"
+                  placeholder="Nhập giới thiệu ..."
+                  name="description"
+                  register={register}
+                  error={errors.description}
+                  isTextArea={true}
                   className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
                 />
               </div>
@@ -214,4 +221,4 @@ const ModalUpdateProfile = (props: IProps) => {
     </Dialog.Root>
   );
 };
-export { ModalUpdateProfile };
+export { ModalUpdateOrganizerProfile };

@@ -97,7 +97,7 @@ const NotificationCard = (props: IProps) => {
         router.push("/author/my-article");
         handleMarkAsRead();
       }
-      if (session?.user?.roleName === "supperadmin") {
+      if (session?.user?.roleName === "superadmin") {
         router.push("/super-admin/pending-approval-article");
         handleMarkAsRead();
       }

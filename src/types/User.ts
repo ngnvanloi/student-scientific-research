@@ -18,5 +18,5 @@ type TUser = {
   academicRank: string;
 
   // for organizer
-  discription: string;
+  description: string;
 };

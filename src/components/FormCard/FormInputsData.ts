@@ -68,3 +68,11 @@ export type TFormUpdateAuthor = {
   roleName?: string;
   facultyId?: number;
 };
+
+export type TFormUpdateOrganizer = {
+  name: string;
+  email: string;
+  numberPhone: string;
+  facultyId?: number | string;
+  description: string;
+};
