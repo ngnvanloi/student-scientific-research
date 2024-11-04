@@ -59,7 +59,9 @@ const PostCardForAdmin = (props: IProps) => {
       key={`post${post?.id}`}
     >
       <a href={`/posts/${post?.id}`}>
-        <span className="block text-gray-400 text-sm">{post?.dateUpLoad}</span>
+        <span className="block text-gray-400 text-sm">
+          {formatDate(post?.dateUpLoad || "")}
+        </span>
         <div className="mt-2">
           <h3 className="text-xl text-gray-900 font-semibold hover:underline">
             {post?.title}

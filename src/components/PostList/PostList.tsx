@@ -76,7 +76,7 @@ const PostListForAdmin = () => {
   // PARAMS
   let params: ParamsGetListPost = {
     index: 1,
-    pageSize: 8,
+    pageSize: 100,
   };
   // USE PROVIDER CONTEXT
   const { isChange, setIsChange } = usePostManagementContext();

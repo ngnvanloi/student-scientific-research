@@ -21,6 +21,7 @@ import { useUploadFileMutation } from "@/hooks-query/mutations/use-upload-file-m
 import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-firebase";
 import { ParamsRegisterCompetiton } from "@/hooks-query/mutations/use-register-competition";
 import { useToast } from "@/hooks/use-toast";
+import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 
 const ModalAddNewPost = () => {
   // STATE
@@ -28,24 +29,27 @@ const ModalAddNewPost = () => {
   const [file, setFile] = useState<File>();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const { toast } = useToast();
-  const { mutate, isSuccess, isError, error } = useCreatePostMutation();
+  const { mutate, isSuccess, isError, error, isPending } =
+    useCreatePostMutation();
   const {
     mutate: fileMutation,
     isSuccess: fileIsSuccess,
     isError: fileIsError,
     error: fileError,
+    isPending: fileIsPending,
   } = useUploadFileMutation();
   // State để điều khiển modal
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // USE PROVIDER CONTEXT
-  const { setIsChange } = usePostManagementContext();
+  const { setIsChange, isChange } = usePostManagementContext();
   // REACT HOOK FORM
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
+    reset,
   } = useForm<TFormAddPost>({
     resolver: zodResolver(FormAddPostSchema),
   });
@@ -63,7 +67,7 @@ const ModalAddNewPost = () => {
 
     fileMutation(formDataUploadFile, {
       onSuccess: (result) => {
-        alert("Upload file successfully");
+        // alert("Upload file successfully");
         // gọi API thêm Post
         let bodyRequest: ParamsCreatePost = {
           title: data.title,
@@ -79,12 +83,16 @@ const ModalAddNewPost = () => {
               description:
                 "Chúc mừng! Bài viết đã được tạo thành công và đăng tải trên hệ thống, bạn có thể kiểm tra hoặc chỉnh sửa nếu cần.",
             });
-            setIsChange(true);
+            setIsChange(!isChange);
             setIsOpen(false);
 
             setContent("");
             setDate(new Date());
             setFile(undefined);
+
+            reset({
+              title: "",
+            });
           },
           onError: (error) => {
             console.error("Lỗi khi xóa bài viết:", error);
@@ -93,7 +101,7 @@ const ModalAddNewPost = () => {
       },
       onError: (error) => {
         // console.error("Lỗi khi upload file:", error);
-        alert("Create post without file");
+        // alert("Create post without file");
         // gọi API thêm Post
         let bodyRequest: ParamsCreatePost = {
           title: data.title,
@@ -115,6 +123,9 @@ const ModalAddNewPost = () => {
             setContent("");
             setDate(new Date());
             setFile(undefined);
+            reset({
+              title: "",
+            });
           },
           onError: (error) => {
             console.error("Lỗi khi tạo bài viết:", error);
@@ -131,6 +142,7 @@ const ModalAddNewPost = () => {
   // RENDER UI
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+      {isPending || (fileIsPending && <SpinnerLoading />)}
       <Dialog.Trigger className="w-32 py-2 shadow-sm rounded-md bg-indigo-600 text-white mt-4 flex items-center justify-center">
         Thêm bài viết
       </Dialog.Trigger>
