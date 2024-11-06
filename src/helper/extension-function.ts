@@ -25,3 +25,12 @@ export function countUnreadNotifications(
 ): number {
   return data.filter((item) => item.status === false).length;
 }
+
+export function formatCurrencyVND(amount: number): string {
+  // Kiểm tra nếu amount là số hợp lệ
+  if (typeof amount !== "number" || isNaN(amount)) {
+    throw new Error("Giá trị không hợp lệ, vui lòng nhập một số.");
+  }
+
+  return amount.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+}

@@ -6,6 +6,7 @@ import {
   TFormApprovalRegistration,
   TFormLoginData,
   TFormRegisterData,
+  TFormReviewTopic,
   TFormSubmitArticle,
   TFormSubmitResearchProjectTabGoalResult,
   TFormSubmitResearchProjectTabOveriew,
@@ -101,3 +102,8 @@ export const FormUpdateOrganizerSchema: ZodType<TFormUpdateOrganizer> =
     facultyId: z.string(),
     description: z.string(),
   });
+
+export const FormReviewTopicSchema: ZodType<TFormReviewTopic> = z.object({
+  content: z.string(),
+  concludeId: z.string(),
+});

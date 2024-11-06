@@ -5,6 +5,7 @@ export type Contributor = {
   dateOfBirth: string;
   sex: string;
   numberPhone: string;
+  facultyId?: number;
   facultyName: string;
   internalCode: string;
   accountId: number;

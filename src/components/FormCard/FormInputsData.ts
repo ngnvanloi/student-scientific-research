@@ -76,3 +76,7 @@ export type TFormUpdateOrganizer = {
   facultyId?: number | string;
   description: string;
 };
+export type TFormReviewTopic = {
+  content: string;
+  concludeId: string;
+};
