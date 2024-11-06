@@ -3,7 +3,7 @@ import React from "react";
 import { classNames } from "@react-pdf-viewer/core";
 
 export type SelectItem = {
-  id: string | number; // 'id' của từng item
+  id: number | string; // 'id' của từng item
   name: string; // Tên hiển thị của item
 };
 

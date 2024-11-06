@@ -90,7 +90,7 @@ export const FormUpdateAuthorSchema: ZodType<TFormUpdateAuthor> = z.object({
   numberPhone: z.string(),
   // dateOfBirth: z.string(),
   sex: z.string(),
-  // roleName: z.string(),
+  facultyId: z.string(),
 });
 
 export const FormUpdateOrganizerSchema: ZodType<TFormUpdateOrganizer> =
@@ -98,6 +98,6 @@ export const FormUpdateOrganizerSchema: ZodType<TFormUpdateOrganizer> =
     name: z.string(),
     email: z.string(),
     numberPhone: z.string(),
-    facultyId: z.number() || z.string(),
+    facultyId: z.string(),
     description: z.string(),
   });

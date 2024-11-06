@@ -14,6 +14,12 @@ import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
 import { CoAuthor } from "@/types/CoAuthor";
 import { Author } from "@/types/Author";
 import { useGetListFaculty } from "@/hooks-query/queries/use-get-faculties";
+import {
+  ParamsUpdateAuthorProfile,
+  useUpdateAuthorProfileMutation,
+} from "@/hooks-query/mutations/use-update-author-profile-mutation";
+import { string } from "zod";
+import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 
 const gender: SelectItem[] = [
   { id: "Nam", name: "Nam" },
@@ -42,6 +48,9 @@ const ModalUpdateProfile = (props: IProps) => {
   // STATE
   const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(new Date());
 
+  // MUTATION
+  const { mutate, isPending, isSuccess, isError } =
+    useUpdateAuthorProfileMutation();
   const { toast } = useToast();
   // REACT HOOK FORM
   const {
@@ -56,9 +65,9 @@ const ModalUpdateProfile = (props: IProps) => {
       name: author?.name || "",
       email: author?.email || "",
       numberPhone: author?.numberPhone || "",
+      dateOfBirth: author?.dateOfBirth,
       sex: author?.sex || "Nam",
       facultyId: author?.facultyId || 0,
-      dateOfBirth: author?.dateOfBirth,
     },
   });
 
@@ -89,21 +98,41 @@ const ModalUpdateProfile = (props: IProps) => {
     console.log("check faculty: ", data.facultyId);
 
     // thêm đồng tác giả và danh sách
-    let contributor: CoAuthor = {
+    let requestBody: ParamsUpdateAuthorProfile = {
       name: data.name,
       email: data.email,
       numberPhone: data.numberPhone,
       dateOfBirth: dateOfBirth?.toISOString() || "",
       sex: data.sex || "Nam",
-      roleName: "co-author",
+      internalCode: "unknown",
+      facultyId: data.facultyId ? (data.facultyId as number) : 0,
     };
-
-    // GỌI API CẬP NHẬT USER
+    mutate(
+      { data: requestBody },
+      {
+        onSuccess: () => {
+          // alert("Update post successfully");
+          toast({
+            title: "Thông báo",
+            variant: "default",
+            description: "Bạn đã cập nhật thông tin cá nhân thành công",
+          });
+          setIsChange(true);
+          setIsOpen(false);
+        },
+        onError: (error) => {
+          alert("Lỗi khi cập nhật profile: " + error);
+        },
+      }
+    );
+    // RESET FORM UPDATE
     reset({
       name: "",
       email: "",
       numberPhone: "",
-      sex: "Nam", // nếu cần giá trị mặc định là Nam
+      sex: "",
+      facultyId: "",
+      dateOfBirth: "",
     });
     setIsOpen(false);
     setDateOfBirth(new Date());
@@ -114,6 +143,7 @@ const ModalUpdateProfile = (props: IProps) => {
   };
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+      {isPending ? <SpinnerLoading /> : ""}
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 w-full h-full bg-black opacity-40 " />
         <Dialog.Content className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full max-w-4xl mx-auto px-4 ">

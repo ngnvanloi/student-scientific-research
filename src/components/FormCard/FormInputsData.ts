@@ -63,10 +63,10 @@ export type TFormUpdateAuthor = {
   name: string;
   email: string;
   numberPhone: string;
+  internalCode?: string;
   dateOfBirth?: string;
   sex?: string;
-  roleName?: string;
-  facultyId?: number;
+  facultyId?: number | string;
 };
 
 export type TFormUpdateOrganizer = {

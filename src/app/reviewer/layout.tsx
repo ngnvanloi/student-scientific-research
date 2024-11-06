@@ -1,22 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import {
-  AppstoreAddOutlined,
   BellOutlined,
-  CarryOutOutlined,
-  CloudServerOutlined,
-  CommentOutlined,
   FileTextOutlined,
-  FireOutlined,
-  Loading3QuartersOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
   ReconciliationOutlined,
-  SignatureOutlined,
-  SolutionOutlined,
-  TeamOutlined,
-  TrophyOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, MenuProps, theme } from "antd";
