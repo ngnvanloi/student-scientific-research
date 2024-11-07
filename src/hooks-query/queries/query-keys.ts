@@ -24,4 +24,5 @@ export const queryKeys = {
   researchTopicDetail: ["researchTopicDetail"],
   versionOfResearchTopic: ["versionOfResearchTopic"],
   listConclude: ["listConclude"],
+  listAuthorResearchTopic: ["listAuthorResearchTopic"],
 };

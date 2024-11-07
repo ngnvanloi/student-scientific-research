@@ -77,11 +77,18 @@ export default function AdminLayout({
       ),
     ]),
     getItem("Đề tài của tôi", "5", <ReconciliationOutlined />, [
-      getItem("Đề tài đã công bố", "6", <TrophyOutlined />, undefined, "#"),
-      getItem("Đề tài chờ phản biện", "7", <CommentOutlined />, undefined, "#"),
+      getItem(
+        "Nộp đề tài",
+        "6",
+        <TrophyOutlined />,
+        undefined,
+        "/author/submit-research-project"
+      ),
+      getItem("Đề tài đã công bố", "7", <TrophyOutlined />, undefined, "#"),
+      getItem("Đề tài chờ phản biện", "8", <CommentOutlined />, undefined, "#"),
       getItem(
         "Đề tài chờ nghiệm thu",
-        "8",
+        "9",
         <Loading3QuartersOutlined />,
         undefined,
         "#"
@@ -89,15 +96,15 @@ export default function AdminLayout({
     ]),
     getItem(
       "Đề tài đang nghiệm thu",
-      "9",
+      "10",
       <CloudServerOutlined />,
       undefined,
       "#"
     ),
-    getItem("Thông báo", "10", <BellOutlined />, undefined, "#"),
+    getItem("Thông báo", "11", <BellOutlined />, undefined, "#"),
     getItem(
       "Quản lý tài khoản",
-      "11",
+      "12",
       <UserOutlined />,
       undefined,
       "/author/my-profile"

@@ -10,9 +10,13 @@ import { Fragment, useState } from "react";
 import { ModalCompetitionRegistration } from "../Modal/ModalCompeRegistration";
 import { useGetRegistrationCompetitionDetail } from "@/hooks-query/queries/use-get-registration-competition-detail";
 import { useGetRegistrationCompetitionDetailForAuthor } from "@/hooks-query/queries/use-get-registration-competition-detail-author";
-import { isCurrentDateInRange } from "@/helper/extension-function";
+import { formatDate, isCurrentDateInRange } from "@/helper/extension-function";
 import { Competition } from "@/types/Competition";
 import { ModalSubmitResearchTopic } from "../Modal/ModalSubmitResearchTopic";
+import {
+  ParamsGetListResearchTopicForAuthorByRolename,
+  useGetListResearchTopicForAuthorByRolename,
+} from "@/hooks-query/queries/use-get-research-topic-for-author";
 
 interface IProps {
   competition: Competition | undefined;
@@ -80,11 +84,11 @@ const CompetitionCard = (props: IProps) => {
               <div className="mt-5 space-y-4 text-sm sm:mt-0 sm:space-y-2">
                 <span className="flex items-center text-gray-500">
                   <CalendarIcon width={"18px"} /> &nbsp;
-                  {new Date(competition?.dateStart || "").toLocaleString()}
+                  {formatDate(competition?.dateStart || "")}
                 </span>
                 <span className="flex items-center text-gray-500">
                   <CalendarDateRangeIcon width={"18px"} /> &nbsp;
-                  {new Date(competition?.dateEnd || "").toLocaleString()}
+                  {formatDate(competition?.dateEnd || "")}
                 </span>
                 {/* BUTTON ĐĂNG KÍ */}
                 {(() => {
@@ -167,8 +171,8 @@ const CompetitionCardForAdmin = (props: IProps) => {
       >
         <a href={`/competitions/${competition?.id}`}>
           <span className="block text-gray-400 text-sm">
-            {competition?.dateStart}
-            {competition?.dateEnd}
+            {formatDate(competition?.dateStart || "")}
+            {formatDate(competition?.dateEnd || "")}
           </span>
           <div className="mt-2">
             <h3 className="text-xl text-gray-900 font-semibold hover:underline">
@@ -219,12 +223,27 @@ const CompetitionCardForAuthor = (props: IProps) => {
       (item) => item.competitionId === competitionId && item.isAccepted === 2
     );
   }
+  let params: ParamsGetListResearchTopicForAuthorByRolename = {
+    roleName: "author",
+    index: 1,
+    pageSize: 999,
+  };
+  const { data: ownResearchTopic } =
+    useGetListResearchTopicForAuthorByRolename(params);
 
+  console.log(
+    "checking list research topic by owner: ",
+    JSON.stringify(ownResearchTopic?.data.items, null, 2)
+  );
+  let isSubmitted = ownResearchTopic?.data.items.some(
+    (topic) => topic.competitionId === competition?.id
+  );
   // KIỂM TRA ĐIỀU KIỆN
   // nếu như competition đã đăng kí ẩn nút Đăng kí
   // thay vào đó là dòng text trạng thái đã đang kí
   // nếu như đăng kí thất bại thì hiển thị lại nút đăng kí
   // lấy ra thông tin đăng kí trong bảng RegistrationForms
+  // nếu đã submit rồi thì ẩn nút nộp bài
 
   return (
     <ul className="mt-12 space-y-6">
@@ -244,11 +263,11 @@ const CompetitionCardForAuthor = (props: IProps) => {
               <div className="mt-5 space-y-4 text-sm sm:mt-0 sm:space-y-2">
                 <span className="flex items-center text-gray-500">
                   <CalendarIcon width={"18px"} /> &nbsp;
-                  {new Date(competition?.dateStart || "").toLocaleString()}
+                  {formatDate(competition?.dateStart || "")}
                 </span>
                 <span className="flex items-center text-gray-500">
                   <CalendarDateRangeIcon width={"18px"} /> &nbsp;
-                  {new Date(competition?.dateEnd || "").toLocaleString()}
+                  {formatDate(competition?.dateEnd || "")}
                 </span>
                 {/* BUTTON ĐĂNG KÍ */}
                 {(() => {
@@ -287,6 +306,8 @@ const CompetitionCardForAuthor = (props: IProps) => {
                         Đăng kí lại
                       </Button>
                     );
+                  } else if (isSubmitted) {
+                    return <p>Đề tài đã được nộp lên hệ thống</p>;
                   } else if (
                     isRegistrationApproved(competition?.id) &&
                     isCurrentDateInRange(
