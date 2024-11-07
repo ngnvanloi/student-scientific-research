@@ -27,6 +27,22 @@ export type TFormSubmitArticle = {
   dateUpload?: string | Date;
   disciplineId?: number | string;
 };
+export type TFormSubmitResearchTopic = {
+  nameTopic: string;
+  description?: string;
+  target: string;
+  achievedResults: string;
+  budget: number;
+  projectDuration: number;
+  supervisor: string;
+  summary: string;
+  productFilePath?: string;
+  budgetFilePath?: string;
+  reportFilePath?: string;
+  articleId: number | string;
+  disciplineId: number | string;
+  competitionId?: number;
+};
 
 export type TFormApprovalRegistration = {
   approvalStatus: number | string;

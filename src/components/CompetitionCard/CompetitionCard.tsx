@@ -12,6 +12,7 @@ import { useGetRegistrationCompetitionDetail } from "@/hooks-query/queries/use-g
 import { useGetRegistrationCompetitionDetailForAuthor } from "@/hooks-query/queries/use-get-registration-competition-detail-author";
 import { isCurrentDateInRange } from "@/helper/extension-function";
 import { Competition } from "@/types/Competition";
+import { ModalSubmitResearchTopic } from "../Modal/ModalSubmitResearchTopic";
 
 interface IProps {
   competition: Competition | undefined;
@@ -182,6 +183,155 @@ const CompetitionCardForAdmin = (props: IProps) => {
     </Fragment>
   );
 };
+const CompetitionCardForAuthor = (props: IProps) => {
+  const { competition } = props;
+  // STATE
+  const [competitionTarget, setCompetitionTarget] = useState<number>(-1);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isModalSubmitOpen, setIsModalSubmitOpen] = useState<boolean>(false);
+  // GET FORM REGISTRATION FOR AUTHOR
+  const { data, refetch } = useGetRegistrationCompetitionDetailForAuthor();
+  console.log(
+    "checking registration details: ",
+    JSON.stringify(data?.data, null, 2)
+  );
+  // HANDLE LOGIC
+  const handleRegistrationForm = (id: number | any) => {
+    setCompetitionTarget(id);
+    setIsOpen(true);
+  };
+  function isCompetitionIdPresent(competitionId: number | undefined) {
+    return data?.data.some((item) => item.competitionId === competitionId);
+  }
 
-export { CompetitionCardForAdmin };
+  function isRegistrationApproved(competitionId: number | undefined) {
+    return data?.data.some(
+      (item) => item.competitionId === competitionId && item.isAccepted === 1
+    );
+  }
+  function isRegistrationPending(competitionId: number | undefined) {
+    return data?.data.some(
+      (item) => item.competitionId === competitionId && item.isAccepted === 0
+    );
+  }
+  function isRegistrationReject(competitionId: number | undefined) {
+    return data?.data.some(
+      (item) => item.competitionId === competitionId && item.isAccepted === 2
+    );
+  }
+
+  // KIỂM TRA ĐIỀU KIỆN
+  // nếu như competition đã đăng kí ẩn nút Đăng kí
+  // thay vào đó là dòng text trạng thái đã đang kí
+  // nếu như đăng kí thất bại thì hiển thị lại nút đăng kí
+  // lấy ra thông tin đăng kí trong bảng RegistrationForms
+
+  return (
+    <ul className="mt-12 space-y-6">
+      <li key={competition?.id} className="p-5 bg-white rounded-md shadow-sm">
+        <a href="#">
+          {/* {`${prefixPath}${competition?.id}`} */}
+          <div>
+            <div className="justify-between sm:flex">
+              <div className="flex-1">
+                <h3 className="text-xl font-medium text-cyan-600">
+                  {competition?.competitionName}
+                </h3>
+                <p className="text-gray-500 mt-2 pr-2 h-11 text-ellipsis overflow-hidden text-base font-light">
+                  {competition?.description}
+                </p>
+              </div>
+              <div className="mt-5 space-y-4 text-sm sm:mt-0 sm:space-y-2">
+                <span className="flex items-center text-gray-500">
+                  <CalendarIcon width={"18px"} /> &nbsp;
+                  {new Date(competition?.dateStart || "").toLocaleString()}
+                </span>
+                <span className="flex items-center text-gray-500">
+                  <CalendarDateRangeIcon width={"18px"} /> &nbsp;
+                  {new Date(competition?.dateEnd || "").toLocaleString()}
+                </span>
+                {/* BUTTON ĐĂNG KÍ */}
+                {(() => {
+                  if (
+                    !isCompetitionIdPresent(competition?.id) &&
+                    isCurrentDateInRange(
+                      competition?.dateStart,
+                      competition?.dateEndSubmit
+                    )
+                  ) {
+                    return (
+                      <Button
+                        variant="filled"
+                        className=""
+                        onClick={() => handleRegistrationForm(competition?.id)}
+                      >
+                        Đăng kí tham gia
+                      </Button>
+                    );
+                  } else if (
+                    !isCurrentDateInRange(
+                      competition?.dateStart,
+                      competition?.dateEndSubmit
+                    )
+                  ) {
+                    return <p>Cuộc thi hết hạn đăng kí</p>;
+                  } else if (isRegistrationPending(competition?.id)) {
+                    return <p>Đang chờ phê duyệt</p>;
+                  } else if (isRegistrationReject(competition?.id)) {
+                    return (
+                      <Button
+                        variant="filled"
+                        className=""
+                        onClick={() => handleRegistrationForm(competition?.id)}
+                      >
+                        Đăng kí lại
+                      </Button>
+                    );
+                  } else if (
+                    isRegistrationApproved(competition?.id) &&
+                    isCurrentDateInRange(
+                      competition?.dateStart,
+                      competition?.dateEndSubmit
+                    )
+                  ) {
+                    return (
+                      <Button
+                        variant="filled"
+                        className=""
+                        onClick={() => setIsModalSubmitOpen(true)}
+                      >
+                        Nộp bài
+                      </Button>
+                    );
+                  }
+                })()}
+                <ModalCompetitionRegistration
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                  competitionID={competitionTarget}
+                />
+                <ModalSubmitResearchTopic
+                  competition={competition}
+                  isOpen={isModalSubmitOpen}
+                  setIsOpen={setIsModalSubmitOpen}
+                />
+              </div>
+            </div>
+            <div className="mt-4 items-center space-y-4 text-sm sm:flex sm:space-x-4 sm:space-y-0">
+              <span className="flex items-center text-gray-500">
+                <BriefcaseIcon width={"18px"} /> &nbsp;
+                {competition?.organizerName}
+              </span>
+              <span className="flex items-center text-gray-500">
+                <MapPinIcon width={"18px"} /> &nbsp;
+                {competition?.destination}
+              </span>
+            </div>
+          </div>
+        </a>
+      </li>
+    </ul>
+  );
+};
+export { CompetitionCardForAdmin, CompetitionCardForAuthor };
 export default CompetitionCard;

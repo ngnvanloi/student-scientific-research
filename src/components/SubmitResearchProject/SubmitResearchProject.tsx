@@ -17,6 +17,7 @@ import {
   TFormSubmitResearchProjectTabGoalResult,
   TFormSubmitResearchProjectTabOveriew,
 } from "../FormCard/FormInputsData";
+import { Competition } from "@/types/Competition";
 
 const SubmitResearchProject = () => {
   // STATE
@@ -76,7 +77,7 @@ const SubmitResearchProject = () => {
       defaultValue="Overview"
     >
       <Tabs.List
-        className="w-full border-b flex items-center gap-x-3 overflow-x-auto text-sm"
+        className="w-full border-b flex items-center gap-x-3 overflow-x-auto text-sm h-full"
         aria-label="Manage your account"
       >
         {tabItems.map((item, idx) => (
@@ -93,7 +94,7 @@ const SubmitResearchProject = () => {
         ))}
       </Tabs.List>
       {tabItems.map((item, idx) => (
-        <Tabs.Content key={idx} className="py-6" value={item.name}>
+        <Tabs.Content key={idx} className="py-6 h-full" value={item.name}>
           {item.contentElement}
         </Tabs.Content>
       ))}

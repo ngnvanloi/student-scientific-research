@@ -5,4 +5,5 @@ export const FolderNameUploadFirebase = {
   ProductFileFolder: "ProductFile",
   RegistrationFormsFolder: "RegistrationForms",
   ReportFileFolder: "ReportFile",
+  BudgetFileFolder: "BudgetFile",
 };

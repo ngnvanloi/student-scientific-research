@@ -28,6 +28,7 @@ const FormReviewResearchTopic = () => {
         contentElement: <FormReviewTopic version={version} />,
       };
     }) || [];
+
   return (
     <Tabs.Root
       className="max-w-screen-xl mx-auto px-4 md:px-8"

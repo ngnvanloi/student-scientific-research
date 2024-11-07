@@ -10,6 +10,7 @@ import {
   TFormSubmitArticle,
   TFormSubmitResearchProjectTabGoalResult,
   TFormSubmitResearchProjectTabOveriew,
+  TFormSubmitResearchTopic,
   TFormUpdateAuthor,
   TFormUpdateOrganizer,
 } from "./FormInputsData";
@@ -52,7 +53,23 @@ export const FormSubmitArticle: ZodType<TFormSubmitArticle> = z.object({
   // filePath: z.string(),
   disciplineId: z.string(),
 });
-
+export const FormSubmitResearchTopicc: ZodType<TFormSubmitResearchTopic> =
+  z.object({
+    nameTopic: z.string(),
+    description: z.string().optional(),
+    target: z.string(),
+    achievedResults: z.string(),
+    budget: z.number(),
+    projectDuration: z.number(),
+    supervisor: z.string(),
+    summary: z.string(),
+    productFilePath: z.string().optional(),
+    budgetFilePath: z.string().optional(),
+    reportFilePath: z.string().optional(),
+    articleId: z.string(),
+    disciplineId: z.string(),
+    competitionId: z.number().optional(),
+  });
 export const FormApprovalRegistration: ZodType<TFormApprovalRegistration> =
   z.object({
     approvalStatus: z.string() || z.number(),

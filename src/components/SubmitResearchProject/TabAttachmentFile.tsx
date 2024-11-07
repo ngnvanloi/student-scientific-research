@@ -5,18 +5,14 @@ import DragFileUpload from "../UploadFile/DragFileUpload";
 import { UploadFile } from "antd";
 
 const TabAttachmentFile = () => {
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<File[]>([]);
   return (
     //   productFilePath: string;
     //   reportFilePath: string;
 
-    <div>
-      <DragFileUpload
-        limit={2}
-        fileList={fileList}
-        setFileList={setFileList}
-        mutiple={true}
-      />
+    <div className="h-full">
+      {/* <ClickFileUpload limit={1} multiple={false} setFile={setFile} /> */}
+      <DragFileUpload limit={1} multiple={false} setFileList={setFileList} />
     </div>
   );
 };
