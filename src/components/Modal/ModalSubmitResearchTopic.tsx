@@ -30,7 +30,10 @@ const ModalSubmitResearchTopic = (props: IProps) => {
               </Dialog.Close>
             </div>
             <Dialog.Description className="space-y-2 p-4 mt-3 text-[15.5px] leading-relaxed text-gray-500 h-full">
-              <FormSubmitResearchTopic competition={competition} />
+              <FormSubmitResearchTopic
+                competition={competition}
+                setIsOpen={setIsOpen}
+              />
             </Dialog.Description>
           </div>
         </Dialog.Content>

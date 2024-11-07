@@ -32,38 +32,52 @@ import { useSession } from "next-auth/react";
 import ClickFileUpload from "../UploadFile/ClickFileUpload";
 import { useGetArticleAuthorByPublicationNoneContributor } from "@/hooks-query/queries/use-get-article-for-author";
 import { Competition } from "@/types/Competition";
+import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 
 interface IProps {
   competition: Competition | undefined;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const FormSubmitResearchTopic = (props: IProps) => {
   const { data: session } = useSession();
-  const { competition } = props;
+  const { competition, setIsOpen } = props;
   // STATE
-  const [description, setDescription] = useState<string>("");
-  const [keywords, setKeywords] = useState<string[]>([]);
   const [fileReport, setFileReport] = useState<File>();
   const [fileBudget, setFileBudget] = useState<File>();
   const [fileProduct, setFileProduct] = useState<File>();
-  const [date, setDate] = useState<Date | undefined>(new Date());
   const [listContributors, setListContributors] = useState<CoAuthor[]>([]);
   const { data: disciplines } = useGetListDiscipline();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setModalAddContributorIsOpen] = useState<boolean>(false);
   const { data: articles } =
     useGetArticleAuthorByPublicationNoneContributor(true);
 
   // TOAST
   const { toast } = useToast();
   // MUTATION DECLARE
-  const { mutate, isSuccess, isError, error } =
+  const { mutate, isSuccess, isError, error, isPending } =
     useSubmitResearchTopicMutation();
   const {
-    mutate: fileMutation,
+    mutate: fileReportMutation,
     isSuccess: fileIsSuccess,
     isError: fileIsError,
     error: fileError,
     isPending: fileIsPending,
   } = useUploadFileMutation();
+  const {
+    mutate: fileProductMutation,
+    isSuccess: fileProductIsSuccess,
+    isError: fileProductIsError,
+    error: fileProductError,
+    isPending: fileProductIsPending,
+  } = useUploadFileMutation();
+  const {
+    mutate: fileBudgetMutation,
+    isSuccess: fileBudgetIsSuccess,
+    isError: fileBudgetIsError,
+    error: fileBudgetError,
+    isPending: fileBudgetIsPending,
+  } = useUploadFileMutation();
+
   const {
     mutate: notiMutation,
     isSuccess: isNotiSuccess,
@@ -71,6 +85,7 @@ const FormSubmitResearchTopic = (props: IProps) => {
     error: notiError,
     isPending: notiIsPending,
   } = useCreateNotificationMutation();
+
   const listDiscipline: SelectItem[] | undefined = disciplines?.data.map(
     (discipline) => ({
       id: discipline.id,
@@ -91,9 +106,24 @@ const FormSubmitResearchTopic = (props: IProps) => {
   } = useForm<TFormSubmitResearchTopic>({
     resolver: zodResolver(FormSubmitResearchTopicc),
   });
+  const uploadFile = (mutation: any, formData: any) => {
+    return new Promise<string>((resolve, reject) => {
+      mutation(formData, {
+        onSuccess: (result: any) => {
+          // Kiểm tra result.data có là chuỗi không, nếu không thì trả về chuỗi rỗng
+          if (typeof result.data === "string") {
+            resolve(result.data);
+          } else {
+            reject(new Error("Invalid file URL"));
+          }
+        },
+        onError: (error: any) => reject(error),
+      });
+    });
+  };
 
   // HANDLE LOGIC
-  const onSubmit = (data: TFormSubmitResearchTopic) => {
+  const onSubmit = async (data: TFormSubmitResearchTopic) => {
     console.log("checking name topic: ", data.nameTopic);
     console.log("checking description: ", data.description);
     console.log("checking target: ", data.target);
@@ -108,84 +138,122 @@ const FormSubmitResearchTopic = (props: IProps) => {
     console.log("checking file report: ", fileReport);
     console.log("checking file product: ", fileProduct);
     console.log("checking list Contributors: ", listContributors);
-    // // GỌI API UPLOAD FILE
-    // const formDataUploadFile = new FormData();
-    // if (fileBudget) {
-    //   formDataUploadFile.append("File", fileBudget);
-    //   formDataUploadFile.append(
-    //     "FolderName",
-    //     FolderNameUploadFirebase.ReportFileFolder
-    //   );
-    // }
 
-    // fileMutation(formDataUploadFile, {
-    //   onSuccess: (result) => {
-    //     // alert("Upload file successfully");
-    //     // TẠO REQUEST BODY
-    //     const requestBody: ParamsSubmitResearchTopic = {
-    //       nameTopic: "string",
-    //       description: "string",
-    //       target: "string",
-    //       achievedResults: "string",
-    //       budget: 0,
-    //       projectDuration: 0,
-    //       supervisor: "string",
-    //       summary: "string",
-    //       productFilePath: "string",
-    //       budgetFilePath: "string",
-    //       reportFilePath: "string",
-    //       articleId: 0,
-    //       disciplineId: 0,
-    //       competitionId: 0,
-    //       // coAuthors?: CoAuthor[];
-    //     };
+    // GỌI API UPLOAD FILE
+    const formDataUploadFileBudget = new FormData();
+    const formDataUploadFileProduct = new FormData();
+    const formDataUploadFileReport = new FormData();
+    if (fileBudget) {
+      formDataUploadFileBudget.append("File", fileBudget);
+      formDataUploadFileBudget.append(
+        "FolderName",
+        FolderNameUploadFirebase.BudgetFileFolder
+      );
+    }
+    if (fileProduct) {
+      formDataUploadFileProduct.append("File", fileProduct);
+      formDataUploadFileProduct.append(
+        "FolderName",
+        FolderNameUploadFirebase.ProductFileFolder
+      );
+    }
+    if (fileReport) {
+      formDataUploadFileReport.append("File", fileReport);
+      formDataUploadFileReport.append(
+        "FolderName",
+        FolderNameUploadFirebase.ReportFileFolder
+      );
+    }
+    try {
+      // Khởi tạo các promise upload file nếu file tồn tại
+      const fileUploadPromises = [
+        fileBudget
+          ? uploadFile(fileBudgetMutation, formDataUploadFileBudget)
+          : Promise.resolve(""),
+        fileProduct
+          ? uploadFile(fileProductMutation, formDataUploadFileProduct)
+          : Promise.resolve(""),
+        fileReport
+          ? uploadFile(fileReportMutation, formDataUploadFileReport)
+          : Promise.resolve(""),
+      ];
 
-    //     // GỌI API upload bài báo
-    //     mutate(requestBody, {
-    //       onSuccess: () => {
-    //         toast({
-    //           title: "Thành công",
-    //           variant: "default",
-    //           description:
-    //             "Chúc mừng! Bài báo của bạn đã được gửi đến quản trị viên, vui lòng chờ kết quả phê duyệt",
-    //         });
-    //         // reset input fields
-    //         reset({
-    //           disciplineId: 0,
-    //         });
-    //         setDescription("");
-    //         setFileBudget(undefined);
-    //         setKeywords([]);
-    //         setListContributors([]);
-    //         setDate(new Date());
+      // Thực hiện các promise upload file đồng thời và đợi tất cả hoàn tất
+      const [budgetFilePath, productFilePath, reportFilePath] =
+        await Promise.all(fileUploadPromises);
 
-    //         // gửi thông báo cho super admin
-    //         const paramsNoti: ParamsCreateNotification = {
-    //           notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.article.author}`,
-    //           notificationDate: new Date().toISOString(),
-    //           // recevierId: articleDetail?.data.accountID || -1,
-    //           recevierId: 1,
-    //           notificationTypeId: 1,
-    //           targetId: -1,
-    //         };
-    //         notiMutation(paramsNoti, {
-    //           onSuccess: () => {
-    //             console.log("Thông báo đã gửi");
-    //           },
-    //           onError: (error) => {
-    //             console.error("Lỗi khi gửi thông báo:", error);
-    //           },
-    //         });
-    //       },
-    //       onError: (error) => {
-    //         console.error("Lỗi khi tạo bài báo:", error);
-    //       },
-    //     });
-    //   },
-    //   onError: (error) => {
-    //     console.error("Lỗi khi upload file:", error);
-    //   },
-    // });
+      // Tạo request body từ kết quả mutation
+      const requestBody: ParamsSubmitResearchTopic = {
+        nameTopic: data.nameTopic,
+        description: data.summary,
+        target: data.target,
+        achievedResults: data.achievedResults,
+        budget: data.budget,
+        projectDuration: data.projectDuration,
+        supervisor: data.supervisor,
+        summary: data.summary,
+        productFilePath: productFilePath || "",
+        budgetFilePath: budgetFilePath || "",
+        reportFilePath: reportFilePath || "",
+        articleId: (data.articleId as number) || -1,
+        disciplineId: (data.disciplineId as number) || -1,
+        competitionId: competition?.id || -1,
+        coAuthors: listContributors,
+      };
+
+      // Gọi API tạo bài báo
+      mutate(requestBody, {
+        onSuccess: () => {
+          toast({
+            title: "Thành công",
+            variant: "default",
+            description:
+              "Chúc mừng! Đề tài của bạn đã được gửi đến ban tổ chức, vui lòng theo dõi thông báo cho quá trình phản biện",
+          });
+          // Reset các field input và file
+          reset({
+            disciplineId: 0,
+            nameTopic: "",
+            description: "",
+            target: "",
+            achievedResults: "",
+            budget: 0,
+            projectDuration: 0,
+            supervisor: "",
+            summary: "",
+            articleId: 0,
+            competitionId: 0,
+          });
+          setFileBudget(undefined);
+          setFileProduct(undefined);
+          setFileReport(undefined);
+          setListContributors([]);
+          setIsOpen(false);
+
+          // Gửi thông báo cho ban tổ chức
+          const paramsNoti: ParamsCreateNotification = {
+            notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.researchTopic.author}`,
+            notificationDate: new Date().toISOString(),
+            recevierId: competition?.accountId || -1,
+            notificationTypeId: 1,
+            targetId: -1,
+          };
+          notiMutation(paramsNoti, {
+            onSuccess: () => {
+              console.log("Thông báo đã gửi");
+            },
+            onError: (error) => {
+              console.error("Lỗi khi gửi thông báo:", error);
+            },
+          });
+        },
+        onError: (error) => {
+          console.error("Lỗi khi tạo bài báo:", error);
+        },
+      });
+    } catch (error) {
+      console.error("Lỗi khi upload file:", error);
+    }
   };
 
   const onError = (errors: any) => {
@@ -193,6 +261,15 @@ const FormSubmitResearchTopic = (props: IProps) => {
   };
   return (
     <div className="h-full">
+      {isPending ||
+      fileIsPending ||
+      fileProductIsPending ||
+      fileBudgetIsPending ||
+      notiIsPending ? (
+        <SpinnerLoading />
+      ) : (
+        ""
+      )}
       <div className="">
         <div>
           <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
@@ -322,12 +399,12 @@ const FormSubmitResearchTopic = (props: IProps) => {
           </label>
           <ModalAddContributor
             isOpen={isOpen}
-            setIsOpen={setIsOpen}
+            setIsOpen={setModalAddContributorIsOpen}
             setListContributors={setListContributors}
           />
           <Button
             className="bg-green-600 text-white"
-            onClick={() => setIsOpen(true)}
+            onClick={() => setModalAddContributorIsOpen(true)}
           >
             <PlusOutlined />
             Thêm
