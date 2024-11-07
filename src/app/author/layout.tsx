@@ -6,7 +6,10 @@ import {
   CarryOutOutlined,
   CloudServerOutlined,
   CommentOutlined,
+  DeliveredProcedureOutlined,
+  FileProtectOutlined,
   FileTextOutlined,
+  FileZipOutlined,
   FireOutlined,
   Loading3QuartersOutlined,
   MenuFoldOutlined,
@@ -64,14 +67,14 @@ export default function AdminLayout({
       getItem(
         "Nộp bài báo",
         "3",
-        <TrophyOutlined />,
+        <DeliveredProcedureOutlined />,
         undefined,
         "/author/submit-article"
       ),
       getItem(
         "Bài báo của tôi",
         "4",
-        <CommentOutlined />,
+        <FileProtectOutlined />,
         undefined,
         "/author/my-article"
       ),
@@ -80,7 +83,7 @@ export default function AdminLayout({
       getItem(
         "Nộp đề tài",
         "6",
-        <TrophyOutlined />,
+        <DeliveredProcedureOutlined />,
         undefined,
         "/author/submit-research-project"
       ),
@@ -97,7 +100,7 @@ export default function AdminLayout({
     getItem(
       "Đề tài đang nghiệm thu",
       "10",
-      <CloudServerOutlined />,
+      <FileZipOutlined />,
       undefined,
       "#"
     ),
