@@ -1,6 +1,15 @@
+"use client";
 import ReviewResearchTopicContainer from "@/components/ReviewResearchTopic/ReviewResearchTopicContainer";
+import FormSubmitResearchTopic from "@/components/SubmitResearchProject/FormSubmitResearchTopic";
+import { useState } from "react";
 
 const UITest = () => {
-  return <ReviewResearchTopicContainer />;
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  return (
+    <div>
+      <FormSubmitResearchTopic competition={undefined} setIsOpen={setIsOpen} />
+      {/* <ReviewResearchTopicContainer /> */}
+    </div>
+  );
 };
 export default UITest;

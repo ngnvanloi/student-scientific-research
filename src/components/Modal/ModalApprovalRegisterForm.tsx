@@ -162,7 +162,7 @@ const ModalApprovalRegisterForm = (props: IProps) => {
                 register={register}
                 error={errors.approvalStatus}
                 label="Chọn tình trạng phê duyệt"
-                className="relative z-20 w-full appearance-none rounded-lg border border-stroke dark:border-dark-3 bg-transparent py-[10px] px-5 text-dark-6 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2"
+                className="relative z-20 w-full appearance-none rounded-lg border border-stroke dark:border-dark-3 bg-transparent py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2"
               />
               <div className="items-center gap-2 mt-3 text-sm sm:flex">
                 <div>
