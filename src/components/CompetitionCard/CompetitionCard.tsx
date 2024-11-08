@@ -17,7 +17,17 @@ import {
   ParamsGetListResearchTopicForAuthorByRolename,
   useGetListResearchTopicForAuthorByRolename,
 } from "@/hooks-query/queries/use-get-research-topic-for-author";
+import * as React from "react";
+import { ChevronsUpDown } from "lucide-react";
 
+import { Button as ButtonUI } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { PlusOutlined } from "@ant-design/icons";
+import { ModalEstablishReviewCouncil } from "../Modal/ModalEstablishReviewCouncil";
 interface IProps {
   competition: Competition | undefined;
 }
@@ -160,7 +170,6 @@ const CompetitionCard = (props: IProps) => {
     </ul>
   );
 };
-
 const CompetitionCardForAdmin = (props: IProps) => {
   const { competition } = props;
   return (
@@ -354,5 +363,75 @@ const CompetitionCardForAuthor = (props: IProps) => {
     </ul>
   );
 };
-export { CompetitionCardForAdmin, CompetitionCardForAuthor };
+const CompetitionCardAdminWithActionEstablishReviewCouncil = (
+  props: IProps
+) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [
+    isShowModaEstablishReviewCouncil,
+    setIsShowModalEstablishReviewCouncil,
+  ] = useState(false);
+  const { competition } = props;
+  return (
+    <Fragment>
+      <article
+        className="mt-5 hover:shadow-lg hover:border transition duration-300 py-4 px-5 hover:rounded-md"
+        key={`post${competition?.id}`}
+      >
+        <div className="flex justify-between items-center">
+          <span className="block text-gray-400 text-sm">
+            {formatDate(competition?.dateStart || "")} {" -> "}
+            {formatDate(competition?.dateEnd || "")}
+          </span>
+          <Button
+            className="bg-green-500 text-white"
+            onClick={() => setIsShowModalEstablishReviewCouncil(true)}
+          >
+            <PlusOutlined />
+          </Button>
+        </div>
+        <ModalEstablishReviewCouncil
+          isOpen={isShowModaEstablishReviewCouncil}
+          setIsOpen={setIsShowModalEstablishReviewCouncil}
+          competition={competition}
+        />
+        <div className="mt-2">
+          <Collapsible
+            open={isOpen}
+            onOpenChange={setIsOpen}
+            className="w-full space-y-2"
+          >
+            <div className="flex items-center justify-between space-x-4">
+              <h3 className="text-xl text-gray-900 font-semibold hover:underline">
+                {competition?.competitionName}
+              </h3>
+              <CollapsibleTrigger asChild>
+                <ButtonUI variant="ghost" size="sm" className="w-9 p-0">
+                  <ChevronsUpDown className="h-4 w-4" />
+                  <span className="sr-only">Toggle</span>
+                </ButtonUI>
+              </CollapsibleTrigger>
+            </div>
+            <div className="rounded-md border px-4 py-3 font-mono text-sm">
+              Hiển thị table hội đồng phản biện
+            </div>
+            <CollapsibleContent className="space-y-2">
+              <div className="rounded-md border px-4 py-3 font-mono text-sm">
+                Hiển thị table hội đồng phản biện A
+              </div>
+              <div className="rounded-md border px-4 py-3 font-mono text-sm">
+                Hiển thị table hội đồng phản biện B
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+        </div>
+      </article>
+    </Fragment>
+  );
+};
+export {
+  CompetitionCardForAdmin,
+  CompetitionCardForAuthor,
+  CompetitionCardAdminWithActionEstablishReviewCouncil,
+};
 export default CompetitionCard;

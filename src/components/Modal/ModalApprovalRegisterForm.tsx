@@ -17,6 +17,7 @@ import {
 import { useSession } from "next-auth/react";
 import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { useGetRegistrationCompetitionDetail } from "@/hooks-query/queries/use-get-registration-competition-detail";
+import { auth } from "@/auth";
 
 interface IProps {
   isOpen: boolean;
@@ -68,10 +69,14 @@ const ModalApprovalRegisterForm = (props: IProps) => {
     let contentNoti = "";
     if (data.approvalStatus === "1") {
       contentNoti =
+        session?.user?.name +
+        " " +
         NotificationContentSample.NotificationType.registration.organizer
           .accept;
     } else if (data.approvalStatus === "2") {
       contentNoti =
+        session?.user?.name +
+        " " +
         NotificationContentSample.NotificationType.registration.organizer
           .reject;
     }

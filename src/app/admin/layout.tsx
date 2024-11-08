@@ -12,6 +12,7 @@ import {
   PieChartOutlined,
   ReconciliationOutlined,
   SafetyCertificateOutlined,
+  ScheduleOutlined,
   SignatureOutlined,
   SolutionOutlined,
   TeamOutlined,
@@ -75,7 +76,7 @@ export default function AdminLayout({
     ),
     getItem("Quản lý quy trình phản biện", "sub1", <ReconciliationOutlined />, [
       getItem(
-        "Đề tài chờ phê duyệt",
+        "Đăng kí chờ phê duyệt",
         "4",
         <BulbOutlined />,
         undefined,
@@ -86,11 +87,18 @@ export default function AdminLayout({
         "5",
         <SolutionOutlined />,
         undefined,
-        "/admin/competition"
+        "/admin/establish-review-council"
+      ),
+      getItem(
+        "Phân công phản biện đề tài",
+        "6",
+        <ScheduleOutlined />,
+        undefined,
+        "/admin/"
       ),
       getItem(
         "Quản lý tình trạng đề tài",
-        "6",
+        "7",
         <CarryOutOutlined />,
         undefined,
         "/admin/"
@@ -99,14 +107,14 @@ export default function AdminLayout({
     getItem("Quản lý quy trình nghiệm thu", "sub2", <CloudServerOutlined />, [
       getItem(
         "Đề tài đang nghiệm thu",
-        "7",
+        "8",
         <SignatureOutlined />,
         undefined,
         "/admin"
       ),
       getItem(
         "Đề tài đã xuất bản",
-        "8",
+        "9",
         <SafetyCertificateOutlined />,
         undefined,
         "/admin"
@@ -114,7 +122,7 @@ export default function AdminLayout({
     ]),
     getItem(
       "Quản lý tài khoản",
-      "9",
+      "10",
       <UserOutlined />,
       undefined,
       "/admin/my-profile"

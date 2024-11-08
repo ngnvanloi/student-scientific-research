@@ -3,7 +3,9 @@ import {
   TFormAddCompetition,
   TFormAddContributor,
   TFormAddPost,
+  TFormAddReviewer,
   TFormApprovalRegistration,
+  TFormEstablishReviewCouncil,
   TFormLoginData,
   TFormRegisterData,
   TFormReviewTopic,
@@ -101,6 +103,13 @@ export const FormAddContributorSchema: ZodType<TFormAddContributor> = z.object({
   sex: z.string(),
   // roleName: z.string(),
 });
+export const FormAddReviewerSchema: ZodType<TFormAddReviewer> = z.object({
+  name: z.string(),
+  email: z.string(),
+  numberPhone: z.string(),
+  sex: z.string(),
+  description: z.string(),
+});
 
 export const FormUpdateAuthorSchema: ZodType<TFormUpdateAuthor> = z.object({
   name: z.string(),
@@ -124,3 +133,8 @@ export const FormReviewTopicSchema: ZodType<TFormReviewTopic> = z.object({
   content: z.string(),
   concludeId: z.string(),
 });
+
+export const FormEstablishReviewCouncil: ZodType<TFormEstablishReviewCouncil> =
+  z.object({
+    name: z.string(),
+  });

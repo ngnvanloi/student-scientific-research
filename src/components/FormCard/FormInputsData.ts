@@ -74,6 +74,14 @@ export type TFormAddContributor = {
   sex?: string;
   roleName?: string;
 };
+export type TFormAddReviewer = {
+  name: string;
+  email: string;
+  numberPhone: string;
+  dateOfBirth?: string;
+  sex?: string;
+  description?: string;
+};
 
 export type TFormUpdateAuthor = {
   name: string;
@@ -95,4 +103,8 @@ export type TFormUpdateOrganizer = {
 export type TFormReviewTopic = {
   content: string;
   concludeId: string;
+};
+
+export type TFormEstablishReviewCouncil = {
+  name: string;
 };
