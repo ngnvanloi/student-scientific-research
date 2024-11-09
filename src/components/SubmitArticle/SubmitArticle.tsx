@@ -245,6 +245,7 @@ const SubmitArticleComponent = () => {
               <DataTableAddContributors
                 columns={columns}
                 data={listContributors}
+                setData={setListContributors}
               />
             </div>
             <div className="mt-4">

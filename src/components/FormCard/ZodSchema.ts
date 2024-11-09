@@ -58,18 +58,35 @@ export const FormSubmitArticle: ZodType<TFormSubmitArticle> = z.object({
 export const FormSubmitResearchTopicc: ZodType<TFormSubmitResearchTopic> =
   z.object({
     nameTopic: z.string(),
-    description: z.string().optional(),
+    description: z.string(),
     target: z.string(),
     achievedResults: z.string(),
     budget: z.number(),
     projectDuration: z.number(),
     supervisor: z.string(),
-    summary: z.string(),
+    summary: z.string().optional(),
     productFilePath: z.string().optional(),
     budgetFilePath: z.string().optional(),
     reportFilePath: z.string().optional(),
     articleId: z.string(),
     disciplineId: z.string(),
+    competitionId: z.number().optional(),
+  });
+export const FormUpdateResearchTopicc: ZodType<TFormSubmitResearchTopic> =
+  z.object({
+    nameTopic: z.string(),
+    description: z.string(),
+    target: z.string(),
+    achievedResults: z.string(),
+    budget: z.number(),
+    projectDuration: z.number(),
+    supervisor: z.string(),
+    summary: z.string().optional(),
+    productFilePath: z.string().optional(),
+    budgetFilePath: z.string().optional(),
+    reportFilePath: z.string().optional(),
+    articleId: z.number(),
+    disciplineId: z.number(),
     competitionId: z.number().optional(),
   });
 export const FormApprovalRegistration: ZodType<TFormApprovalRegistration> =

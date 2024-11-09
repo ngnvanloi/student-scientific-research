@@ -29,13 +29,13 @@ export type TFormSubmitArticle = {
 };
 export type TFormSubmitResearchTopic = {
   nameTopic: string;
-  description?: string;
+  description: string;
   target: string;
   achievedResults: string;
   budget: number;
   projectDuration: number;
   supervisor: string;
-  summary: string;
+  summary?: string;
   productFilePath?: string;
   budgetFilePath?: string;
   reportFilePath?: string;

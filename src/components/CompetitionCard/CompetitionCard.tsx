@@ -28,6 +28,16 @@ import {
 } from "@/components/ui/collapsible";
 import { PlusOutlined } from "@ant-design/icons";
 import { ModalEstablishReviewCouncil } from "../Modal/ModalEstablishReviewCouncil";
+import {
+  ParamsGetListReviewCouncilForEachCompetition,
+  useGetListReviewCouncilForEachCompetition,
+} from "@/hooks-query/queries/use-get-review-council-each-competition";
+import {
+  columns,
+  DataTablePreviewMemberOfReviewCouncil,
+} from "../DataTable/DataTablePreviewMemberOfReviewCouncil";
+import { ModalUpdateResearchTopic } from "../Modal/ModalUpdateResearchTopic";
+import { getSession, useSession } from "next-auth/react";
 interface IProps {
   competition: Competition | undefined;
 }
@@ -197,17 +207,19 @@ const CompetitionCardForAdmin = (props: IProps) => {
   );
 };
 const CompetitionCardForAuthor = (props: IProps) => {
+  const { data: session } = useSession();
   const { competition } = props;
   // STATE
   const [competitionTarget, setCompetitionTarget] = useState<number>(-1);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isModalSubmitOpen, setIsModalSubmitOpen] = useState<boolean>(false);
+  const [isModalUpdateOpen, setIsModalUpdateOpen] = useState<boolean>(false);
   // GET FORM REGISTRATION FOR AUTHOR
   const { data, refetch } = useGetRegistrationCompetitionDetailForAuthor();
-  console.log(
-    "checking registration details: ",
-    JSON.stringify(data?.data, null, 2)
-  );
+  // console.log(
+  //   "checking registration details: ",
+  //   JSON.stringify(data?.data, null, 2)
+  // );
   // HANDLE LOGIC
   const handleRegistrationForm = (id: number | any) => {
     setCompetitionTarget(id);
@@ -240,19 +252,37 @@ const CompetitionCardForAuthor = (props: IProps) => {
   const { data: ownResearchTopic } =
     useGetListResearchTopicForAuthorByRolename(params);
 
-  console.log(
-    "checking list research topic by owner: ",
-    JSON.stringify(ownResearchTopic?.data.items, null, 2)
-  );
+  // console.log(
+  //   "checking list research topic by owner: ",
+  //   JSON.stringify(ownResearchTopic?.data.items, null, 2)
+  // );
   let isSubmitted = ownResearchTopic?.data.items.some(
     (topic) => topic.competitionId === competition?.id
   );
+  let researchTopicByCompetitionId = ownResearchTopic?.data.items.find(
+    (topic) => topic.competitionId === competition?.id
+  );
+
+  console.log(
+    `=====> checking research topic by competition ID = ${competition?.id}: `,
+    researchTopicByCompetitionId
+  );
+
+  // kiểm tra account email có nằm trong mảng coAuthor với vai trò đồng tác giả hay không, nếu có thì ẩn nút chỉnh sửa đi
+  function checkContributor(email: string, roleName: string): boolean {
+    return (
+      researchTopicByCompetitionId?.coAuthors.some(
+        (item) => item.email === email && item.roleName === roleName
+      ) || false
+    );
+  }
+
   // KIỂM TRA ĐIỀU KIỆN
   // nếu như competition đã đăng kí ẩn nút Đăng kí
   // thay vào đó là dòng text trạng thái đã đang kí
   // nếu như đăng kí thất bại thì hiển thị lại nút đăng kí
   // lấy ra thông tin đăng kí trong bảng RegistrationForms
-  // nếu đã submit rồi thì ẩn nút nộp bài
+  // nếu đã submit rồi thì ẩn nút nộp bài và hiển thị ra button chỉnh sửa đề tài đã nộp
 
   return (
     <ul className="mt-12 space-y-6">
@@ -315,8 +345,24 @@ const CompetitionCardForAuthor = (props: IProps) => {
                         Đăng kí lại
                       </Button>
                     );
+                  } else if (
+                    checkContributor(`${session?.user?.email}`, "co-author")
+                  ) {
+                    return <div>Bạn không phải tác giả chính</div>;
                   } else if (isSubmitted) {
-                    return <p>Đề tài đã được nộp lên hệ thống</p>;
+                    return (
+                      <div>
+                        <p onClick={() => setIsModalUpdateOpen(true)}>
+                          Chỉnh sửa đề tài đã nộp
+                        </p>
+                        <ModalUpdateResearchTopic
+                          competition={competition}
+                          researchTopic={researchTopicByCompetitionId}
+                          isOpen={isModalUpdateOpen}
+                          setIsOpen={setIsModalUpdateOpen}
+                        />
+                      </div>
+                    );
                   } else if (
                     isRegistrationApproved(competition?.id) &&
                     isCurrentDateInRange(
@@ -372,6 +418,20 @@ const CompetitionCardAdminWithActionEstablishReviewCouncil = (
     setIsShowModalEstablishReviewCouncil,
   ] = useState(false);
   const { competition } = props;
+  let params: ParamsGetListReviewCouncilForEachCompetition = {
+    competitionId: competition?.id || 0,
+    page: 1,
+    pageSize: 10,
+  };
+  const { data: listReviewCouncil, refetch: refetchListReviewCouncil } =
+    useGetListReviewCouncilForEachCompetition(params);
+
+  console.log(
+    `===> checking list review council for ${competition?.competitionName}: `,
+    JSON.stringify(listReviewCouncil?.data.items, null, 2)
+  );
+
+  // UI
   return (
     <Fragment>
       <article
@@ -406,22 +466,37 @@ const CompetitionCardAdminWithActionEstablishReviewCouncil = (
                 {competition?.competitionName}
               </h3>
               <CollapsibleTrigger asChild>
-                <ButtonUI variant="ghost" size="sm" className="w-9 p-0">
+                <ButtonUI
+                  variant="ghost"
+                  size="sm"
+                  className="w-9 p-0"
+                  onClick={() => refetchListReviewCouncil()}
+                >
                   <ChevronsUpDown className="h-4 w-4" />
                   <span className="sr-only">Toggle</span>
                 </ButtonUI>
               </CollapsibleTrigger>
             </div>
-            <div className="rounded-md border px-4 py-3 font-mono text-sm">
-              Hiển thị table hội đồng phản biện
+            <div className="rounded-md border px-4 py-3 font-sans text-sm">
+              Ấn vào icon Extend để hiển thị danh sách hội đồng phản biện
             </div>
             <CollapsibleContent className="space-y-2">
-              <div className="rounded-md border px-4 py-3 font-mono text-sm">
-                Hiển thị table hội đồng phản biện A
-              </div>
-              <div className="rounded-md border px-4 py-3 font-mono text-sm">
-                Hiển thị table hội đồng phản biện B
-              </div>
+              {listReviewCouncil?.data.items.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="rounded-md border px-4 py-3 font-sans text-sm"
+                  >
+                    <p className="font-semibold mb-3">
+                      {item.reviewCommitteeName}
+                    </p>
+                    <DataTablePreviewMemberOfReviewCouncil
+                      columns={columns}
+                      data={item.reviewBoardMembers}
+                    />
+                  </div>
+                );
+              })}
             </CollapsibleContent>
           </Collapsible>
         </div>

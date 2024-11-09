@@ -24,7 +24,6 @@ import {
 import { useForm } from "react-hook-form";
 import { TFormSubmitResearchTopic } from "../FormCard/FormInputsData";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormSubmitResearchTopicc } from "../FormCard/ZodSchema";
 import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-firebase";
 import { ModalAddContributor } from "../Modal/ModalAddContributorArticle";
 import { NotificationContentSample } from "@/lib/notification-content-sample ";
@@ -33,30 +32,57 @@ import ClickFileUpload from "../UploadFile/ClickFileUpload";
 import { useGetArticleAuthorByPublicationNoneContributor } from "@/hooks-query/queries/use-get-article-for-author";
 import { Competition } from "@/types/Competition";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
+import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContributors";
+import { string } from "zod";
+import {
+  ParamsUpdateResearchTopic,
+  useUpdateResearchTopicMutation,
+} from "@/hooks-query/mutations/use-update-research-topic-mutation";
+import { FormUpdateResearchTopicc } from "../FormCard/ZodSchema";
 
 interface IProps {
   competition: Competition | undefined;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLoadingSpinner: React.Dispatch<React.SetStateAction<boolean>>;
+  researchTopic: ResearchTopicWithContributors | undefined;
 }
-const FormSubmitResearchTopic = (props: IProps) => {
+const FormUpdateResearchTopic = (props: IProps) => {
+  const { competition, setIsOpen, researchTopic, setIsLoadingSpinner } = props;
+  const listTempContributor: CoAuthor[] = researchTopic?.coAuthors
+    ? researchTopic.coAuthors
+        .filter((item) => item.roleName === "co-author")
+        .map((item) => ({
+          name: item.name,
+          email: item.email,
+          numberPhone: item.numberPhone,
+          dateOfBirth: item.dateOfBirth,
+          sex: item.sex,
+          roleName: item.roleName,
+        }))
+    : [];
+
   const { data: session } = useSession();
-  const { competition, setIsOpen, setIsLoadingSpinner } = props;
   // STATE
   const [fileReport, setFileReport] = useState<File>();
   const [fileBudget, setFileBudget] = useState<File>();
   const [fileProduct, setFileProduct] = useState<File>();
-  const [listContributors, setListContributors] = useState<CoAuthor[]>([]);
+  const [listContributors, setListContributors] =
+    useState<CoAuthor[]>(listTempContributor);
+
   const { data: disciplines } = useGetListDiscipline();
   const [isOpen, setModalAddContributorIsOpen] = useState<boolean>(false);
   const { data: articles } =
     useGetArticleAuthorByPublicationNoneContributor(true);
 
+  console.log(
+    ">>>>>>>>>> checking listTempContributor: ",
+    JSON.stringify(listTempContributor, null, 2)
+  );
   // TOAST
   const { toast } = useToast();
   // MUTATION DECLARE
   const { mutate, isSuccess, isError, error, isPending } =
-    useSubmitResearchTopicMutation();
+    useUpdateResearchTopicMutation();
   const {
     mutate: fileReportMutation,
     isSuccess: fileIsSuccess,
@@ -105,7 +131,23 @@ const FormSubmitResearchTopic = (props: IProps) => {
     setError,
     reset,
   } = useForm<TFormSubmitResearchTopic>({
-    resolver: zodResolver(FormSubmitResearchTopicc),
+    resolver: zodResolver(FormUpdateResearchTopicc),
+    defaultValues: {
+      nameTopic: researchTopic?.nameTopic,
+      description: researchTopic?.description,
+      target: researchTopic?.target,
+      achievedResults: researchTopic?.achievedResults,
+      budget: researchTopic?.budget,
+      projectDuration: researchTopic?.projectDuration,
+      supervisor: researchTopic?.supervisor,
+      summary: researchTopic?.summary,
+      productFilePath: researchTopic?.productFilePath,
+      budgetFilePath: researchTopic?.budgetFilePath,
+      reportFilePath: researchTopic?.reportFilePath,
+      articleId: researchTopic?.articleId,
+      disciplineId: researchTopic?.disciplineId,
+      competitionId: competition?.id,
+    },
   });
   const uploadFile = (mutation: any, formData: any) => {
     return new Promise<string>((resolve, reject) => {
@@ -184,7 +226,7 @@ const FormSubmitResearchTopic = (props: IProps) => {
         await Promise.all(fileUploadPromises);
 
       // Tạo request body từ kết quả mutation
-      const requestBody: ParamsSubmitResearchTopic = {
+      const requestBody: ParamsUpdateResearchTopic = {
         nameTopic: data.nameTopic,
         description: data.description,
         target: data.target,
@@ -193,65 +235,68 @@ const FormSubmitResearchTopic = (props: IProps) => {
         projectDuration: data.projectDuration,
         supervisor: data.supervisor,
         summary: data.description,
-        productFilePath: productFilePath || "",
-        budgetFilePath: budgetFilePath || "",
-        reportFilePath: reportFilePath || "",
+        productFilePath:
+          productFilePath || researchTopic?.productFilePath || "",
+        budgetFilePath: budgetFilePath || researchTopic?.budgetFilePath || "",
+        reportFilePath: reportFilePath || researchTopic?.reportFilePath || "",
         articleId: (data.articleId as number) || -1,
         disciplineId: (data.disciplineId as number) || -1,
         competitionId: competition?.id || -1,
         coAuthors: listContributors,
       };
 
-      // Gọi API tạo bài báo
-      mutate(requestBody, {
-        onSuccess: () => {
-          toast({
-            title: "Thành công",
-            variant: "default",
-            description:
-              "Chúc mừng! Đề tài của bạn đã được gửi đến ban tổ chức, vui lòng theo dõi thông báo cho quá trình phản biện",
-          });
-          // Reset các field input và file
-          reset({
-            disciplineId: 0,
-            nameTopic: "",
-            description: "",
-            target: "",
-            achievedResults: "",
-            budget: 0,
-            projectDuration: 0,
-            supervisor: "",
-            summary: "",
-            articleId: 0,
-            competitionId: 0,
-          });
-          setFileBudget(undefined);
-          setFileProduct(undefined);
-          setFileReport(undefined);
-          setListContributors([]);
-          setIsOpen(false);
+      // Gọi API
+      mutate(
+        { id: researchTopic?.id || 0, params: requestBody },
+        {
+          onSuccess: () => {
+            toast({
+              title: "Thành công",
+              variant: "default",
+              description: "Chúc mừng! Bạn đã cập nhật thành công đề tài",
+            });
+            // Reset các field input và file
+            reset({
+              disciplineId: 0,
+              nameTopic: "",
+              description: "",
+              target: "",
+              achievedResults: "",
+              budget: 0,
+              projectDuration: 0,
+              supervisor: "",
+              summary: "",
+              articleId: 0,
+              competitionId: 0,
+            });
+            setFileBudget(undefined);
+            setFileProduct(undefined);
+            setFileReport(undefined);
+            setListContributors([]);
+            setIsOpen(false);
 
-          // Gửi thông báo cho ban tổ chức
-          const paramsNoti: ParamsCreateNotification = {
-            notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.researchTopic.author}`,
-            notificationDate: new Date().toISOString(),
-            recevierId: competition?.accountId || -1,
-            notificationTypeId: 2,
-            targetId: -1,
-          };
-          notiMutation(paramsNoti, {
-            onSuccess: () => {
-              console.log("Thông báo đã gửi");
-            },
-            onError: (error) => {
-              console.error("Lỗi khi gửi thông báo:", error);
-            },
-          });
-        },
-        onError: (error) => {
-          console.error("Lỗi khi tạo bài báo:", error);
-        },
-      });
+            // // Gửi thông báo cho ban tổ chức
+            // const paramsNoti: ParamsCreateNotification = {
+            //   notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.researchTopic.author}`,
+            //   notificationDate: new Date().toISOString(),
+            //   recevierId: competition?.accountId || -1,
+            //   notificationTypeId: 2,
+            //   targetId: -1,
+            // };
+            // notiMutation(paramsNoti, {
+            //   onSuccess: () => {
+            //     console.log("Thông báo đã gửi");
+            //   },
+            //   onError: (error) => {
+            //     console.error("Lỗi khi gửi thông báo:", error);
+            //   },
+            // });
+          },
+          onError: (error) => {
+            console.error("Lỗi khi tạo bài báo:", error);
+          },
+        }
+      );
     } catch (error) {
       console.error("Lỗi khi upload file:", error);
     }
@@ -260,7 +305,6 @@ const FormSubmitResearchTopic = (props: IProps) => {
   const onError = (errors: any) => {
     console.log("FORM ERRORS", errors); // Kiểm tra các lỗi của form
   };
-
   useEffect(() => {
     // Kiểm tra nếu bất kỳ trạng thái pending nào đang là true
     if (
@@ -282,17 +326,9 @@ const FormSubmitResearchTopic = (props: IProps) => {
     fileProductIsPending,
     setIsLoadingSpinner,
   ]);
+
   return (
     <div className="h-full">
-      {isPending ||
-      fileIsPending ||
-      fileProductIsPending ||
-      fileBudgetIsPending ||
-      notiIsPending ? (
-        <SpinnerLoading />
-      ) : (
-        ""
-      )}
       <div className="">
         <div>
           <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
@@ -439,16 +475,48 @@ const FormSubmitResearchTopic = (props: IProps) => {
           setData={setListContributors}
         />
       </div>
+      <div className="mt-3">
+        <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
+          Các file đã nộp trước đó
+        </label>
+        <div>
+          <a
+            target="_blank"
+            className="hover:text-blue-500 hover:underline"
+            href={researchTopic?.reportFilePath}
+          >
+            File thuyết minh
+          </a>
+        </div>
+        <div>
+          <a
+            target="_blank"
+            className="hover:text-blue-500 hover:underline"
+            href={researchTopic?.productFilePath}
+          >
+            File sản phẩm
+          </a>
+        </div>
+        <div>
+          <a
+            target="_blank"
+            className="hover:text-blue-500 hover:underline"
+            href={researchTopic?.budgetFilePath}
+          >
+            File dự trù kinh phí
+          </a>
+        </div>
+      </div>
       <div className="flex gap-4 mt-3">
         <div>
           <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-            File thuyết minh
+            Cập nhật file thuyết minh (nếu cần)
           </label>
           <ClickFileUpload limit={1} multiple={false} setFile={setFileReport} />
         </div>
         <div>
           <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-            File sản phẩm
+            Cập nhật file sản phẩm (nếu cần)
           </label>
           <ClickFileUpload
             limit={1}
@@ -458,7 +526,7 @@ const FormSubmitResearchTopic = (props: IProps) => {
         </div>
         <div>
           <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-            File dự trù kinh phí
+            Cập nhật file dự trù kinh phí (nếu cần)
           </label>
           <ClickFileUpload limit={1} multiple={false} setFile={setFileBudget} />
         </div>
@@ -468,7 +536,7 @@ const FormSubmitResearchTopic = (props: IProps) => {
         className="my-3"
         type="primary"
       >
-        Nộp bài
+        Cập nhật
       </Button>
     </div>
   );
@@ -485,4 +553,4 @@ const div = ({ children }: IProp) => {
   );
 };
 
-export default FormSubmitResearchTopic;
+export default FormUpdateResearchTopic;

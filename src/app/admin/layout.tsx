@@ -94,7 +94,7 @@ export default function AdminLayout({
         "6",
         <ScheduleOutlined />,
         undefined,
-        "/admin/"
+        "/admin/project-reviewer-assignment"
       ),
       getItem(
         "Quản lý tình trạng đề tài",

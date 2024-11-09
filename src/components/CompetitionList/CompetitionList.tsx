@@ -100,7 +100,10 @@ const CompetitionListForAuthor = () => {
       )
   );
 
-  console.log("checking new list competitions: ", registeredCompetitions);
+  console.log(
+    "=========>checking new list competitions (registeredCompetitions): ",
+    registeredCompetitions
+  );
   // UI
   return (
     <section className="mt-5 max-w-screen-lg mx-auto px-4 md:px-8">

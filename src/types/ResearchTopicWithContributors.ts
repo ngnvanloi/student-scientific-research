@@ -6,6 +6,8 @@ export type ResearchTopicWithContributors = {
   dateUpLoad: string;
   description: string;
   target: string;
+  achievedResults?: string;
+  summary?: string;
   budget: number;
   projectDuration: number;
   isAcceptanceApproved: false;

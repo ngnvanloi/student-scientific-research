@@ -142,7 +142,11 @@ const ModalEstablishReviewCouncil = (props: IProps) => {
                     setIsOpen={setModalAddReviewer}
                     setListReviewer={setListReviewer}
                   />
-                  <DataTableAddReviewer columns={columns} data={listReviewer} />
+                  <DataTableAddReviewer
+                    columns={columns}
+                    data={listReviewer}
+                    setData={setListReviewer}
+                  />
                 </div>
               </Dialog.Description>
               <div className="flex items-center gap-3 p-4 border-t">

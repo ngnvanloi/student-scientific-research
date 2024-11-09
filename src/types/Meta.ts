@@ -73,7 +73,7 @@ export interface IDataWithTokenResponseFromAPI<T> {
 // for post/get
 export interface IDataResponseFromAPI<T> {
   data: T;
-  additionalData: any;
+  additionalData?: any;
   message: string;
   statusCode: number;
   code: string;

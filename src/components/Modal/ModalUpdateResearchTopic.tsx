@@ -6,15 +6,19 @@ import { Button } from "antd";
 import React, { useState } from "react";
 import { SubmitResearchProject } from "../SubmitResearchProject/SubmitResearchProject";
 import FormSubmitResearchTopic from "../SubmitResearchProject/FormSubmitResearchTopic";
+import FormUpdateResearchTopic from "../UpdateResearchTopic/UpdateResearchTopic";
+import { ResearchProjectTopic } from "@/types/ResearchProjectTopic";
+import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContributors";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 
 interface IProps {
   competition: Competition | undefined;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  researchTopic: ResearchTopicWithContributors | undefined;
 }
-const ModalSubmitResearchTopic = (props: IProps) => {
-  const { competition, isOpen, setIsOpen } = props;
+const ModalUpdateResearchTopic = (props: IProps) => {
+  const { competition, isOpen, setIsOpen, researchTopic } = props;
   const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
   // RENDER UI
   return (
@@ -26,16 +30,17 @@ const ModalSubmitResearchTopic = (props: IProps) => {
           <div className="bg-white rounded-md shadow-lg h-full  overflow-x-auto">
             <div className="flex items-center justify-between p-4 border-b">
               <Dialog.Title className="text-lg font-medium text-gray-800 ">
-                Nộp đề tài cho cuộc thi {competition?.competitionName}
+                Chỉnh sửa đề tài {researchTopic?.nameTopic}
               </Dialog.Title>
               <Dialog.Close className="p-2 text-gray-400 rounded-md hover:bg-gray-100">
                 <CloseModalIcon />
               </Dialog.Close>
             </div>
             <Dialog.Description className="space-y-2 p-4 mt-3 text-[15.5px] leading-relaxed text-gray-500 h-full">
-              <FormSubmitResearchTopic
+              <FormUpdateResearchTopic
                 competition={competition}
                 setIsOpen={setIsOpen}
+                researchTopic={researchTopic}
                 setIsLoadingSpinner={setIsLoadingSpinner}
               />
             </Dialog.Description>
@@ -45,4 +50,4 @@ const ModalSubmitResearchTopic = (props: IProps) => {
     </Dialog.Root>
   );
 };
-export { ModalSubmitResearchTopic };
+export { ModalUpdateResearchTopic };

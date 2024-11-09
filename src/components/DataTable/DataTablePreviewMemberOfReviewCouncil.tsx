@@ -2,19 +2,14 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-// export type Payment = {
-//   id: string;
-//   amount: number;
-//   status: "pending" | "processing" | "success" | "failed";
-//   email: string;
-// };
-
-export const columns: ColumnDef<CoAuthor>[] = [
+export const columns: ColumnDef<MemberOfCouncil>[] = [
   {
     accessorKey: "name",
     header: "Họ tên",
+  },
+  {
+    accessorKey: "dateOfBirth",
+    header: "Ngày sinh",
   },
   {
     accessorKey: "email",
@@ -23,18 +18,6 @@ export const columns: ColumnDef<CoAuthor>[] = [
   {
     accessorKey: "numberPhone",
     header: "Số điện thoại",
-  },
-  {
-    accessorKey: "dateOfBirth",
-    header: "Ngày sinh",
-  },
-  {
-    accessorKey: "sex",
-    header: "Giới tính",
-  },
-  {
-    accessorKey: "roleName",
-    header: "Vai trò",
   },
 ];
 import {
@@ -51,30 +34,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CoAuthor } from "@/types/CoAuthor";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { ReviewBoardMembers } from "@/types/ReviewBoardMembers";
+import { MemberOfCouncil } from "@/types/ReviewCouncilWithMembers";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  setData: React.Dispatch<React.SetStateAction<TData[] | any>>;
 }
 
-export function DataTableAddContributors<TData, TValue>({
+export function DataTablePreviewMemberOfReviewCouncil<TData, TValue>({
   columns,
   data,
-  setData,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-  // Hàm xóa phần tử
-  const handleDelete = (item: TData) => {
-    setData((prevData: any) => prevData.filter((row: any) => row !== item));
-    // gọi API DELETE
-  };
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -108,13 +85,6 @@ export function DataTableAddContributors<TData, TValue>({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
-                <TableCell>
-                  <TrashIcon
-                    width={16}
-                    onClick={() => handleDelete(row.original)}
-                    className="hover:cursor-pointer hover:text-red-500"
-                  />
-                </TableCell>
               </TableRow>
             ))
           ) : (
