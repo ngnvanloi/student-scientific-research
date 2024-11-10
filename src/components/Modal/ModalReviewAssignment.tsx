@@ -161,12 +161,12 @@ const ModalReviewAssignment = (props: IProps) => {
                   onClick={handleSubmit(onSubmit, onError)}
                   className="px-6 py-2 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "
                 >
-                  Create
+                  Xác nhận
                 </Button>
               </Dialog.Close>
               <Dialog.Close asChild>
                 <Button className="px-6 py-2 text-gray-800 border rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 ">
-                  Cancel
+                  Hủy
                 </Button>
               </Dialog.Close>
             </div>

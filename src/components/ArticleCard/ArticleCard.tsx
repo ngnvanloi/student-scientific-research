@@ -12,6 +12,7 @@ import { FolderArrowDownIcon } from "@heroicons/react/24/outline";
 import { ModalShowArticleDetails } from "../Modal/ModalDetailArticle";
 import { ModalApprovalArticle } from "../Modal/ModalApprovalArticle";
 import { useRouter } from "next/navigation";
+import { ModalUpdateArticle } from "../Modal/ModalUpdateArticle";
 
 interface IPropsAuthorArticle {
   articleItem: Article;
@@ -27,7 +28,6 @@ const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
   // function
   const handleClickUpdateButton = (e: any, acticleID: number) => {
     e.stopPropagation();
-    alert("update");
     setModelUpdateOpen(true);
   };
 
@@ -43,33 +43,34 @@ const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
     }
   };
   return (
-    <div
-      className="w-full mx-auto px-4 md:px-8 outline outline-1 outline-[#ccc] p-4 rounded-md duration-150 hover:shadow-lg hover:cursor-pointer"
-      onClick={() => handleShowDetailArticle()}
-    >
+    <div className="w-full mx-auto px-4 md:px-8 outline outline-1 outline-[#ccc] p-4 rounded-md duration-150 hover:shadow-lg hover:cursor-pointer">
       <div className="w-full mx-auto group sm:max-w-sm">
-        <div className="flex items-center justify-center">
-          <img
-            src={iconPDF.src}
-            loading="lazy"
-            alt={articleItem.title}
-            className="h-[135px] rounded-lg"
-          />
-        </div>
-        <div className="mt-3 space-y-2">
-          <span className="block text-indigo-600 text-sm">
-            {formatDate(articleItem.dateUpload)}
-          </span>
-          <h3 className="text-lg text-gray-800 duration-150 group-hover:text-indigo-600 font-semibold truncate max-h-[300px]">
-            {articleItem.title}
-          </h3>
-          <p className="text-gray-600 text-sm duration-150 group-hover:text-gray-800">
-            {/* <div
+        <div onClick={() => handleShowDetailArticle()}>
+          <div className="flex items-center justify-center">
+            <img
+              src={iconPDF.src}
+              loading="lazy"
+              alt={articleItem.title}
+              className="h-[135px] rounded-lg"
+            />
+          </div>
+          <div className="mt-3">
+            <span className="block text-indigo-600 text-sm">
+              {formatDate(articleItem.dateUpload)}
+            </span>
+            <h3 className="text-lg text-gray-800 duration-150 group-hover:text-indigo-600 font-semibold truncate max-h-[300px]">
+              {articleItem.title}
+            </h3>
+            <p className="text-gray-600 text-sm duration-150 group-hover:text-gray-800">
+              {/* <div
                 dangerouslySetInnerHTML={{
                   __html: articleItem.description ?? "",
                 }}
               /> */}
-          </p>
+            </p>
+          </div>
+        </div>
+        <div className="mt-3 space-y-2">
           {isAcceptedForPublication === true ? (
             <Tag color="cyan-inverse" key={"public"}>
               Đã công bố
@@ -135,6 +136,11 @@ const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             articleID={articleItem.articleId}
+          />
+          <ModalUpdateArticle
+            isOpen={isModalUpdateOpen}
+            setIsOpen={setModelUpdateOpen}
+            article={articleItem}
           />
         </div>
       </div>

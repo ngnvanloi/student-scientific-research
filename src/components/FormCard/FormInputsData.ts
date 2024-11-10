@@ -43,6 +43,10 @@ export type TFormSubmitResearchTopic = {
   disciplineId: number | string;
   competitionId?: number;
 };
+export type TFormUpdateArticle = {
+  title: string;
+  disciplineId: number | string;
+};
 
 export type TFormApprovalRegistration = {
   approvalStatus: number | string;
