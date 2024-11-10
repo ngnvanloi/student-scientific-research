@@ -111,7 +111,6 @@ const FormSubmitResearchTopic = (props: IProps) => {
     return new Promise<string>((resolve, reject) => {
       mutation(formData, {
         onSuccess: (result: any) => {
-          // Kiểm tra result.data có là chuỗi không, nếu không thì trả về chuỗi rỗng
           if (typeof result.data === "string") {
             resolve(result.data);
           } else {

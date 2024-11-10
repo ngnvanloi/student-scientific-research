@@ -2,6 +2,9 @@
 
 import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContributors";
 import { FolderOpenIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import { Button } from "antd";
+import { useState } from "react";
+import { ModalReviewAssignment } from "../Modal/ModalReviewAssignment";
 
 interface IProps {
   researchTopic: ResearchTopicWithContributors;
@@ -9,8 +12,11 @@ interface IProps {
 }
 const ResearchTopicComponentForAdmin = (props: IProps) => {
   const { researchTopic, isAssignment } = props;
+  const [toggleModalAssignment, setToggleModalAssignment] =
+    useState<boolean>(false);
+
   return (
-    <div className="flex gap-3 border p-3 mb-2">
+    <div className="flex gap-3 border p-3 mb-2 justify-between">
       <div>
         <span className="block text-sm font-bold text-blue-900">
           {researchTopic.nameTopic}
@@ -24,7 +30,20 @@ const ResearchTopicComponentForAdmin = (props: IProps) => {
           <FolderOpenIcon width={20} /> {researchTopic.disciplineName}
         </p>
       </div>
-      <div>{isAssignment ? <p>Đã phân công</p> : <p>Chưa phân công</p>}</div>
+      <div>
+        {isAssignment ? (
+          <p>Đã phân công</p>
+        ) : (
+          <Button onClick={() => setToggleModalAssignment(true)}>
+            Phân công
+          </Button>
+        )}
+        <ModalReviewAssignment
+          isOpen={toggleModalAssignment}
+          setIsOpen={setToggleModalAssignment}
+          competitionId={researchTopic.competitionId || 0}
+        />
+      </div>
     </div>
   );
 };

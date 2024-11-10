@@ -81,7 +81,7 @@ export default function AdminLayout({
     ]),
     getItem("Đề tài của tôi", "5", <ReconciliationOutlined />, [
       getItem(
-        "Nộp đề tài",
+        "Nộp/cập nhật đề tài",
         "6",
         <DeliveredProcedureOutlined />,
         undefined,

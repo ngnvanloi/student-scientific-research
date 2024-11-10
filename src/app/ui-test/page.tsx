@@ -7,8 +7,7 @@ const UITest = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <div>
-      <FormSubmitResearchTopic competition={undefined} setIsOpen={setIsOpen} />
-      {/* <ReviewResearchTopicContainer /> */}
+      <ReviewResearchTopicContainer />
     </div>
   );
 };
