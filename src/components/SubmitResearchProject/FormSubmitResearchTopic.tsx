@@ -195,9 +195,9 @@ const FormSubmitResearchTopic = (props: IProps) => {
         productFilePath: productFilePath || "",
         budgetFilePath: budgetFilePath || "",
         reportFilePath: reportFilePath || "",
-        articleId: (data.articleId as number) || -1,
-        disciplineId: (data.disciplineId as number) || -1,
-        competitionId: competition?.id || -1,
+        articleId: (data?.articleId as number) || 0,
+        disciplineId: (data.disciplineId as number) || 0,
+        competitionId: competition?.id || 0,
         coAuthors: listContributors,
       };
 
@@ -283,7 +283,7 @@ const FormSubmitResearchTopic = (props: IProps) => {
   ]);
   return (
     <div className="h-full">
-      {isPending ||
+      {/* {isPending ||
       fileIsPending ||
       fileProductIsPending ||
       fileBudgetIsPending ||
@@ -291,7 +291,7 @@ const FormSubmitResearchTopic = (props: IProps) => {
         <SpinnerLoading />
       ) : (
         ""
-      )}
+      )} */}
       <div className="">
         <div>
           <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">

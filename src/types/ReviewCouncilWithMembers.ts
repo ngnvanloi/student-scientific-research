@@ -3,6 +3,8 @@ export type ReviewCouncilWithMembers = {
   reviewCommitteeName: string;
   competitionId: number;
   competitionName: string;
+  dateStart: string | Date;
+  dateEnd: string | Date;
   reviewBoardMembers: MemberOfCouncil[];
 };
 
@@ -17,4 +19,5 @@ export type MemberOfCouncil = {
   facultyName: string;
   accountId: number;
   email: string;
+  sex: string;
 };

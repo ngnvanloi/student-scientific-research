@@ -4,47 +4,49 @@ import type { IResponseFromAPI } from "@/types/Meta";
 import { getSession } from "next-auth/react";
 import { ReviewBoardMembers } from "@/types/ReviewBoardMembers";
 
-export type ParamsEstablishReviewCouncil = {
+export type ParamsUpdateReviewCouncil = {
   reviewCommitteeName: string;
-  competitionId: number;
   dateStart: string;
   dateEnd: string;
   reviewBoardMembers: ReviewBoardMembers[];
 };
 
-export const useEstablishReviewCouncilMutation = () => {
+export const useUpdateReviewCouncilMutation = () => {
   return useMutation<
     IResponseFromAPI,
     Error,
-    ParamsEstablishReviewCouncil,
+    { id: number; params: ParamsUpdateReviewCouncil },
     unknown
   >({
-    mutationFn: (data) => establishReviewCouncil(data),
+    mutationFn: ({ params, id }) => updateReviewCouncil(id, params),
     onMutate: () => {},
     onSuccess: (result) => {
       console.log("Check result if successfully: ", JSON.stringify(result));
     },
     onError: (err) => {
-      console.log("Error establish review council: ", err);
+      console.log("Error update review council: ", err);
     },
   });
 };
 
-export async function establishReviewCouncil(
-  data: ParamsEstablishReviewCouncil
+export async function updateReviewCouncil(
+  id: number,
+  data: ParamsUpdateReviewCouncil
 ): Promise<IResponseFromAPI> {
   const session = await getSession();
   if (!session) {
     throw new Error("User not authenticated");
   }
+  // Token lấy từ session hoặc bất kỳ nơi nào bạn lưu trữ nó
+  const token = session.user?.accessToken || ""; // Điều chỉnh lấy token từ session
   console.log("Checking getSession() from Server side: ", session.user);
   try {
     const response = await communityRequest<IResponseFromAPI>(
-      `api/Organizer/review-committee`,
+      `api/Organizer/review-committee/${id}`,
       {
-        method: "POST",
+        method: "PATCH",
         headers: {
-          // "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         data,
       }
@@ -52,7 +54,7 @@ export async function establishReviewCouncil(
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error establish review council: ", error);
+    console.error("Error update review council: ", error);
     throw error;
   }
 }

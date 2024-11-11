@@ -4,6 +4,8 @@ import {
   CalendarDaysIcon,
   CalendarIcon,
   MapPinIcon,
+  TrashIcon,
+  WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 import { Button } from "antd";
 import { Fragment, useState } from "react";
@@ -38,6 +40,9 @@ import {
 } from "../DataTable/DataTablePreviewMemberOfReviewCouncil";
 import { ModalUpdateResearchTopic } from "../Modal/ModalUpdateResearchTopic";
 import { getSession, useSession } from "next-auth/react";
+import { ReviewCouncilWithMembers } from "@/types/ReviewCouncilWithMembers";
+import { ModalUpdateReviewCouncil } from "../Modal/ModalUpdateReviewCouncil";
+import { ModalDeleteReviewCouncil } from "../Modal/ModalDeleteReviewCouncil";
 interface IProps {
   competition: Competition | undefined;
 }
@@ -431,6 +436,17 @@ const CompetitionCardAdminWithActionEstablishReviewCouncil = (
     JSON.stringify(listReviewCouncil?.data.items, null, 2)
   );
 
+  // STATE
+  const [isShowModaUpdateReviewCouncil, setIsShowModalUpdateReviewCouncil] =
+    useState(false);
+
+  const [isShowModaDeleteReviewCouncil, setIsShowModalDeleteReviewCouncil] =
+    useState(false);
+
+  const [reviewCouncilToAction, setReviewCouncilToAction] = useState<
+    ReviewCouncilWithMembers | undefined
+  >();
+  const [reviewCouncilToDelete, setReviewCouncleToDelete] = useState(0);
   // UI
   return (
     <Fragment>
@@ -487,9 +503,29 @@ const CompetitionCardAdminWithActionEstablishReviewCouncil = (
                     key={index}
                     className="rounded-md border px-4 py-3 font-sans text-sm"
                   >
-                    <p className="font-semibold mb-3">
-                      {item.reviewCommitteeName}
-                    </p>
+                    <div className="flex justify-between">
+                      <p className="font-semibold mb-3">
+                        {item.reviewCommitteeName}
+                      </p>
+                      <div className="flex gap-3 text-gray-600">
+                        <WrenchScrewdriverIcon
+                          width={16}
+                          className="hover:text-yellow-500 hover:cursor-pointer"
+                          onClick={() => {
+                            setReviewCouncilToAction(item);
+                            setIsShowModalUpdateReviewCouncil(true);
+                          }}
+                        />
+                        <TrashIcon
+                          width={16}
+                          className="hover:text-red-500"
+                          onClick={() => {
+                            setReviewCouncleToDelete(item.id);
+                            setIsShowModalDeleteReviewCouncil(true);
+                          }}
+                        />
+                      </div>
+                    </div>
                     <DataTablePreviewMemberOfReviewCouncil
                       columns={columns}
                       data={item.reviewBoardMembers}
@@ -497,6 +533,16 @@ const CompetitionCardAdminWithActionEstablishReviewCouncil = (
                   </div>
                 );
               })}
+              <ModalUpdateReviewCouncil
+                isOpen={isShowModaUpdateReviewCouncil}
+                setIsOpen={setIsShowModalUpdateReviewCouncil}
+                reviewCouncil={reviewCouncilToAction}
+              />
+              <ModalDeleteReviewCouncil
+                isOpen={isShowModaDeleteReviewCouncil}
+                setIsOpen={setIsShowModalDeleteReviewCouncil}
+                reviewCouncilID={reviewCouncilToDelete}
+              />
             </CollapsibleContent>
           </Collapsible>
         </div>

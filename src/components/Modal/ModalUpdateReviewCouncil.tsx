@@ -4,50 +4,86 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useForm } from "react-hook-form";
 import { TFormEstablishReviewCouncil } from "../FormCard/FormInputsData";
-import {
-  FormAddContributorSchema,
-  FormEstablishReviewCouncil,
-} from "../FormCard/ZodSchema";
+import { FormEstablishReviewCouncil } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
 import { Button } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DatePicker } from "../DatePicker/DatePicker";
 import { useToast } from "@/hooks/use-toast";
-import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
-import { CoAuthor } from "@/types/CoAuthor";
-import { Competition } from "@/types/Competition";
 import { ModalAddReviewerForCouncil } from "./ModalAddReviewerForCouncil";
-import { ConsoleSqlOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { ReviewBoardMembers } from "@/types/ReviewBoardMembers";
 import {
   columns,
   DataTableAddReviewer,
 } from "../DataTable/DataTableAddReviewer";
-import {
-  ParamsEstablishReviewCouncil,
-  useEstablishReviewCouncilMutation,
-} from "@/hooks-query/mutations/use-establish-review-council";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
+import {
+  ParamsUpdateReviewCouncil,
+  useUpdateReviewCouncilMutation,
+} from "@/hooks-query/mutations/use-update-review-council";
+import { ReviewCouncilWithMembers } from "@/types/ReviewCouncilWithMembers";
 
 interface IProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  competition: Competition | undefined;
+  reviewCouncil: ReviewCouncilWithMembers | undefined;
 }
-const ModalEstablishReviewCouncil = (props: IProps) => {
-  const { isOpen, setIsOpen, competition } = props;
+const ModalUpdateReviewCouncil = (props: IProps) => {
+  const { isOpen, setIsOpen, reviewCouncil } = props;
+  console.log("==== checking reviewCouncil update: ", reviewCouncil);
   // MUTATION
   const { mutate, isPending, isSuccess, isError } =
-    useEstablishReviewCouncilMutation();
+    useUpdateReviewCouncilMutation();
+  const listReviewPreviously: ReviewBoardMembers[] =
+    reviewCouncil?.reviewBoardMembers.map((item) => {
+      return {
+        name: item.name,
+        email: item.email,
+        numberPhone: item.numberPhone,
+        dateOfBirth: item.dateOfBirth,
+        sex: item.sex,
+        description: item.description,
+      };
+    }) || [];
   // STATE
-  const [listReviewer, setListReviewer] = useState<ReviewBoardMembers[]>([]);
+  const [listReviewer, setListReviewer] =
+    useState<ReviewBoardMembers[]>(listReviewPreviously);
+  const [dateStart, setDateStart] = useState<Date | undefined>(
+    reviewCouncil?.dateStart ? new Date(reviewCouncil.dateStart) : undefined
+  );
+  const [dateEnd, setDateEnd] = useState<Date | undefined>(
+    reviewCouncil?.dateEnd ? new Date(reviewCouncil.dateEnd) : undefined
+  );
   const [isModalAddReviewer, setModalAddReviewer] = useState<boolean>(false);
-  const [dateStart, setDateStart] = useState<Date | undefined>(new Date());
-  const [dateEnd, setDateEnd] = useState<Date | undefined>(() => {
-    const today = new Date();
-    today.setDate(today.getDate() + 7);
-    return today;
-  });
+  useEffect(() => {
+    const updatedListReviewers =
+      reviewCouncil?.reviewBoardMembers.map((item) => ({
+        name: item.name,
+        email: item.email,
+        numberPhone: item.numberPhone,
+        dateOfBirth: item.dateOfBirth,
+        sex: item.sex,
+        description: item.description,
+      })) || [];
+    setListReviewer(updatedListReviewers);
+
+    // Cập nhật dateStart và dateEnd
+    console.log("========check dateStart: ", reviewCouncil?.dateStart);
+    console.log("========check dateEnd: ", reviewCouncil?.dateEnd);
+    setDateStart(
+      reviewCouncil?.dateStart ? new Date(reviewCouncil.dateStart) : undefined
+    );
+    setDateEnd(
+      reviewCouncil?.dateEnd ? new Date(reviewCouncil.dateEnd) : undefined
+    );
+    // cập nhật reviewCommitteeName
+    if (reviewCouncil) {
+      reset({
+        name: reviewCouncil.reviewCommitteeName || "",
+      });
+    }
+  }, [reviewCouncil]);
   const { toast } = useToast();
   // REACT HOOK FORM
   const {
@@ -58,46 +94,51 @@ const ModalEstablishReviewCouncil = (props: IProps) => {
     reset,
   } = useForm<TFormEstablishReviewCouncil>({
     resolver: zodResolver(FormEstablishReviewCouncil),
+    defaultValues: {
+      name: reviewCouncil?.reviewCommitteeName || "",
+    },
   });
 
   // HANDLE LOGIC
   const onSubmit = (data: TFormEstablishReviewCouncil) => {
     console.log("Check name review council: ", data.name);
     console.log("Check list reviewzers: ", listReviewer);
-    console.log("Check competitionID: ", competition?.id);
+    console.log("Check reviewCouncilID: ", reviewCouncil?.id);
 
     // GỌI API THÀNH LẬP HỘI ĐỒNG PHẢN BIỆN
-    let requestBody: ParamsEstablishReviewCouncil = {
+    let requestBody: ParamsUpdateReviewCouncil = {
       reviewCommitteeName: data.name,
-      competitionId: competition?.id || 0,
       dateStart: dateStart?.toISOString() || "",
       dateEnd: dateEnd?.toISOString() || "",
       reviewBoardMembers: listReviewer,
     };
-    mutate(requestBody, {
-      onSuccess: () => {
-        toast({
-          title: "Thành công",
-          variant: "default",
-          description: "Hội đồng phản biện đã được tạo thành công",
-        });
-        // reset input fields
-        reset({
-          name: "",
-        });
-        setListReviewer([]);
-        setDateStart(new Date());
-        setDateEnd(() => {
-          const today = new Date();
-          today.setDate(today.getDate() + 7);
-          return today;
-        });
-        setIsOpen(false);
-      },
-      onError: (error) => {
-        console.error("Lỗi khi tạo bài báo:", error);
-      },
-    });
+    mutate(
+      { id: reviewCouncil?.id || 0, params: requestBody },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Thành công",
+            variant: "default",
+            description: "Hội đồng phản biện đã được cập nhật thành công",
+          });
+          // reset input fields
+          reset({
+            name: "",
+          });
+          setListReviewer([]);
+          setDateStart(new Date());
+          setDateEnd(() => {
+            const today = new Date();
+            today.setDate(today.getDate() + 7);
+            return today;
+          });
+          setIsOpen(false);
+        },
+        onError: (error) => {
+          console.error("Lỗi khi cập nhật hội đồng phản biện:", error);
+        },
+      }
+    );
   };
 
   const onError = (errors: any) => {
@@ -116,8 +157,8 @@ const ModalEstablishReviewCouncil = (props: IProps) => {
               <div className="flex items-center justify-between p-4 border-b">
                 <Dialog.Title className="text-lg font-medium text-gray-800 ">
                   <strong>
-                    Thành lập hội đồng phản biện cho cuộc thi{" "}
-                    {competition?.competitionName}
+                    Cập nhật hội đồng phản biện{" "}
+                    {reviewCouncil?.reviewCommitteeName}
                   </strong>
                 </Dialog.Title>
                 <Dialog.Close className="p-2 text-gray-400 rounded-md hover:bg-gray-100">
@@ -183,7 +224,7 @@ const ModalEstablishReviewCouncil = (props: IProps) => {
                     onClick={handleSubmit(onSubmit, onError)}
                     className="px-6 py-2 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "
                   >
-                    Create
+                    Cập nhật
                   </Button>
                 </Dialog.Close>
                 <Dialog.Close asChild>
@@ -199,4 +240,4 @@ const ModalEstablishReviewCouncil = (props: IProps) => {
     </div>
   );
 };
-export { ModalEstablishReviewCouncil };
+export { ModalUpdateReviewCouncil };

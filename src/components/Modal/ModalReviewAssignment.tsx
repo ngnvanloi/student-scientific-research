@@ -57,8 +57,6 @@ const ModalReviewAssignment = (props: IProps) => {
       name: faculty.reviewCommitteeName,
     }));
   // STATE
-  const [dateStart, setDateStart] = useState<Date | undefined>(new Date());
-  const [dateEnd, setDateEnd] = useState<Date | undefined>(new Date());
   const [toggleShowListCouncil, setToggleShowListCouncil] =
     useState<boolean>(false);
   const { toast } = useToast();
@@ -76,8 +74,6 @@ const ModalReviewAssignment = (props: IProps) => {
   // HANDLE LOGIC
   const onSubmit = (data: TFormAddContributor) => {
     setIsOpen(false);
-    setDateStart(new Date());
-    setDateEnd(new Date());
   };
 
   const onError = (errors: any) => {
@@ -129,20 +125,6 @@ const ModalReviewAssignment = (props: IProps) => {
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
-              </div>
-              <div className="flex gap-3">
-                <div className="basis-1/2">
-                  <label className="mb-[10px] block text-base font-bold text-blue-900 dark:text-white">
-                    Ngày bắt đầu phản biện
-                  </label>
-                  <DatePicker date={dateStart} setDate={setDateStart} />
-                </div>
-                <div className="basis-1/2">
-                  <label className="mb-[10px] block text-base font-bold text-blue-900 dark:text-white">
-                    Ngày kết thúc phản biện
-                  </label>
-                  <DatePicker date={dateEnd} setDate={setDateEnd} />
-                </div>
               </div>
               <div className="mt-5">
                 <FormSelect
