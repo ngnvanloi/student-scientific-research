@@ -8,6 +8,7 @@ import {
   TFormEstablishReviewCouncil,
   TFormLoginData,
   TFormRegisterData,
+  TFormReviewAssignment,
   TFormReviewTopic,
   TFormSubmitArticle,
   TFormSubmitResearchProjectTabGoalResult,
@@ -124,6 +125,9 @@ export const FormAddContributorSchema: ZodType<TFormAddContributor> = z.object({
   // dateOfBirth: z.string(),
   sex: z.string(),
   // roleName: z.string(),
+});
+export const FormReviewAssignment: ZodType<TFormReviewAssignment> = z.object({
+  review_CommitteeId: z.string() || z.number(),
 });
 export const FormAddReviewerSchema: ZodType<TFormAddReviewer> = z.object({
   name: z.string(),

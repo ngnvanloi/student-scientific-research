@@ -7,10 +7,10 @@ import {
 import { ListResearchTopicForEachCompetition } from "./ListResearchTopicForEachCompetition";
 
 interface IProps {
-  isAssignment: boolean;
+  reviewCommitteeId: number;
 }
 const PendingAssignmentResearchTopic = (props: IProps) => {
-  const { isAssignment } = props;
+  const { reviewCommitteeId } = props;
   // lấy ra danh sách các cuộc thi (cuộc thi chứa các đề tài đã và chưa phân công phản biện)
   let params: ParamsGetListCompetition = {
     index: 1,
@@ -30,7 +30,7 @@ const PendingAssignmentResearchTopic = (props: IProps) => {
           <div key={idx}>
             <ListResearchTopicForEachCompetition
               competition={item}
-              isAssignment={isAssignment}
+              reviewCommitteeId={reviewCommitteeId}
             />
           </div>
         );

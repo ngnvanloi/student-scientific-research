@@ -78,6 +78,9 @@ export type TFormAddContributor = {
   sex?: string;
   roleName?: string;
 };
+export type TFormReviewAssignment = {
+  review_CommitteeId: string | number;
+};
 export type TFormAddReviewer = {
   name: string;
   email: string;

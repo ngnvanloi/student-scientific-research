@@ -21,7 +21,8 @@ export type ResearchTopicWithContributors = {
   articleName: string;
   disciplineId: number;
   disciplineName: string;
-  competitionId: 4;
+  competitionId: number;
+  review_CommitteeId?: number;
   competitionName: string;
   supervisor: string;
   coAuthors: Contributor[];

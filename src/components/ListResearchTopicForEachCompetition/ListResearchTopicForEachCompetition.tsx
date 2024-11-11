@@ -15,13 +15,14 @@ import { ResearchTopicComponentForAdmin } from "./ResearchTopicComponentForAdmin
 import { useEffect } from "react";
 interface IProps {
   competition: Competition;
-  isAssignment: boolean;
+  reviewCommitteeId: number;
 }
 const ListResearchTopicForEachCompetition = (props: IProps) => {
-  const { competition, isAssignment } = props;
+  const { competition, reviewCommitteeId } = props;
   // lấy ra danh sách đề tài cho từng cuộc thi
   let params: ParamsGetListResearchTopicForeachCompetition = {
     competitionId: competition.id,
+    reviewCommitteeId: reviewCommitteeId,
     index: 1,
     pageSize: 100,
   };
@@ -47,7 +48,7 @@ const ListResearchTopicForEachCompetition = (props: IProps) => {
             {listResearchTopic?.data.items.map((topic) => (
               <ResearchTopicComponentForAdmin
                 researchTopic={topic}
-                isAssignment={isAssignment}
+                reviewCommitteeId={reviewCommitteeId}
               />
             ))}
           </AccordionContent>

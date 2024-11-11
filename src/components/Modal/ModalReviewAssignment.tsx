@@ -3,8 +3,11 @@ import { CloseModalIcon } from "@/assets/svg/close.modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useForm } from "react-hook-form";
-import { TFormAddContributor } from "../FormCard/FormInputsData";
-import { FormAddContributorSchema } from "../FormCard/ZodSchema";
+
+import {
+  FormAddContributorSchema,
+  FormReviewAssignment,
+} from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
 import { Button } from "antd";
 import React, { useState } from "react";
@@ -33,14 +36,21 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+import {
+  ParamsReviewAssignment,
+  useReviewAssignmentMutation,
+} from "@/hooks-query/mutations/use-review-assignment";
+import { TFormReviewAssignment } from "../FormCard/FormInputsData";
+import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContributors";
 
 interface IProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   competitionId: number | undefined;
+  researchTopic: ResearchTopicWithContributors;
 }
 const ModalReviewAssignment = (props: IProps) => {
-  const { isOpen, setIsOpen, competitionId } = props;
+  const { isOpen, setIsOpen, competitionId, researchTopic } = props;
   // REACT QUERY
   let params: ParamsGetListReviewCouncilForEachCompetition = {
     competitionId: competitionId || 0,
@@ -50,6 +60,8 @@ const ModalReviewAssignment = (props: IProps) => {
   const { data: listReviewCouncil, refetch: refetchListReviewCouncil } =
     useGetListReviewCouncilForEachCompetition(params);
 
+  const { mutate, isPending, isError, isSuccess } =
+    useReviewAssignmentMutation();
   // VARIABLE
   const listReviewCouncilName: SelectItem[] | undefined =
     listReviewCouncil?.data.items.map((faculty) => ({
@@ -67,13 +79,35 @@ const ModalReviewAssignment = (props: IProps) => {
     formState: { errors },
     setError,
     reset,
-  } = useForm<TFormAddContributor>({
-    resolver: zodResolver(FormAddContributorSchema),
+  } = useForm<TFormReviewAssignment>({
+    resolver: zodResolver(FormReviewAssignment),
   });
 
   // HANDLE LOGIC
-  const onSubmit = (data: TFormAddContributor) => {
-    setIsOpen(false);
+  const onSubmit = (data: TFormReviewAssignment) => {
+    let params: ParamsReviewAssignment = {
+      review_CommitteeId: data.review_CommitteeId,
+    };
+    mutate(
+      { researchTopicId: researchTopic.id, params: params },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Thông báo",
+            variant: "default",
+            description: "Phân công phản biện thành công",
+          });
+          setIsOpen(false);
+        },
+        onError: (error) => {
+          alert("Lỗi khi phân công phản biện: " + error);
+        },
+      }
+    );
+    // RESET FORM UPDATE
+    reset({
+      review_CommitteeId: 0,
+    });
   };
 
   const onError = (errors: any) => {
@@ -128,10 +162,10 @@ const ModalReviewAssignment = (props: IProps) => {
               </div>
               <div className="mt-5">
                 <FormSelect
-                  name="sex"
+                  name="review_CommitteeId"
                   items={listReviewCouncilName || []}
                   register={register}
-                  error={errors.sex}
+                  error={errors.review_CommitteeId}
                   label="Chọn hội đồng phản biện"
                   className="relative basis-1/2 z-20 w-full appearance-none rounded-lg border border-stroke dark:border-dark-3 bg-transparent py-[10px] px-5 text-dark-600 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2"
                 />

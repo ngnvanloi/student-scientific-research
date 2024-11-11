@@ -8,10 +8,10 @@ import { ModalReviewAssignment } from "../Modal/ModalReviewAssignment";
 
 interface IProps {
   researchTopic: ResearchTopicWithContributors;
-  isAssignment: boolean;
+  reviewCommitteeId: number;
 }
 const ResearchTopicComponentForAdmin = (props: IProps) => {
-  const { researchTopic, isAssignment } = props;
+  const { researchTopic, reviewCommitteeId } = props;
   const [toggleModalAssignment, setToggleModalAssignment] =
     useState<boolean>(false);
 
@@ -31,8 +31,13 @@ const ResearchTopicComponentForAdmin = (props: IProps) => {
         </p>
       </div>
       <div>
-        {isAssignment ? (
-          <p>Đã phân công</p>
+        {reviewCommitteeId === 1 ? (
+          <div className="flex flex-col gap-2">
+            <p>Đã phân công: {researchTopic.review_CommitteeId}</p>
+            <Button onClick={() => setToggleModalAssignment(true)}>
+              Thay đổi
+            </Button>
+          </div>
         ) : (
           <Button onClick={() => setToggleModalAssignment(true)}>
             Phân công
@@ -42,6 +47,7 @@ const ResearchTopicComponentForAdmin = (props: IProps) => {
           isOpen={toggleModalAssignment}
           setIsOpen={setToggleModalAssignment}
           competitionId={researchTopic.competitionId || 0}
+          researchTopic={researchTopic}
         />
       </div>
     </div>

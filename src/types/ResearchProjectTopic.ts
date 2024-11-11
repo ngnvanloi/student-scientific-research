@@ -21,6 +21,7 @@ export type ResearchProjectTopic = {
   disciplineId: number;
   disciplineName: string;
   competitionId: number;
+  review_CommitteeId?: number;
   competitionName: string;
   supervisor: string;
   coAuthors: Contributor[];

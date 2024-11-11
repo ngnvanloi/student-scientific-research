@@ -12,4 +12,5 @@ type ResearchTopic = {
   articalID: number;
   disciplineID: number;
   competitionID: number;
+  review_CommitteeId?: number;
 };

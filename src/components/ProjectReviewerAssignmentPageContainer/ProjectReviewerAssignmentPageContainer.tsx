@@ -9,10 +9,10 @@ const ProjectReviewerAssignmentPageContainer = () => {
         <TabsTrigger value="accept">Đã phân công</TabsTrigger>
       </TabsList>
       <TabsContent value="pending">
-        <PendingAssignmentResearchTopic isAssignment={false} />
+        <PendingAssignmentResearchTopic reviewCommitteeId={-1} />
       </TabsContent>
       <TabsContent value="accept">
-        <PendingAssignmentResearchTopic isAssignment={true} />
+        <PendingAssignmentResearchTopic reviewCommitteeId={1} />
       </TabsContent>
     </Tabs>
   );

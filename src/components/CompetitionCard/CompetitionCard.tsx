@@ -504,9 +504,16 @@ const CompetitionCardAdminWithActionEstablishReviewCouncil = (
                     className="rounded-md border px-4 py-3 font-sans text-sm"
                   >
                     <div className="flex justify-between">
-                      <p className="font-semibold mb-3">
-                        {item.reviewCommitteeName}
-                      </p>
+                      <div className="flex gap-3">
+                        <p className="font-semibold mb-3">
+                          {item.reviewCommitteeName}
+                        </p>
+                        <p>
+                          {formatDate(item?.dateStart.toString() || "") +
+                            " -> " +
+                            formatDate(item?.dateEnd.toString() || "")}
+                        </p>
+                      </div>
                       <div className="flex gap-3 text-gray-600">
                         <WrenchScrewdriverIcon
                           width={16}

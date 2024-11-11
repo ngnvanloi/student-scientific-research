@@ -7,6 +7,7 @@ import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContribu
 export type ParamsGetListResearchTopicForeachCompetition = {
   competitionId: number;
   index: number;
+  reviewCommitteeId?: number;
   pageSize: number;
   nameTopicSearch?: string;
   disciplineId?: number;
@@ -32,16 +33,30 @@ export const useGetListResearchTopicForeachCompetition = (
 };
 
 export async function GetListResearchTopicForeachCompetition(
-  param: ParamsGetListResearchTopicForeachCompetition
+  params: ParamsGetListResearchTopicForeachCompetition
 ): Promise<
   IDataResponseFromAPI<IListDataResponseFromAPI<ResearchTopicWithContributors>>
 > {
-  const response = (await communityRequest)(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/ResearchTopic/competition/${param.competitionId}?index=${param.index}&pageSize=${param.pageSize}`,
-    {
-      method: "GET",
-    }
-  );
+  // Xây dựng URL dựa trên các tham số có sẵn
+  let url = `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/ResearchTopic/competition/${params.competitionId}?index=${params.index}&pageSize=${params.pageSize}`;
+
+  // Thêm reviewCommitteeId nếu có
+  if (
+    params.reviewCommitteeId !== undefined &&
+    params.reviewCommitteeId !== null
+  ) {
+    url += `&reviewCommitteeId=${params.reviewCommitteeId}`;
+  }
+
+  // Thêm disciplineId nếu có
+  if (params.disciplineId !== undefined && params.disciplineId !== null) {
+    url += `&disciplineId=${params.disciplineId}`;
+  }
+
+  const response = (await communityRequest)(url, {
+    method: "GET",
+  });
+
   return response as unknown as IDataResponseFromAPI<
     IListDataResponseFromAPI<ResearchTopicWithContributors>
   >;
