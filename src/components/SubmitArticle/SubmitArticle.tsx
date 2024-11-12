@@ -34,6 +34,7 @@ import {
 import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { useSession } from "next-auth/react";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
+import DateTimePicker from "../DatePicker/DateTimePicker";
 
 const SubmitArticleComponent = () => {
   const { data: session } = useSession();
@@ -178,7 +179,7 @@ const SubmitArticleComponent = () => {
               <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                 Ngày đăng tải
               </label>
-              <DatePicker date={date} setDate={setDate} />
+              <DateTimePicker date={date} setDate={setDate} />
             </div>
 
             <div className="mt-4">

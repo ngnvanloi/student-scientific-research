@@ -22,6 +22,7 @@ import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-fireb
 import { ParamsRegisterCompetiton } from "@/hooks-query/mutations/use-register-competition";
 import { useToast } from "@/hooks/use-toast";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
+import DateTimePicker from "../DatePicker/DateTimePicker";
 
 const ModalAddNewPost = () => {
   // STATE
@@ -163,7 +164,7 @@ const ModalAddNewPost = () => {
                 <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                   Ngày đăng
                 </label>
-                <DatePicker date={date} setDate={setDate} />
+                <DateTimePicker date={date} setDate={setDate} />
               </div>
               <div>
                 <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">

@@ -23,6 +23,7 @@ import {
   useCreateCompetitionMutation,
 } from "@/hooks-query/mutations/use-create-competition-mutation";
 import { useToast } from "@/hooks/use-toast";
+import DateTimePicker from "../DatePicker/DateTimePicker";
 
 const ModalAddNewCompetition = () => {
   // STATE
@@ -114,19 +115,22 @@ const ModalAddNewCompetition = () => {
                   <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                     Ngày bắt đầu
                   </label>
-                  <DatePicker date={dateStart} setDate={setDateStart} />
+                  <DateTimePicker date={dateStart} setDate={setDateStart} />
                 </div>
                 <div className="basis-1/3">
                   <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                     Ngày kết thúc
                   </label>
-                  <DatePicker date={dateEnd} setDate={setDateEnd} />
+                  <DateTimePicker date={dateEnd} setDate={setDateEnd} />
                 </div>
                 <div className="basis-1/3">
                   <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                     Hạn chốt nộp đề tài
                   </label>
-                  <DatePicker date={dateEndSubmit} setDate={setDateEndSubmit} />
+                  <DateTimePicker
+                    date={dateEndSubmit}
+                    setDate={setDateEndSubmit}
+                  />
                 </div>
               </div>
               <div>

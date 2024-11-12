@@ -28,6 +28,7 @@ import {
   useEstablishReviewCouncilMutation,
 } from "@/hooks-query/mutations/use-establish-review-council";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
+import DateTimePicker from "../DatePicker/DateTimePicker";
 
 interface IProps {
   isOpen: boolean;
@@ -143,13 +144,13 @@ const ModalEstablishReviewCouncil = (props: IProps) => {
                     <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                       Ngày bắt đầu phản biện
                     </label>
-                    <DatePicker date={dateStart} setDate={setDateStart} />
+                    <DateTimePicker date={dateStart} setDate={setDateStart} />
                   </div>
                   <div className="basis-1/2">
                     <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                       Ngày kết thúc phản biện
                     </label>
-                    <DatePicker date={dateEnd} setDate={setDateEnd} />
+                    <DateTimePicker date={dateEnd} setDate={setDateEnd} />
                   </div>
                 </div>
                 <div className="flex justify-between items-center justify-items-center mb-3 mt-3">

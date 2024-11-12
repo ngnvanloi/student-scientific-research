@@ -12,6 +12,7 @@ import { DatePicker } from "../DatePicker/DatePicker";
 import { useToast } from "@/hooks/use-toast";
 import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
 import { CoAuthor } from "@/types/CoAuthor";
+import DateTimePicker from "../DatePicker/DateTimePicker";
 
 const gender: SelectItem[] = [
   { id: "Nam", name: "Nam" },
@@ -110,7 +111,7 @@ const ModalAddContributor = (props: IProps) => {
                   <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                     Ngày sinh
                   </label>
-                  <DatePicker date={dateOfBirth} setDate={setDateOfBirth} />
+                  <DateTimePicker date={dateOfBirth} setDate={setDateOfBirth} />
                 </div>
                 <FormSelect
                   name="sex"

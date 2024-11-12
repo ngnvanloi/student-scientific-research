@@ -18,6 +18,7 @@ import {
   useUpdatePostMutation,
 } from "@/hooks-query/mutations/use-update-post-mutation";
 import { useToast } from "@/hooks/use-toast";
+import DateTimePicker from "../DatePicker/DateTimePicker";
 
 interface IProps {
   isOpen: boolean;
@@ -138,7 +139,7 @@ const ModalUpdatePost = (props: IProps) => {
                 <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                   Ngày đăng
                 </label>
-                <DatePicker date={date} setDate={setDate} />
+                <DateTimePicker date={date} setDate={setDate} />
               </div>
               <div>
                 <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">

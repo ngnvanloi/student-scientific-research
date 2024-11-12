@@ -44,6 +44,7 @@ import {
 import { useGetArticleDetail } from "@/hooks-query/queries/use-get-article-detail";
 import { ArticleWithContributors } from "@/types/ArticleWithContributor";
 import Tags from "../Tags/Tags";
+import DateTimePicker from "../DatePicker/DateTimePicker";
 
 interface IProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -235,7 +236,7 @@ const FormUpdateArticle = (props: IProps) => {
             <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
               Ngày đăng tải
             </label>
-            <DatePicker date={date} setDate={setDate} />
+            <DateTimePicker date={date} setDate={setDate} />
           </div>
 
           <div className="mt-4">
