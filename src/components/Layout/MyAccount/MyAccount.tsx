@@ -35,6 +35,8 @@ export function MyAccount(props: IProps) {
       router.push("/admin");
     } else if (session?.user?.roleName === "superadmin") {
       router.push("/super-admin");
+    } else if (session?.user?.roleName === "reviewer") {
+      router.push("/reviewer");
     }
   };
 

@@ -93,7 +93,7 @@ export default function AdminLayout({
         "8",
         <CommentOutlined />,
         undefined,
-        "/author/topic-awaiting-review"
+        "/author/research-topic-awaiting-review"
       ),
       getItem(
         "Đề tài chờ nghiệm thu",

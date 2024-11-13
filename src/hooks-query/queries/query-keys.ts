@@ -30,4 +30,5 @@ export const queryKeys = {
   listReviewCommitteeForEachResearchTopic: [
     "listReviewCommitteeForEachResearchTopic",
   ],
+  listReviewerResearchTopic: ["listReviewerResearchTopic"],
 };

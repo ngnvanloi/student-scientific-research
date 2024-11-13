@@ -56,10 +56,16 @@ export default function AdminLayout({
       "3",
       <ReconciliationOutlined />,
       undefined,
-      "#"
+      "/reviewer/research-topic-awaiting-review"
     ),
     getItem("Thông báo", "4", <BellOutlined />, undefined, "#"),
-    getItem("Quản lý tài khoản", "5", <UserOutlined />, undefined, "#"),
+    getItem(
+      "Quản lý tài khoản",
+      "5",
+      <UserOutlined />,
+      undefined,
+      "/reviewer/my-profile"
+    ),
   ];
 
   return (

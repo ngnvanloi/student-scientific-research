@@ -48,7 +48,9 @@ const TopicAwaitingReviewPageContainer = () => {
               <div
                 className="hover:cursor-pointer hover:text-blue-500 gap-2 hover:underline"
                 onClick={() => {
-                  route.push(`/author/topic-awaiting-review/${item.id}`);
+                  route.push(
+                    `/author/research-topic-awaiting-review/${item.id}`
+                  );
                 }}
               >
                 Xem phản biện

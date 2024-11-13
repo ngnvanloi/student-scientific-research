@@ -20,7 +20,7 @@ const TopicAwaitingReviewPageDetail = ({
   return (
     <div>
       <div
-        className="hover:cursor-pointer hover:text-blue-500 flex gap-2 items-center mb-3"
+        className="hover:cursor-pointer hover:text-blue-500 flex gap-2 items-center mb-3 w-32"
         onClick={() => {
           route.back();
         }}

@@ -21,9 +21,9 @@ export const NotificationContentSample = {
     // Phản biện
     reviewProcess: {
       author:
-        " đã hoàn tất chỉnh sửa đề tài theo góp ý của bạn. Vui lòng kiểm tra để cập nhật thông tin mới nhất. ",
+        " đã hoàn tất chỉnh sửa đề tài theo góp ý của bạn. Vui lòng kiểm tra để cập nhật thông tin mới nhất ",
       reviewer:
-        " đã phản biện đề tài của bạn. Vui lòng xem xét phản hồi và tiếp tục hoàn thiện nội dung. ",
+        " đã phản biện đề tài của bạn. Vui lòng xem xét phản hồi và tiếp tục hoàn thiện nội dung ",
     },
 
     // Phiếu đăng ký

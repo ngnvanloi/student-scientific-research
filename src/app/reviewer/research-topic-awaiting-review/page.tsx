@@ -1,4 +1,6 @@
+import { ResearchTopicAwaitingReviewPageContainer } from "@/components/ResearchTopicAwaitingReviewPage/ResearchTopicAwaitingReviewPageContainer/ResearchTopicAwaitingReviewPageContainer";
+
 const ResearchTopicAwaitingReview = () => {
-  return <div>ResearchTopicAwaitingReview</div>;
+  return <ResearchTopicAwaitingReviewPageContainer />;
 };
 export default ResearchTopicAwaitingReview;
