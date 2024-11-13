@@ -12,23 +12,20 @@ interface IProps {
 export default function RichTextEditor(props: IProps) {
   const quillModules = {
     toolbar: [
-      ["bold", "italic", "underline", "strike"], // toggled buttons
+      ["bold", "italic", "underline", "strike"], //
       ["blockquote", "code-block"],
-      ["link", "image", "video", "formula"],
+      ["link", "image"], // "video", "formula"
 
       [{ header: 1 }, { header: 2 }], // custom button values
       [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
       [{ script: "sub" }, { script: "super" }], // superscript/subscript
-      [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-      [{ direction: "rtl" }], // text direction
-
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
+      // [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+      // [{ direction: "rtl" }], // text direction
+      // [{ header: [1, 2, 3, 4, 5, 6, false] }],
       [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-      [{ font: [] }],
+      // [{ font: [] }],
       [{ align: [] }],
-
-      ["clean"], // remove formatting button
+      // ["clean"], // remove formatting button
     ],
   };
 

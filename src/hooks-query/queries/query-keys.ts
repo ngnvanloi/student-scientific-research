@@ -27,4 +27,7 @@ export const queryKeys = {
   listAuthorResearchTopic: ["listAuthorResearchTopic"],
   listReviewCouncilForEachCompetition: ["listReviewCouncilForEachCompetition"],
   listResearchTopicForeachCompetition: ["listResearchTopicForeachCompetition"],
+  listReviewCommitteeForEachResearchTopic: [
+    "listReviewCommitteeForEachResearchTopic",
+  ],
 };

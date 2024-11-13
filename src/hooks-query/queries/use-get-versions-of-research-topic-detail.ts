@@ -5,6 +5,7 @@ import { queryKeys } from "./query-keys";
 import { VersionOfResearchProjectTopic } from "@/types/VersionOfResearchProjectTopic";
 
 export const useGetVersionOfResearchProjectTopicDetail = (id: number) => {
+  //
   return useQuery<
     IDataRetrievedResponseFromAPI<VersionOfResearchProjectTopic>,
     Error

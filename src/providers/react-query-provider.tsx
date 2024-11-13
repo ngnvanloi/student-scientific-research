@@ -41,8 +41,9 @@ export function ReactQueryProvider({
   children: React.ReactNode;
 }) {
   // const [mounted, setMounted] = useState(false);
-  const queryClient = getQueryClient();
+  // const queryClient = getQueryClient();
 
+  const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
       {children}

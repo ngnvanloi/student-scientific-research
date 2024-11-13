@@ -1,0 +1,46 @@
+import { IDataResponseFromAPI, IListDataResponseFromAPI } from "@/types/Meta";
+import { communityRequest } from "@/web-configs/community-api";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "./query-keys";
+import { ReviewCouncilWithMembers } from "@/types/ReviewCouncilWithMembers";
+
+// lấy bài báo đã public ĐÃ bao gồm danh sách đồng tác giả
+export type ParamsGetReviewCommitteeForEachResearchTopic = {
+  researchTopicId: number;
+  page: number;
+  pageSize: number;
+  idSearch?: number;
+  nameSearch?: string;
+};
+export const useGetReviewCommitteeForEachResearchTopic = (
+  params: ParamsGetReviewCommitteeForEachResearchTopic
+) => {
+  return useQuery<
+    IDataResponseFromAPI<IListDataResponseFromAPI<ReviewCouncilWithMembers>>,
+    Error
+  >({
+    queryKey: [
+      queryKeys.listReviewCommitteeForEachResearchTopic,
+      params.page,
+      params.pageSize,
+      params.researchTopicId,
+    ],
+    queryFn: () => GetReviewCommitteeForEachResearchTopic(params),
+  });
+};
+
+export async function GetReviewCommitteeForEachResearchTopic(
+  param: ParamsGetReviewCommitteeForEachResearchTopic
+): Promise<
+  IDataResponseFromAPI<IListDataResponseFromAPI<ReviewCouncilWithMembers>>
+> {
+  const response = (await communityRequest)(
+    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Organizer/review-committee/research-topic/${param.researchTopicId}?page=${param.page}&pageSize=${param.pageSize}`,
+    {
+      method: "GET",
+    }
+  );
+  return response as unknown as IDataResponseFromAPI<
+    IListDataResponseFromAPI<ReviewCouncilWithMembers>
+  >;
+}

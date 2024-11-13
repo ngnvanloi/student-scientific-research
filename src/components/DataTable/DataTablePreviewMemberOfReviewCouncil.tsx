@@ -8,9 +8,13 @@ export const columns: ColumnDef<MemberOfCouncil>[] = [
     header: "Họ tên",
   },
   {
-    accessorKey: "dateOfBirth",
-    header: "Ngày sinh",
+    accessorKey: "sex",
+    header: "Giới tính",
   },
+  // {
+  //   accessorKey: "dateOfBirth",
+  //   header: "Ngày sinh",
+  // },
   {
     accessorKey: "email",
     header: "Email",

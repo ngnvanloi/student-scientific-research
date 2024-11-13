@@ -16,6 +16,7 @@ export type ParamsGetListResearchTopicForeachCompetition = {
 export const useGetListResearchTopicForeachCompetition = (
   params: ParamsGetListResearchTopicForeachCompetition
 ) => {
+  //
   return useQuery<
     IDataResponseFromAPI<
       IListDataResponseFromAPI<ResearchTopicWithContributors>

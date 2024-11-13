@@ -33,7 +33,7 @@ const ResearchTopicComponentForAdmin = (props: IProps) => {
       <div>
         {reviewCommitteeId === 1 ? (
           <div className="flex flex-col gap-2">
-            <p>Đã phân công: {researchTopic.review_CommitteeId}</p>
+            <p>Đã phân công: {researchTopic.reviewCommitteeName}</p>
             <Button onClick={() => setToggleModalAssignment(true)}>
               Thay đổi
             </Button>

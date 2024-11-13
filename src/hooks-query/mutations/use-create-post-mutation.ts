@@ -1,9 +1,10 @@
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { IDataResponseFromAPI } from "@/types/Meta";
 import { UploadFile } from "antd";
 import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
+import { queryKeys } from "../queries/query-keys";
 
 export type ParamsCreatePost = {
   title: string;
@@ -11,8 +12,8 @@ export type ParamsCreatePost = {
   dateUpload: string | Date | undefined;
   filePath?: string;
 };
-
 export const useCreatePostMutation = () => {
+  const queryClient = useQueryClient();
   return useMutation<
     IDataResponseFromAPI<null>,
     Error,
@@ -26,6 +27,7 @@ export const useCreatePostMutation = () => {
         "Check result if create post successfully: ",
         JSON.stringify(result)
       );
+      queryClient.invalidateQueries({ queryKey: queryKeys.posts });
     },
     onError: (err) => {
       console.log("Error creating post: ", err);

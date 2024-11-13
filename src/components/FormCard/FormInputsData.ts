@@ -51,6 +51,9 @@ export type TFormUpdateArticle = {
 export type TFormApprovalRegistration = {
   approvalStatus: number | string;
 };
+export type TFormSubmitNewTopicVersion = {
+  summary: string;
+};
 
 export type TFormSubmitResearchProjectTabGoalResult = {
   researchProject_Goal: string;

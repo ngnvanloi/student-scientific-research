@@ -14,7 +14,7 @@ const ReviewResearchTopicContainer = () => {
       </div>
       <div className="flex gap-1">
         <div className=" basis-1/2 h-screen">
-          <PreviewPDFBookmark fileUrl="https://firebasestorage.googleapis.com/v0/b/seminarclouds.appspot.com/o/Article%2F50f9673a-2138-4aa9-adfc-65bb76c9d1da_mongodb.pdf?alt=media" />
+          <PreviewPDFBookmark fileUrl="https://firebasestorage.googleapis.com/v0/b/seminarclouds.appspot.com/o/ReportFile%2F8ad96830-bf95-41bf-aa05-1a5beb66e9eb_mongodb.pdf?alt=media" />
         </div>
         <div className="basis-1/2 border">
           <FormReviewResearchTopic />

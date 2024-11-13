@@ -3,17 +3,17 @@ export type ReviewCouncilWithMembers = {
   reviewCommitteeName: string;
   competitionId: number;
   competitionName: string;
-  dateStart: string | Date;
-  dateEnd: string | Date;
+  dateStart: string;
+  dateEnd: string;
   reviewBoardMembers: MemberOfCouncil[];
 };
 
 export type MemberOfCouncil = {
-  isStatus: boolean;
-  description: string;
+  isStatus?: boolean;
+  description?: string;
   id: number;
   name: string;
-  dateOfBirth: string | Date;
+  dateOfBirth: string;
   numberPhone: string;
   facultyId: number;
   facultyName: string;

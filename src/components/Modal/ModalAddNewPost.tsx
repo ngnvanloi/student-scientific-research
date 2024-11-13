@@ -84,7 +84,7 @@ const ModalAddNewPost = () => {
               description:
                 "Chúc mừng! Bài viết đã được tạo thành công và đăng tải trên hệ thống, bạn có thể kiểm tra hoặc chỉnh sửa nếu cần.",
             });
-            setIsChange(!isChange);
+            // setIsChange(!isChange);
             setIsOpen(false);
 
             setContent("");

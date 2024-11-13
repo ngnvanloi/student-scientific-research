@@ -14,6 +14,7 @@ export type ParamsGetListResearchTopicForAuthorByRolename = {
 export const useGetListResearchTopicForAuthorByRolename = (
   params: ParamsGetListResearchTopicForAuthorByRolename
 ) => {
+  //
   return useQuery<
     IDataResponseFromAPI<
       IListDataResponseFromAPI<ResearchTopicWithContributors>

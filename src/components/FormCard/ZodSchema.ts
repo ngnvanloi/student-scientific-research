@@ -11,6 +11,7 @@ import {
   TFormReviewAssignment,
   TFormReviewTopic,
   TFormSubmitArticle,
+  TFormSubmitNewTopicVersion,
   TFormSubmitResearchProjectTabGoalResult,
   TFormSubmitResearchProjectTabOveriew,
   TFormSubmitResearchTopic,
@@ -95,6 +96,10 @@ export const FormUpdateArticlee: ZodType<TFormUpdateArticle> = z.object({
   title: z.string(),
   disciplineId: z.string() || z.number(),
 });
+export const FormSubmitNewTopicVersion: ZodType<TFormSubmitNewTopicVersion> =
+  z.object({
+    summary: z.string(),
+  });
 export const FormApprovalRegistration: ZodType<TFormApprovalRegistration> =
   z.object({
     approvalStatus: z.string() || z.number(),
