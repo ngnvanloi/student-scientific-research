@@ -37,7 +37,10 @@ const ResearchTopicAwaitingReviewPageContainer = () => {
         <div>
           {listResearchTopicAwaitingReview?.data.items.map((item, index) => {
             return (
-              <div key={index} className="border rounded-md py-3 px-4 flex">
+              <div
+                key={index}
+                className="border rounded-md py-3 px-4 flex mb-3"
+              >
                 <div className="flex-1">
                   <p className="font-semibold text-lg text-blue-900">
                     {item.nameTopic}

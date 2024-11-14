@@ -41,9 +41,11 @@ const TopicAwaitingReviewPageDetail = ({
         )}
       </div>
       <div className="flex gap-1">
-        {researchTopicDetail?.data && (
-          <ReviewOverview researchTopicDetail={researchTopicDetail.data} />
-        )}
+        <div className="basis-3/5">
+          {researchTopicDetail?.data && (
+            <ReviewOverview researchTopicDetail={researchTopicDetail.data} />
+          )}
+        </div>
         <div className="basis-2/5">
           <p className="mb-3 text-blue-900 font-semibold text-base">
             Phần cập nhật đề tài

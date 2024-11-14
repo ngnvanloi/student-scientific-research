@@ -340,20 +340,6 @@ const CompetitionCardForAuthor = (props: IProps) => {
                     return <p>Cuộc thi hết hạn đăng kí</p>;
                   } else if (isRegistrationPending(competition?.id)) {
                     return <p>Đang chờ phê duyệt</p>;
-                  } else if (isRegistrationReject(competition?.id)) {
-                    return (
-                      <Button
-                        variant="filled"
-                        className=""
-                        onClick={() => handleRegistrationForm(competition?.id)}
-                      >
-                        Đăng kí lại
-                      </Button>
-                    );
-                  } else if (
-                    checkContributor(`${session?.user?.email}`, "co-author")
-                  ) {
-                    return <div>Bạn không phải tác giả chính</div>;
                   } else if (isSubmitted) {
                     return (
                       <div>
@@ -382,6 +368,20 @@ const CompetitionCardForAuthor = (props: IProps) => {
                         onClick={() => setIsModalSubmitOpen(true)}
                       >
                         Nộp bài
+                      </Button>
+                    );
+                  } else if (
+                    checkContributor(`${session?.user?.email}`, "co-author")
+                  ) {
+                    return <div>Bạn không phải tác giả chính</div>;
+                  } else if (isRegistrationReject(competition?.id)) {
+                    return (
+                      <Button
+                        variant="filled"
+                        className=""
+                        onClick={() => handleRegistrationForm(competition?.id)}
+                      >
+                        Đăng kí lại
                       </Button>
                     );
                   }

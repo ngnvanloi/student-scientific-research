@@ -2,19 +2,13 @@
 import { CloseModalIcon } from "@/assets/svg/close.modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
-import {
-  FormAddContributorSchema,
-  FormReviewAssignment,
-} from "../FormCard/ZodSchema";
-import FormField from "../FormCard/FormInputField";
+import { FormReviewAssignment } from "../FormCard/ZodSchema";
 import { Button } from "antd";
-import React, { useState } from "react";
-import { DatePicker } from "../DatePicker/DatePicker";
+import React, { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
-import { Competition } from "@/types/Competition";
 import {
   ParamsGetListReviewCouncilForEachCompetition,
   useGetListReviewCouncilForEachCompetition,
@@ -23,12 +17,7 @@ import {
   columns,
   DataTablePreviewMemberOfReviewCouncil,
 } from "../DataTable/DataTablePreviewMemberOfReviewCouncil";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
-import { ChevronsUpDown } from "lucide-react";
+
 import { ListBulletIcon } from "@heroicons/react/24/outline";
 import {
   Accordion,
@@ -42,6 +31,17 @@ import {
 } from "@/hooks-query/mutations/use-review-assignment";
 import { TFormReviewAssignment } from "../FormCard/FormInputsData";
 import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContributors";
+import { useSession } from "next-auth/react";
+import { NotificationContentSample } from "@/lib/notification-content-sample ";
+import {
+  ParamsCreateNotification,
+  useCreateNotificationMutation,
+} from "@/hooks-query/mutations/use-create-notification-mutation";
+import { useGetReviewCouncilDetail } from "@/hooks-query/queries/use-get-review-council-detail";
+import {
+  MemberOfCouncil,
+  ReviewCouncilWithMembers,
+} from "@/types/ReviewCouncilWithMembers";
 
 interface IProps {
   isOpen: boolean;
@@ -51,27 +51,31 @@ interface IProps {
 }
 const ModalReviewAssignment = (props: IProps) => {
   const { isOpen, setIsOpen, competitionId, researchTopic } = props;
+  const { data: session } = useSession();
+  const { toast } = useToast();
+
   // REACT QUERY
   let params: ParamsGetListReviewCouncilForEachCompetition = {
     competitionId: competitionId || 0,
     page: 1,
     pageSize: 10,
   };
-  const { data: listReviewCouncil, refetch: refetchListReviewCouncil } =
+  const { data: listReviewCouncil } =
     useGetListReviewCouncilForEachCompetition(params);
 
-  const { mutate, isPending, isError, isSuccess } =
-    useReviewAssignmentMutation();
-  // VARIABLE
+  const { mutate, isPending, isError } = useReviewAssignmentMutation();
+  const { mutate: notiMutation } = useCreateNotificationMutation();
+
   const listReviewCouncilName: SelectItem[] | undefined =
     listReviewCouncil?.data.items.map((faculty) => ({
       id: faculty.id,
       name: faculty.reviewCommitteeName,
     }));
-  // STATE
-  const [toggleShowListCouncil, setToggleShowListCouncil] =
-    useState<boolean>(false);
-  const { toast } = useToast();
+
+  const [listReviewer, setListReviewer] = useState<
+    ReviewCouncilWithMembers | undefined
+  >();
+
   // REACT HOOK FORM
   const {
     register,
@@ -79,35 +83,74 @@ const ModalReviewAssignment = (props: IProps) => {
     formState: { errors },
     setError,
     reset,
+    control,
   } = useForm<TFormReviewAssignment>({
     resolver: zodResolver(FormReviewAssignment),
   });
 
-  // HANDLE LOGIC
+  // Sử dụng useWatch để theo dõi sự thay đổi của review_CommitteeId
+  const selectedCommitteeId = useWatch({
+    control,
+    name: "review_CommitteeId",
+  });
+
+  // Fetch danh sách reviewer dựa trên selectedCommitteeId
+  const { data: fetchedListReviewer } = useGetReviewCouncilDetail(
+    Number(selectedCommitteeId)
+  );
+
+  useEffect(() => {
+    if (fetchedListReviewer?.data) {
+      console.log(
+        "-==============> fetched reviewers: ",
+        JSON.stringify(fetchedListReviewer.data, null, 2)
+      );
+      setListReviewer(fetchedListReviewer.data);
+    }
+  }, [fetchedListReviewer]);
+
   const onSubmit = (data: TFormReviewAssignment) => {
     let params: ParamsReviewAssignment = {
       review_CommitteeId: Number(data.review_CommitteeId),
     };
+
     mutate(
       { researchTopicId: researchTopic.id, params: params },
       {
         onSuccess: () => {
+          console.log(
+            "-==============> checking list reviewer: ",
+            JSON.stringify(listReviewer, null, 2)
+          );
           toast({
             title: "Thông báo",
             variant: "default",
             description: "Phân công phản biện thành công",
           });
+          // Gửi thông báo
+          const notiContent = `${session?.user?.name} ${
+            NotificationContentSample.NotificationType.reviewAssignment.reviewer
+          }: "${researchTopic.nameTopic}". Vui lòng truy cập hệ thống để xem chi tiết và thực hiện phản biện đúng tiến độ`;
+
+          listReviewer?.reviewBoardMembers.forEach((item) => {
+            const paramsNoti: ParamsCreateNotification = {
+              notificationContent: notiContent,
+              notificationDate: new Date().toISOString(),
+              recevierId: item.accountId || -1,
+              notificationTypeId: 3,
+              targetId: researchTopic.id,
+            };
+            notiMutation(paramsNoti);
+          });
+
           setIsOpen(false);
+          reset();
         },
         onError: (error) => {
           alert("Lỗi khi phân công phản biện: " + error);
         },
       }
     );
-    // RESET FORM UPDATE
-    reset({
-      review_CommitteeId: "0",
-    });
   };
 
   const onError = (errors: any) => {

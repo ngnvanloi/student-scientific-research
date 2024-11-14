@@ -20,6 +20,7 @@ import {
 } from "@/hooks-query/mutations/use-create-notification-mutation";
 import { getSession, useSession } from "next-auth/react";
 import { NotificationContentSample } from "@/lib/notification-content-sample ";
+import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 
 interface IProps {
   isOpen: boolean;
@@ -53,12 +54,14 @@ const ModalCompetitionRegistration = (props: IProps) => {
   const [file, setFile] = useState<File>();
 
   // REACT QUERY
-  const { mutate, isSuccess, isError, error } = useRegisterCompetitonMutation();
+  const { mutate, isSuccess, isError, error, isPending } =
+    useRegisterCompetitonMutation();
   const {
     mutate: fileMutation,
     isSuccess: fileIsSuccess,
     isError: fileIsError,
     error: fileError,
+    isPending: fileIsPending,
   } = useUploadFileMutation();
 
   // HANDLE LOGIC
@@ -126,6 +129,7 @@ const ModalCompetitionRegistration = (props: IProps) => {
   // RENDER UI
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+      {isPending || fileIsPending ? <SpinnerLoading /> : ""}
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 w-full h-full bg-black opacity-40 " />
         <Dialog.Content className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full max-w-xl mx-auto px-4 ">

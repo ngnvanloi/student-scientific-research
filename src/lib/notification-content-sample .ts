@@ -39,8 +39,7 @@ export const NotificationContentSample = {
 
     // Phân công phản biện
     reviewAssignment: {
-      reviewer:
-        " Bạn đã được phân công phản biện cho đề tài mới. Vui lòng truy cập hệ thống để xem chi tiết và thực hiện phản biện đúng tiến độ. ",
+      reviewer: " đã phân công bạn phản biện cho đề tài ",
     },
   },
 };
