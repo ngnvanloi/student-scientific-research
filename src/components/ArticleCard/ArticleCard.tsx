@@ -13,6 +13,7 @@ import { ModalShowArticleDetails } from "../Modal/ModalDetailArticle";
 import { ModalApprovalArticle } from "../Modal/ModalApprovalArticle";
 import { useRouter } from "next/navigation";
 import { ModalUpdateArticle } from "../Modal/ModalUpdateArticle";
+import DisplayPDFThumbnai from "../PreviewPDF/DisplayPDFThumbnail";
 
 interface IPropsAuthorArticle {
   articleItem: Article;
@@ -53,6 +54,7 @@ const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
               alt={articleItem.title}
               className="h-[135px] rounded-lg"
             />
+            {/* <DisplayPDFThumbnai pageIndex={1} fileUrl={articleItem.filePath} /> */}
           </div>
           <div className="mt-3">
             <span className="block text-indigo-600 text-sm">
