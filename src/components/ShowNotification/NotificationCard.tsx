@@ -27,6 +27,7 @@ import {
 import { useDeleteNotificationMutation } from "@/hooks-query/mutations/use-delete-notification-mutation";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface IProps {
   notification: Notification;
@@ -37,6 +38,11 @@ const NotificationCard = (props: IProps) => {
   const { notification, isChanged, setIsChanged } = props;
   const markAsReadMutation = useMarkAsReadOrUnreadMutation();
   const deleteNotification = useDeleteNotificationMutation();
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
   const router = useRouter();
   // LOGIC
   const handleMarkAsRead = () => {
@@ -105,29 +111,33 @@ const NotificationCard = (props: IProps) => {
     // REDICRECT TO TOPIC
     else if (notification.notificationTypeId === 2) {
       if (session?.user?.roleName === "author") {
-        router.push("/author/");
+        router.push("/author/research-topic-awaiting-review");
         handleMarkAsRead();
       }
       if (session?.user?.roleName === "organizer") {
-        router.push("/admin/");
+        router.push("/admin/project-reviewer-assignment");
         handleMarkAsRead();
       }
     }
     // REDIRECT TO REVIEWER
     else if (notification.notificationTypeId === 3) {
-      if (session?.user?.roleName === "author") {
-        router.push("/author/");
+      if (session?.user?.roleName === "author ") {
+        router.push(
+          `/author/research-topic-awaiting-review/${notification.targetId}`
+        );
         handleMarkAsRead();
       }
       if (session?.user?.roleName === "reviewer") {
-        router.push("/reviewer/");
+        router.push(
+          `/reviewer/research-topic-awaiting-review/${notification.targetId}`
+        );
         handleMarkAsRead();
       }
     }
-    // REDIRECT TO REGISTER (NỘP BÀI)
+    // REDIRECT TO REGISTER (ĐĂNG KÍ ĐỀ TÀI)
     else if (notification.notificationTypeId === 4) {
       if (session?.user?.roleName === "author") {
-        router.push("/author/");
+        router.push("/author/submit-research-project");
         handleMarkAsRead();
       }
       if (session?.user?.roleName === "organizer") {
@@ -135,7 +145,7 @@ const NotificationCard = (props: IProps) => {
         handleMarkAsRead();
       }
     }
-    // REDIRECT TO PHÂN CÔNG PHẢN BIỆN
+    // REDIRECT TO PHÂN CÔNG PHẢN BIỆN (chưa cần)
     else if (notification.notificationTypeId === 5) {
       if (session?.user?.roleName === "reviewer") {
         router.push("/reviewer/");
@@ -173,9 +183,21 @@ const NotificationCard = (props: IProps) => {
         <p className="text-sm font-medium leading-none">
           {formatDate(notification.notificationDate)}
         </p>
-        <p className="text-sm text-muted-foreground">
+        <p
+          className={`text-sm text-muted-foreground overflow-hidden ${
+            isExpanded ? "" : "max-h-[100px] overflow-hidden line-clamp-5"
+          }`}
+        >
           {notification.notificationContent}
         </p>
+        {notification.notificationContent.length > 50 && (
+          <button
+            onClick={toggleExpand}
+            className="text-blue-500 hover:text-blue-700 text-sm focus:outline-none"
+          >
+            {isExpanded ? "Thu gọn" : "Xem thêm"}
+          </button>
+        )}
       </div>
       <div className="">
         <DropdownMenu>

@@ -82,6 +82,14 @@ const SubmitNewResearchTopicVersion = (props: IProps) => {
     });
   };
 
+  console.log(
+    "checking researchTopicDetail.history_Update_ResearchTopics: ",
+    JSON.stringify(
+      researchTopicDetail.review_Committees.reviewBoardMembers,
+      null,
+      2
+    )
+  );
   // ON SUBMIT
   const onSubmit = async (data: TFormSubmitNewTopicVersion) => {
     console.log("checking ID topic version: ", researchTopicDetail.id);
@@ -143,28 +151,26 @@ const SubmitNewResearchTopicVersion = (props: IProps) => {
           // noti content
           let notiContent = `${session?.user?.name} ${NotificationContentSample.NotificationType.reviewProcess.author}. Nội dung chỉnh sửa: ${data.summary}`;
           // lấy ra danh sách các reviewer và gửi thông báo lần lượt
-          researchTopicDetail.history_Update_ResearchTopics.forEach(
-            (version) => {
-              version.review_Forms.map((item, index) => {
-                const paramsNoti: ParamsCreateNotification = {
-                  notificationContent: notiContent,
-                  notificationDate: new Date().toISOString(),
-                  recevierId: item.reviewer.accountId || -1,
-                  notificationTypeId: 3,
-                  targetId: researchTopicDetail.id,
-                };
-                notiMutation(paramsNoti, {
-                  onSuccess: () => {
-                    toast({
-                      title: "Thành công",
-                      variant: "default",
-                      description: `Bạn đã gửi thông báo thành công đến người phản biện: ${item.reviewer.name}`,
-                    });
-                  },
-                  onError: (error) => {
-                    console.error("Lỗi khi gửi thông báo:", error);
-                  },
-                });
+          researchTopicDetail.review_Committees.reviewBoardMembers.map(
+            (item, index) => {
+              const paramsNoti: ParamsCreateNotification = {
+                notificationContent: notiContent,
+                notificationDate: new Date().toISOString(),
+                recevierId: item.accountId || -1,
+                notificationTypeId: 3,
+                targetId: researchTopicDetail.id,
+              };
+              notiMutation(paramsNoti, {
+                onSuccess: () => {
+                  toast({
+                    title: "Thành công",
+                    variant: "default",
+                    description: `Bạn đã gửi thông báo thành công đến người phản biện: ${item.name}`,
+                  });
+                },
+                onError: (error) => {
+                  console.error("Lỗi khi gửi thông báo:", error);
+                },
               });
             }
           );
@@ -200,7 +206,7 @@ const SubmitNewResearchTopicVersion = (props: IProps) => {
         </div>
         <div className="mt-2">
           <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-            File sản phẩm
+            File sản phẩm (nếu có)
           </label>
           <DragFileUpload limit={1} multiple={false} setFile={setFileProduct} />
         </div>

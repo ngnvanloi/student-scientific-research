@@ -33,7 +33,11 @@ const TabsReviewForAllVersionOfResearchTopic = (props: IProps) => {
         icon: <FolderOpenIcon width={"20px"} />,
         name: `version ${index + 1}`,
         contentElement: (
-          <FormReviewTopic version={version} accountID={accountID} />
+          <FormReviewTopic
+            version={version}
+            accountID={accountID}
+            researchTopicID={researchTopicDetail.id}
+          />
         ),
         newFilePath: version.newReportFilePath,
       };

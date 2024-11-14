@@ -29,10 +29,11 @@ import { SpinnerLoading } from "@/components/SpinnerLoading/SpinnerLoading";
 interface IProps {
   version: HistoryUpdateResearchTopic;
   accountID: number;
+  researchTopicID: number;
 }
 
 const FormReviewTopic = (props: IProps) => {
-  const { version, accountID } = props;
+  const { version, accountID, researchTopicID } = props;
   const { data: session } = useSession();
   const { toast } = useToast();
   const { data: concludes } = useGetListConclude();
@@ -98,7 +99,7 @@ const FormReviewTopic = (props: IProps) => {
           notificationDate: new Date().toISOString(),
           recevierId: accountID,
           notificationTypeId: 3,
-          targetId: -1,
+          targetId: researchTopicID,
         };
         notiMutation(paramsNoti, {
           onSuccess: () => {
