@@ -126,7 +126,7 @@ const FormUpdateArticle = (props: IProps) => {
     resolver: zodResolver(FormUpdateArticlee),
     defaultValues: {
       title: article?.title,
-      disciplineId: article?.disciplineId,
+      disciplineId: String(article?.disciplineId),
     },
   });
   const uploadFile = (mutation: any, formData: any) => {
@@ -183,7 +183,7 @@ const FormUpdateArticle = (props: IProps) => {
         keywords: keywords,
         filePath: articleFilePath || article?.filePath || "",
         dateUpload: date || "",
-        disciplineId: data.disciplineId as number,
+        disciplineId: Number(data.disciplineId),
         coAuthors: listContributors,
       };
 
@@ -200,7 +200,7 @@ const FormUpdateArticle = (props: IProps) => {
             // Reset các field input và file
             reset({
               title: "",
-              disciplineId: 0,
+              disciplineId: "",
             });
             setFileArticle(undefined);
             setListContributors([]);

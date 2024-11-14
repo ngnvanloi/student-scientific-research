@@ -55,7 +55,7 @@ const ModalUpdateOrganizerProfile = (props: IProps) => {
       name: organizer?.name || "",
       email: organizer?.email || "",
       numberPhone: organizer?.numberPhone || "",
-      facultyId: organizer?.facultyId || 0,
+      facultyId: String(organizer?.facultyId) || "",
       description: organizer?.description || "",
     },
   });
@@ -67,7 +67,7 @@ const ModalUpdateOrganizerProfile = (props: IProps) => {
         name: organizer.name,
         email: organizer.email,
         numberPhone: organizer.numberPhone,
-        facultyId: organizer.facultyId,
+        facultyId: String(organizer.facultyId),
         description: organizer.description,
       });
     }
@@ -87,7 +87,7 @@ const ModalUpdateOrganizerProfile = (props: IProps) => {
       email: data.email,
       numberPhone: data.numberPhone,
       description: data.description,
-      facultyId: data.facultyId,
+      facultyId: Number(data.facultyId),
     };
     mutate(
       { data: bodyRequest },
@@ -112,7 +112,7 @@ const ModalUpdateOrganizerProfile = (props: IProps) => {
       name: "",
       email: "",
       numberPhone: "",
-      facultyId: 0,
+      facultyId: "",
       description: "",
     });
     setIsOpen(false);

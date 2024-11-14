@@ -68,7 +68,7 @@ const ModalUpdateProfile = (props: IProps) => {
       numberPhone: author?.numberPhone || "",
       dateOfBirth: author?.dateOfBirth,
       sex: author?.sex || "Nam",
-      facultyId: author?.facultyId || 0,
+      facultyId: String(author?.facultyId) || "0",
     },
   });
 
@@ -80,7 +80,7 @@ const ModalUpdateProfile = (props: IProps) => {
         email: author.email,
         numberPhone: author.numberPhone,
         sex: author.sex,
-        facultyId: author.facultyId,
+        facultyId: String(author.facultyId),
         dateOfBirth: author.dateOfBirth,
       });
       setDateOfBirth(
@@ -106,7 +106,7 @@ const ModalUpdateProfile = (props: IProps) => {
       dateOfBirth: dateOfBirth?.toISOString() || "",
       sex: data.sex || "Nam",
       internalCode: "unknown",
-      facultyId: data.facultyId ? (data.facultyId as number) : 0,
+      facultyId: data.facultyId ? Number(data.facultyId) : 0,
     };
     mutate(
       { data: requestBody },

@@ -86,7 +86,7 @@ const ModalReviewAssignment = (props: IProps) => {
   // HANDLE LOGIC
   const onSubmit = (data: TFormReviewAssignment) => {
     let params: ParamsReviewAssignment = {
-      review_CommitteeId: data.review_CommitteeId,
+      review_CommitteeId: Number(data.review_CommitteeId),
     };
     mutate(
       { researchTopicId: researchTopic.id, params: params },
@@ -106,7 +106,7 @@ const ModalReviewAssignment = (props: IProps) => {
     );
     // RESET FORM UPDATE
     reset({
-      review_CommitteeId: 0,
+      review_CommitteeId: "0",
     });
   };
 

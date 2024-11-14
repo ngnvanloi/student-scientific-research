@@ -110,7 +110,7 @@ const SubmitArticleComponent = () => {
           keywords: keywords,
           filePath: result.data,
           dateUpload: date?.toISOString() ? date.toISOString() : "",
-          disciplineId: data?.disciplineId,
+          disciplineId: Number(data?.disciplineId),
           coAuthors: listContributors,
         };
 
@@ -126,7 +126,7 @@ const SubmitArticleComponent = () => {
             // reset input fields
             reset({
               title: "",
-              disciplineId: 0,
+              disciplineId: "",
             });
             setDescription("");
             setFile(undefined);

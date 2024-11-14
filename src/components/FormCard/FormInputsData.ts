@@ -14,8 +14,8 @@ export type TFormSubmitResearchProjectTabOveriew = {
   researchProject_Name: string;
   researchProject_Description: string;
   researchProject_DateUpload: string;
-  articleID: string | number;
-  disciplineID: string | number;
+  articleID: string;
+  disciplineID: string;
   competitionID: number;
 };
 
@@ -25,7 +25,7 @@ export type TFormSubmitArticle = {
   keywords?: string[];
   filePath?: string;
   dateUpload?: string | Date;
-  disciplineId?: number | string;
+  disciplineId?: string;
 };
 export type TFormSubmitResearchTopic = {
   nameTopic: string;
@@ -39,13 +39,13 @@ export type TFormSubmitResearchTopic = {
   productFilePath?: string;
   budgetFilePath?: string;
   reportFilePath?: string;
-  articleId: number | string;
-  disciplineId: number | string;
+  articleId?: string;
+  disciplineId: string;
   competitionId?: number;
 };
 export type TFormUpdateArticle = {
   title: string;
-  disciplineId: number | string;
+  disciplineId: string;
 };
 
 export type TFormApprovalRegistration = {
@@ -82,7 +82,7 @@ export type TFormAddContributor = {
   roleName?: string;
 };
 export type TFormReviewAssignment = {
-  review_CommitteeId: string | number;
+  review_CommitteeId: string;
 };
 export type TFormAddReviewer = {
   name: string;
@@ -100,14 +100,14 @@ export type TFormUpdateAuthor = {
   internalCode?: string;
   dateOfBirth?: string;
   sex?: string;
-  facultyId?: number | string;
+  facultyId?: string;
 };
 
 export type TFormUpdateOrganizer = {
   name: string;
   email: string;
   numberPhone: string;
-  facultyId?: number | string;
+  facultyId?: string;
   description: string;
 };
 export type TFormReviewTopic = {

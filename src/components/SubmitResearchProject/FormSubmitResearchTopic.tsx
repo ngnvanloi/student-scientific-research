@@ -195,8 +195,8 @@ const FormSubmitResearchTopic = (props: IProps) => {
         productFilePath: productFilePath || "",
         budgetFilePath: budgetFilePath || "",
         reportFilePath: reportFilePath || "",
-        articleId: (data?.articleId as number) || 0,
-        disciplineId: (data.disciplineId as number) || 0,
+        articleId: Number(data?.articleId) || 0,
+        disciplineId: Number(data.disciplineId) || 0,
         competitionId: competition?.id || 0,
         coAuthors: listContributors,
       };
@@ -212,7 +212,7 @@ const FormSubmitResearchTopic = (props: IProps) => {
           });
           // Reset các field input và file
           reset({
-            disciplineId: 0,
+            disciplineId: "0",
             nameTopic: "",
             description: "",
             target: "",
@@ -221,7 +221,7 @@ const FormSubmitResearchTopic = (props: IProps) => {
             projectDuration: 0,
             supervisor: "",
             summary: "",
-            articleId: 0,
+            articleId: "0",
             competitionId: 0,
           });
           setFileBudget(undefined);

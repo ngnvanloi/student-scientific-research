@@ -88,13 +88,13 @@ export const FormUpdateResearchTopicc: ZodType<TFormSubmitResearchTopic> =
     productFilePath: z.string().optional(),
     budgetFilePath: z.string().optional(),
     reportFilePath: z.string().optional(),
-    articleId: z.number(),
-    disciplineId: z.number(),
-    competitionId: z.number().optional(),
+    articleId: z.string().optional(),
+    disciplineId: z.string(),
+    competitionId: z.number(),
   });
 export const FormUpdateArticlee: ZodType<TFormUpdateArticle> = z.object({
   title: z.string(),
-  disciplineId: z.string() || z.number(),
+  disciplineId: z.string(),
 });
 export const FormSubmitNewTopicVersion: ZodType<TFormSubmitNewTopicVersion> =
   z.object({
@@ -132,7 +132,7 @@ export const FormAddContributorSchema: ZodType<TFormAddContributor> = z.object({
   // roleName: z.string(),
 });
 export const FormReviewAssignment: ZodType<TFormReviewAssignment> = z.object({
-  review_CommitteeId: z.string() || z.number(),
+  review_CommitteeId: z.string(),
 });
 export const FormAddReviewerSchema: ZodType<TFormAddReviewer> = z.object({
   name: z.string(),
