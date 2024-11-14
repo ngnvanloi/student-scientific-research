@@ -190,9 +190,7 @@ const SubmitNewResearchTopicVersion = (props: IProps) => {
       ) : (
         ""
       )}
-      <p className="mb-3 text-blue-900 font-semibold text-base">
-        Phần cập nhật đề tài
-      </p>
+
       <div className="">
         <div className="mt-2">
           <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">

@@ -43,7 +43,7 @@ const ReviewOverview = (props: IProps) => {
                   <div className="mt-3">
                     {item.review_Forms.map((item, index) => {
                       return (
-                        <div key={index} className="border p-2">
+                        <div key={index} className="border p-2 mb-1">
                           <p className="font-semibold">
                             Người phản biện: {item.reviewer?.name}
                           </p>

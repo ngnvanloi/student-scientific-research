@@ -46,10 +46,15 @@ const FormReviewTopic = (props: IProps) => {
   //    -> nếu chưa: hiển thị form phản biện
   //    -> ngược lại, hiển thị kết quả phản biện
   console.log("checking version: ", JSON.stringify(version, null, 2));
-  const accountIdToCheck = 10;
+  const accountIdToCheck = session?.user?.accountId;
 
   const hasReviewed = version.review_Forms.some(
     (form) => form.reviewer?.accountId === accountIdToCheck
+  );
+
+  console.log(
+    "Checking owner review version: ",
+    JSON.stringify(version.review_Forms, null, 2)
   );
 
   const { mutate, isPending, isError, isSuccess } =
@@ -130,18 +135,18 @@ const FormReviewTopic = (props: IProps) => {
       </div>
       {hasReviewed ? (
         <div>
-          <p className="font-semibold mt-3">Nội dung phản biện trước đó</p>
+          <p className="font-semibold mt-3">Nội dung phản biện trước đó: </p>
           <p>
-            {version.review_Forms.map((item) => {
-              return (
-                <div>
-                  <p>{item.content}</p>
+            {version.review_Forms
+              .filter((item) => item.reviewer.accountId === accountIdToCheck)
+              .map((filteredItem) => (
+                <div key={filteredItem.id}>
+                  <p>{filteredItem.content}</p>
                   <p className="mt-3 font-semibold">
-                    Kết luận: {item.conclude.result}
+                    Kết luận: {filteredItem.conclude.result}
                   </p>
                 </div>
-              );
-            })}
+              ))}
           </p>
         </div>
       ) : (

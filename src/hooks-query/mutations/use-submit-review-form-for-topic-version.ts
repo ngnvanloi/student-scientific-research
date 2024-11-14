@@ -1,7 +1,8 @@
 import { communityRequest } from "@/web-configs/community-api";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { IResponseFromAPI } from "@/types/Meta";
 import { getSession } from "next-auth/react";
+import { queryKeys } from "../queries/query-keys";
 
 export type ParamsSubmitReviewForm = {
   content: string;
@@ -10,11 +11,15 @@ export type ParamsSubmitReviewForm = {
 };
 
 export const useSubmitReviewFormMutation = () => {
+  const queryClient = useQueryClient();
   return useMutation<IResponseFromAPI, Error, ParamsSubmitReviewForm, unknown>({
     mutationFn: (data) => createNewCompetition(data),
     onMutate: () => {},
     onSuccess: (result) => {
       console.log("Check result if successfully: ", JSON.stringify(result));
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.researchTopicDetail],
+      });
     },
     onError: (err) => {
       console.log("Error creating post: ", err);

@@ -5,7 +5,6 @@ import { SubmitNewResearchTopicVersion } from "@/components/TopicAwaitingReviewP
 import { useGetResearchProjectTopicDetail } from "@/hooks-query/queries/use-get-research-topic-detail";
 import { ArrowTurnDownLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 const TopicAwaitingReviewPageDetail = ({
   params,
@@ -45,12 +44,17 @@ const TopicAwaitingReviewPageDetail = ({
         {researchTopicDetail?.data && (
           <ReviewOverview researchTopicDetail={researchTopicDetail.data} />
         )}
-        <div className="basis-2/5 border">
-          {researchTopicDetail?.data && (
-            <SubmitNewResearchTopicVersion
-              researchTopicDetail={researchTopicDetail?.data}
-            />
-          )}
+        <div className="basis-2/5">
+          <p className="mb-3 text-blue-900 font-semibold text-base">
+            Phần cập nhật đề tài
+          </p>
+          <div className="border rounded-lg">
+            {researchTopicDetail?.data && (
+              <SubmitNewResearchTopicVersion
+                researchTopicDetail={researchTopicDetail?.data}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
