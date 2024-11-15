@@ -1,29 +1,29 @@
 "use client";
-import {
-  ParamsGetPublicationArticleAuthorIncludeContributor,
-  useGetPublicationArticleAuthorIncludeContributor,
-} from "@/hooks-query/queries/use-get-article-for-author";
 import { ArticleCardForGuest } from "../ArticleCard/ArticleCard";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import { Pagination } from "antd";
 import { useState } from "react";
+import {
+  ParamsGetAllArticleForSystem,
+  useGetAllArticleForSystem,
+} from "@/hooks-query/queries/use-get-article-for-system";
 
 const ArticlePageComponent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
-  const params: ParamsGetPublicationArticleAuthorIncludeContributor = {
+  const params: ParamsGetAllArticleForSystem = {
     index: currentPage,
     pageSize,
+    idSearch: "",
     nameSearch: "",
-    organizerName: "",
   };
 
   const {
     data: listPublicArticle,
     refetch: refetchListPublicArticle,
     isPending,
-  } = useGetPublicationArticleAuthorIncludeContributor(params);
+  } = useGetAllArticleForSystem(params);
 
   const handlePageChange = (page: number, pageSize?: number) => {
     setCurrentPage(page);

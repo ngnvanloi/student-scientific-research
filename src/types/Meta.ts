@@ -74,7 +74,7 @@ export interface IDataWithTokenResponseFromAPI<T> {
 export interface IDataResponseFromAPI<T> {
   data: T;
   additionalData?: any;
-  message: string;
+  message: string | any;
   statusCode: number;
   code: string;
 }
@@ -98,6 +98,10 @@ export interface IDataRetrievedResponseFromAPI<T> {
   statusCode: number;
   code: string;
 }
+export type APIErrorResponse = {
+  errorCode: string;
+  errorMessage: string;
+};
 export interface IListPostResponseFromAPI<T> {}
 // ==========
 

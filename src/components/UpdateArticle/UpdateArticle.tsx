@@ -12,31 +12,14 @@ import { useEffect, useState } from "react";
 import { useGetListDiscipline } from "@/hooks-query/queries/use-get-discipline";
 import { CoAuthor } from "@/types/CoAuthor";
 import { useToast } from "@/hooks/use-toast";
-import {
-  ParamsSubmitResearchTopic,
-  useSubmitResearchTopicMutation,
-} from "@/hooks-query/mutations/use-submit-research-topic";
 import { useUploadFileMutation } from "@/hooks-query/mutations/use-upload-file-mutation";
-import {
-  ParamsCreateNotification,
-  useCreateNotificationMutation,
-} from "@/hooks-query/mutations/use-create-notification-mutation";
 import { useForm } from "react-hook-form";
-import {
-  TFormSubmitResearchTopic,
-  TFormUpdateArticle,
-} from "../FormCard/FormInputsData";
+import { TFormUpdateArticle } from "../FormCard/FormInputsData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-firebase";
 import { ModalAddContributor } from "../Modal/ModalAddContributorArticle";
-import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { useSession } from "next-auth/react";
-import ClickFileUpload from "../UploadFile/ClickFileUpload";
-import { useGetArticleAuthorByPublicationNoneContributor } from "@/hooks-query/queries/use-get-article-for-author";
-import { Competition } from "@/types/Competition";
-import { Article } from "@/types/Article";
 import { FormUpdateArticlee } from "../FormCard/ZodSchema";
-import { DatePicker } from "../DatePicker/DatePicker";
 import {
   ParamsUpdateArticle,
   useUpdateArticleMutation,
@@ -49,27 +32,34 @@ import DateTimePicker from "../DatePicker/DateTimePicker";
 interface IProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLoadingSpinner: React.Dispatch<React.SetStateAction<boolean>>;
-  articleItem: Article | undefined;
+  articleItem: ArticleWithContributors | undefined;
 }
 const FormUpdateArticle = (props: IProps) => {
   const { setIsOpen, articleItem, setIsLoadingSpinner } = props;
-  const { data } = useGetArticleDetail(articleItem?.articleId || 0);
+  const { data } = useGetArticleDetail(articleItem?.id || 0);
   const article: ArticleWithContributors | undefined = data?.data;
-  const listTempContributor: CoAuthor[] = article?.coAuthors
-    ? article.coAuthors
+  const listTempContributor: CoAuthor[] = article?.author_Articles
+    ? article.author_Articles
         .filter((item) => item.roleName === "co-author")
         .map((item) => ({
-          name: item.name,
-          email: item.email,
-          numberPhone: item.numberPhone,
-          dateOfBirth: item.dateOfBirth,
-          sex: item.sex,
-          roleName: item.roleName,
+          name: item.author.name,
+          email: item.author.email,
+          numberPhone: item.author.numberPhone,
+          dateOfBirth: item.author.dateOfBirth,
+          sex: item.author.sex,
+          roleName: "co-author",
         }))
     : [];
 
-  const { data: articles } =
-    useGetArticleAuthorByPublicationNoneContributor(true);
+  console.log(
+    "===== checking article for updating: ",
+    JSON.stringify(data, null, 2)
+  );
+  console.log(
+    "===== checking list contributors of article for updating: ",
+    JSON.stringify(listTempContributor, null, 2)
+  );
+
   const {
     mutate: fileArticleMutation,
     isSuccess: fileArticleIsSuccess,
@@ -322,7 +312,7 @@ const FormUpdateArticle = (props: IProps) => {
           </div>
           <div className="mt-4">
             <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-              File bài báo (cập nhật nếu có)
+              Cập nhật file bài báo (nếu có)
             </label>
             <DragFileUpload
               limit={1}

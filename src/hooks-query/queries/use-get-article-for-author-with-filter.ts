@@ -4,16 +4,16 @@ import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "./query-keys";
 import { ArticleWithContributors } from "@/types/ArticleWithContributor";
 
-// lấy bài báo đã public ĐÃ bao gồm danh sách đồng tác giả
-export type ParamsGetPublicationArticleForAdminIncludeContributor = {
+export type ParamsGetAllArticleForAuthorWithFilter = {
   index: number;
   pageSize: number;
   idSearch?: string;
   nameSearch?: string;
   acceptedForPublicationStatus: number;
+  roleName?: string;
 };
-export const useGetPublicationArticleForAdminIncludeContributor = (
-  params: ParamsGetPublicationArticleForAdminIncludeContributor
+export const useGetAllArticleForAuthorWithFilter = (
+  params: ParamsGetAllArticleForAuthorWithFilter
   //
 ) => {
   return useQuery<
@@ -21,16 +21,16 @@ export const useGetPublicationArticleForAdminIncludeContributor = (
     Error
   >({
     queryKey: queryKeys.listForAdminArticle,
-    queryFn: () => GetPublicationArticleForAdminIncludeContributor(params),
+    queryFn: () => GetAllArticleForAuthorWithFilter(params),
   });
 };
 
-export async function GetPublicationArticleForAdminIncludeContributor(
-  param: ParamsGetPublicationArticleForAdminIncludeContributor
+export async function GetAllArticleForAuthorWithFilter(
+  param: ParamsGetAllArticleForAuthorWithFilter
 ): Promise<
   IDataResponseFromAPI<IListDataResponseFromAPI<ArticleWithContributors>>
 > {
-  const baseUrl = `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article/paging-admin`;
+  const baseUrl = `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article/paging-author`;
 
   // Sử dụng URLSearchParams để xây dựng query string
   const queryParams = new URLSearchParams({
@@ -38,6 +38,11 @@ export async function GetPublicationArticleForAdminIncludeContributor(
     pageSize: param.pageSize.toString(),
     acceptedForPublicationStatus: param.acceptedForPublicationStatus.toString(),
   });
+
+  // Thêm roleName nếu có giá trị
+  if (param.roleName) {
+    queryParams.append("roleName", param.roleName);
+  }
 
   // Thêm các tham số khác nếu có
   if (param.idSearch) {
@@ -54,12 +59,7 @@ export async function GetPublicationArticleForAdminIncludeContributor(
   >(fullUrl, {
     method: "GET",
   });
-  // const response = (await communityRequest)(
-  //   `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article/paging-admin?index=${param.index}&pageSize=${param.pageSize}&acceptedForPublicationStatus=${param.acceptedForPublicationStatus}`,
-  //   {
-  //     method: "GET",
-  //   }
-  // );
+
   return response as unknown as IDataResponseFromAPI<
     IListDataResponseFromAPI<ArticleWithContributors>
   >;

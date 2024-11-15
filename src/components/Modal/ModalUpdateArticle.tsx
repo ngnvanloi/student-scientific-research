@@ -1,22 +1,15 @@
 "use client";
 import { CloseModalIcon } from "@/assets/svg/close.modal";
-import { Competition } from "@/types/Competition";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Button } from "antd";
 import React, { useState } from "react";
-import { SubmitResearchProject } from "../SubmitResearchProject/SubmitResearchProject";
-import FormSubmitResearchTopic from "../SubmitResearchProject/FormSubmitResearchTopic";
-import FormUpdateResearchTopic from "../UpdateResearchTopic/UpdateResearchTopic";
-import { ResearchProjectTopic } from "@/types/ResearchProjectTopic";
-import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContributors";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
-import { Article } from "@/types/Article";
 import FormUpdateArticle from "../UpdateArticle/UpdateArticle";
+import { ArticleWithContributors } from "@/types/ArticleWithContributor";
 
 interface IProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  article: Article | undefined;
+  article: ArticleWithContributors | undefined;
 }
 const ModalUpdateArticle = (props: IProps) => {
   const { isOpen, setIsOpen, article } = props;
@@ -31,7 +24,7 @@ const ModalUpdateArticle = (props: IProps) => {
           <div className="bg-white rounded-md shadow-lg h-full  overflow-x-auto">
             <div className="flex items-center justify-between p-4 border-b">
               <Dialog.Title className="text-lg font-medium text-gray-800 ">
-                Chỉnh sửa bài b {article?.title}
+                Chỉnh sửa bài báo {article?.title}
               </Dialog.Title>
               <Dialog.Close className="p-2 text-gray-400 rounded-md hover:bg-gray-100">
                 <CloseModalIcon />

@@ -30,7 +30,7 @@ interface IProps {
 }
 const approvalStatus = [
   { id: 1, name: "Phê duyệt" },
-  { id: 0, name: "Từ chối" },
+  { id: 2, name: "Từ chối" },
 ];
 const ModalApprovalArticle = (props: IProps) => {
   // STATE
@@ -73,18 +73,21 @@ const ModalApprovalArticle = (props: IProps) => {
     if (data.approvalStatus === "1") {
       contentNoti =
         NotificationContentSample.NotificationType.article.admin.accept;
-    } else if (data.approvalStatus === "0") {
+    } else if (data.approvalStatus === "2") {
       contentNoti =
         NotificationContentSample.NotificationType.article.admin.reject;
     }
 
     // gửi request đến API phê duyệt đăng kí
-    let approvl = false;
+    let approvl = 0;
     if (data.approvalStatus === "1") {
-      approvl = true;
+      approvl = 1;
+    }
+    if (data.approvalStatus === "2") {
+      approvl = 2;
     }
     const bodyRequest: ParamsUpdateArticleForPublic = {
-      isAcceptedForPublication: approvl,
+      AcceptedForPublicationStatus: approvl,
     };
     approvalArticleMutation.mutate(
       { id: articleID, requestbody: bodyRequest },
@@ -103,9 +106,9 @@ const ModalApprovalArticle = (props: IProps) => {
             notificationDate: new Date().toISOString(),
             // recevierId: articleDetail?.data.accountID || -1,
             recevierId:
-              articleDetail?.data?.coAuthors?.find(
+              articleDetail?.data?.author_Articles?.find(
                 (author) => author.roleName === "author"
-              )?.accountId || -1,
+              )?.author.accountId || -1,
             notificationTypeId: 1,
             targetId: -1,
           };

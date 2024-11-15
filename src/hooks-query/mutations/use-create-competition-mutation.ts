@@ -1,9 +1,10 @@
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
-import type { IDataResponseFromAPI } from "@/types/Meta";
+import type { APIErrorResponse, IDataResponseFromAPI } from "@/types/Meta";
 import { UploadFile } from "antd";
 import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
+import ky, { HTTPError } from "ky";
 
 export type ParamsCreateCompetition = {
   competitionName: string;
@@ -14,10 +15,12 @@ export type ParamsCreateCompetition = {
   destination: string;
 };
 
-export const useCreateCompetitionMutation = () => {
+export const useCreateCompetitionMutation = (
+  onErrorCallback?: (msg: string) => void
+) => {
   return useMutation<
     IDataResponseFromAPI<null>,
-    Error,
+    APIErrorResponse,
     ParamsCreateCompetition,
     unknown
   >({
@@ -31,6 +34,9 @@ export const useCreateCompetitionMutation = () => {
     },
     onError: (err) => {
       console.log("Error creating post: ", err);
+      if (onErrorCallback) {
+        onErrorCallback(err.errorMessage);
+      }
     },
   });
 };
@@ -57,8 +63,19 @@ export async function createNewCompetition(
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error creating post:", error);
-    throw error;
+    if (error instanceof HTTPError) {
+      // Lấy thông tin lỗi từ response của server
+      const errorResponse = await error.response.json();
+      throw {
+        errorCode: errorResponse.errorCode,
+        errorMessage: errorResponse.errorMessage,
+      };
+    }
+    // Xử lý các lỗi khác
+    throw {
+      errorCode: "UnknownError",
+      errorMessage: "An unknown error occurred",
+    };
   }
 }
 

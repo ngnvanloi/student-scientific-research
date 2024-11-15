@@ -35,7 +35,13 @@ const ModalAddNewCompetition = () => {
   const [dateEndSubmit, setDateEndSubmit] = useState<Date | undefined>(
     new Date()
   );
-  const { mutate, isSuccess, isError, error } = useCreateCompetitionMutation();
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { mutate, isSuccess, isError, error } = useCreateCompetitionMutation(
+    (msg) => {
+      setErrorMessage(msg);
+    }
+  );
   // State để điều khiển modal
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { toast } = useToast();
@@ -65,6 +71,7 @@ const ModalAddNewCompetition = () => {
       description: data.description,
       destination: data.destination,
     };
+
     mutate(dataSender, {
       onSuccess: () => {
         toast({
@@ -110,6 +117,9 @@ const ModalAddNewCompetition = () => {
               </Dialog.Close>
             </div>
             <Dialog.Description className="space-y-2 p-4 mt-3 text-[15.5px] leading-relaxed text-gray-500">
+              {errorMessage && (
+                <p style={{ color: "red" }}>Error: {errorMessage}</p>
+              )}
               <div className="grid grid-cols-3 gap-5">
                 <div className="basis-1/3">
                   <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">

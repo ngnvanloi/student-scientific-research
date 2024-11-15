@@ -16,8 +16,8 @@ import { ModalUpdateArticle } from "../Modal/ModalUpdateArticle";
 import DisplayPDFThumbnai from "../PreviewPDF/DisplayPDFThumbnail";
 
 interface IPropsAuthorArticle {
-  articleItem: Article;
-  isAcceptedForPublication: boolean;
+  articleItem: ArticleWithContributors;
+  isAcceptedForPublication: number;
 }
 
 const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
@@ -37,11 +37,18 @@ const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
     setModelDelOpen(true);
   };
   const handleShowDetailArticle = () => {
-    if (isAcceptedForPublication === true) {
-      router.push(`/article/${articleItem.articleId}`);
+    if (isAcceptedForPublication === 1) {
+      router.push(`/article/${articleItem.id}`);
     } else {
       setIsOpen(true);
     }
+  };
+  const handleClickRequestPublicationButton = (e: any) => {
+    e.stopPropagation();
+    alert("Gửi yêu cầu phê duyệt lại cho super admin");
+    // cập nhật thuộc tính acceptionForPublication = 0
+
+    // gửi lại thông báo cho super admin
   };
   return (
     <div className="w-full mx-auto px-4 md:px-8 outline outline-1 outline-[#ccc] p-4 rounded-md duration-150 hover:shadow-lg hover:cursor-pointer">
@@ -73,71 +80,144 @@ const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
           </div>
         </div>
         <div className="mt-3 space-y-2">
-          {isAcceptedForPublication === true ? (
-            <Tag color="cyan-inverse" key={"public"}>
-              Đã công bố
-            </Tag>
-          ) : (
-            <div className="flex justify-between items-center align-middle">
-              <Tag color="gold-inverse" key={"unpublic"}>
-                Chưa công bố
-              </Tag>
-              <div>
-                {(() => {
-                  const items: MenuProps["items"] = [
-                    {
-                      key: "1",
-                      label: (
-                        <p
-                          className="link-info"
-                          onClick={(e) =>
-                            handleClickUpdateButton(e, articleItem.articleId)
-                          }
-                        >
-                          Update
-                        </p>
-                      ),
-                    },
-                    {
-                      key: "2",
-                      label: (
-                        <a
-                          className="link-danger"
-                          onClick={(e) => handleClickDeleteButton(e)}
-                        >
-                          Delete
-                        </a>
-                      ),
-                    },
-                  ];
-                  return (
-                    <Dropdown menu={{ items }}>
-                      <p
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                        }}
-                      >
-                        <Space>
-                          Chỉnh sửa
-                          <DownOutlined />
-                        </Space>
-                      </p>
-                    </Dropdown>
-                  );
-                })()}
-              </div>
-            </div>
-          )}
+          {(() => {
+            if (isAcceptedForPublication === 1) {
+              return (
+                <Tag color="cyan-inverse" key={"public"}>
+                  Đã công bố
+                </Tag>
+              );
+            } else if (isAcceptedForPublication === 0) {
+              return (
+                <div className="flex justify-between items-center align-middle">
+                  <Tag color="gold-inverse" key={"unpublic"}>
+                    Đang chờ phê duyệt
+                  </Tag>
+                  <div>
+                    {(() => {
+                      const items: MenuProps["items"] = [
+                        {
+                          key: "1",
+                          label: (
+                            <p
+                              className="link-info"
+                              onClick={(e) =>
+                                handleClickUpdateButton(e, articleItem.id)
+                              }
+                            >
+                              Update
+                            </p>
+                          ),
+                        },
+                        {
+                          key: "2",
+                          label: (
+                            <a
+                              className="link-danger"
+                              onClick={(e) => handleClickDeleteButton(e)}
+                            >
+                              Delete
+                            </a>
+                          ),
+                        },
+                      ];
+                      return (
+                        <Dropdown menu={{ items }}>
+                          <p
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                          >
+                            <Space>
+                              More
+                              <DownOutlined />
+                            </Space>
+                          </p>
+                        </Dropdown>
+                      );
+                    })()}
+                  </div>
+                </div>
+              );
+            } else if (isAcceptedForPublication === 2) {
+              return (
+                <div className="flex justify-between items-center align-middle">
+                  <Tag color="gold-inverse" key={"unpublic"}>
+                    Từ chối phê duyệt
+                  </Tag>
+                  <div>
+                    {(() => {
+                      const items: MenuProps["items"] = [
+                        {
+                          key: "1",
+                          label: (
+                            <p
+                              className="link-info"
+                              onClick={(e) =>
+                                handleClickUpdateButton(e, articleItem.id)
+                              }
+                            >
+                              Update
+                            </p>
+                          ),
+                        },
+                        {
+                          key: "2",
+                          label: (
+                            <a
+                              className="link-danger"
+                              onClick={(e) =>
+                                handleClickRequestPublicationButton(e)
+                              }
+                            >
+                              Request again
+                            </a>
+                          ),
+                        },
+                        {
+                          key: "3",
+                          label: (
+                            <a
+                              className="link-danger"
+                              onClick={(e) => handleClickDeleteButton(e)}
+                            >
+                              Delete
+                            </a>
+                          ),
+                        },
+                      ];
+                      return (
+                        <Dropdown menu={{ items }}>
+                          <p
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                          >
+                            <Space>
+                              More
+                              <DownOutlined />
+                            </Space>
+                          </p>
+                        </Dropdown>
+                      );
+                    })()}
+                  </div>
+                </div>
+              );
+            }
+          })()}
+
           <ModalDeleteArticle
             isOpen={isModalDelOpen}
             setIsOpen={setModelDelOpen}
-            articleID={articleItem.articleId}
+            articleID={articleItem.id}
           />
           <ModalShowArticleDetails
             isOpen={isOpen}
             setIsOpen={setIsOpen}
-            articleID={articleItem.articleId}
+            articleID={articleItem.id}
           />
           <ModalUpdateArticle
             isOpen={isModalUpdateOpen}
@@ -170,7 +250,9 @@ const ArticleCardForGuest = (props: IProps) => {
             {formatDate(articleItem.dateUpload)}
           </p>
           <p className="mt-1 truncate text-xs/5 text-gray-500">
-            {articleItem.coAuthors?.map((author) => author.name).join(", ")}
+            {articleItem.author_Articles
+              ?.map((author) => author.author.name)
+              .join(", ")}
           </p>
         </div>
       </div>
@@ -221,7 +303,9 @@ const ArticleCardForAdmin = (props: IProps) => {
             {articleItem.title}
           </p>
           <p className="truncate text-xs/5 text-gray-500">
-            {articleItem.coAuthors?.map((author) => author.name).join(", ")}
+            {articleItem.author_Articles
+              ?.map((author) => author.author.name)
+              .join(", ")}
           </p>
           <a
             className="text-blue-500 mt-2 hover:underline"

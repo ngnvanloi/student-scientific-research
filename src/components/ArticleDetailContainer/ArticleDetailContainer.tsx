@@ -49,18 +49,22 @@ const ArticleDetailContainer = (props: IProps) => {
         <div>
           <h2 className="font-bold">Danh sách tác giả</h2>
           <List
-            dataSource={article?.data.coAuthors}
+            dataSource={article?.data.author_Articles}
             className="max-w-[500px]"
             renderItem={(item) => (
-              <List.Item key={item.email}>
+              <List.Item key={item.author.email}>
                 <List.Item.Meta
                   avatar={
                     <Avatar
-                      src={item.sex == "Nữ" ? avatarFemale.src : avatarMale.src}
+                      src={
+                        item.author.sex == "Nữ"
+                          ? avatarFemale.src
+                          : avatarMale.src
+                      }
                     />
                   }
-                  title={item.name}
-                  description={item.email}
+                  title={item.author.name}
+                  description={item.author.email}
                 />
                 <div>{item.roleName}</div>
               </List.Item>

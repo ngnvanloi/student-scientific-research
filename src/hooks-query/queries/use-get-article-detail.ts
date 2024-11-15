@@ -14,8 +14,9 @@ export const useGetArticleDetail = (id: number) => {
 export async function GetArticleDetail(
   id: number
 ): Promise<IDataResponseFromAPI<ArticleWithContributors>> {
+  //
   const response = (await communityRequest)(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article?id=${id}`,
+    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article/${id}`,
     {
       method: "GET",
     }

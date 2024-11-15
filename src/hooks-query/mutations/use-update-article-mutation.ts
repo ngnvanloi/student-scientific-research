@@ -42,7 +42,7 @@ export async function updateArticle(
   }
 
   // Token lấy từ session hoặc bất kỳ nơi nào bạn lưu trữ nó
-  const token = session.user?.accessToken || ""; // Điều chỉnh lấy token từ session
+  const token = session.user?.accessToken || "";
 
   console.log("Checking getSession() from Server side: ", session.user);
 

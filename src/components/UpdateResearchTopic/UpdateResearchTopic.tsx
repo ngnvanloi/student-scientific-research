@@ -12,33 +12,26 @@ import { useEffect, useState } from "react";
 import { useGetListDiscipline } from "@/hooks-query/queries/use-get-discipline";
 import { CoAuthor } from "@/types/CoAuthor";
 import { useToast } from "@/hooks/use-toast";
-import {
-  ParamsSubmitResearchTopic,
-  useSubmitResearchTopicMutation,
-} from "@/hooks-query/mutations/use-submit-research-topic";
 import { useUploadFileMutation } from "@/hooks-query/mutations/use-upload-file-mutation";
-import {
-  ParamsCreateNotification,
-  useCreateNotificationMutation,
-} from "@/hooks-query/mutations/use-create-notification-mutation";
+import { useCreateNotificationMutation } from "@/hooks-query/mutations/use-create-notification-mutation";
 import { useForm } from "react-hook-form";
 import { TFormSubmitResearchTopic } from "../FormCard/FormInputsData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-firebase";
 import { ModalAddContributor } from "../Modal/ModalAddContributorArticle";
-import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { useSession } from "next-auth/react";
 import ClickFileUpload from "../UploadFile/ClickFileUpload";
-import { useGetArticleAuthorByPublicationNoneContributor } from "@/hooks-query/queries/use-get-article-for-author";
 import { Competition } from "@/types/Competition";
-import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContributors";
-import { string } from "zod";
 import {
   ParamsUpdateResearchTopic,
   useUpdateResearchTopicMutation,
 } from "@/hooks-query/mutations/use-update-research-topic-mutation";
 import { FormUpdateResearchTopicc } from "../FormCard/ZodSchema";
+import {
+  ParamsGetAllArticleForAuthorWithFilter,
+  useGetAllArticleForAuthorWithFilter,
+} from "@/hooks-query/queries/use-get-article-for-author-with-filter";
 
 interface IProps {
   competition: Competition | undefined;
@@ -71,8 +64,13 @@ const FormUpdateResearchTopic = (props: IProps) => {
 
   const { data: disciplines } = useGetListDiscipline();
   const [isOpen, setModalAddContributorIsOpen] = useState<boolean>(false);
-  const { data: articles } =
-    useGetArticleAuthorByPublicationNoneContributor(true);
+  // lấy ra danh sách các bài báo đã public (bao gồm author và co-author)
+  let params: ParamsGetAllArticleForAuthorWithFilter = {
+    index: 1,
+    pageSize: 100,
+    acceptedForPublicationStatus: 1,
+  };
+  const { data: articles } = useGetAllArticleForAuthorWithFilter(params);
 
   console.log(
     ">>>>>>>>>> checking listTempContributor: ",
@@ -119,10 +117,12 @@ const FormUpdateResearchTopic = (props: IProps) => {
       name: discipline.disciplineName,
     })
   );
-  const listArticles: SelectItem[] | undefined = articles?.data.map((item) => ({
-    id: item.articleId,
-    name: item.title,
-  }));
+  const listArticles: SelectItem[] | undefined = articles?.data.items.map(
+    (item) => ({
+      id: item.id,
+      name: item.title,
+    })
+  );
   // REACT HOOK FORM
   const {
     register,

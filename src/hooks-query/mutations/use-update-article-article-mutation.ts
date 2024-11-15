@@ -1,15 +1,15 @@
+import { IDataResponseFromAPI } from "@/types/Meta";
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
-import type { IResponseFromAPI } from "@/types/Meta";
 import { getSession } from "next-auth/react";
 
 export type ParamsUpdateArticleForPublic = {
-  isAcceptedForPublication: number | string | boolean;
+  AcceptedForPublicationStatus: number | string;
 };
 
 export const useApprovalArticleForPublicMutation = () => {
   return useMutation<
-    IResponseFromAPI,
+    IDataResponseFromAPI<null>,
     Error,
     { id: number; requestbody: ParamsUpdateArticleForPublic },
     unknown
@@ -29,7 +29,7 @@ export const useApprovalArticleForPublicMutation = () => {
 export async function updateArticleForPublic(
   id: number,
   requestbody: ParamsUpdateArticleForPublic
-): Promise<IResponseFromAPI> {
+): Promise<IDataResponseFromAPI<null>> {
   const session = await getSession();
   if (!session) {
     throw new Error("User not authenticated");
@@ -41,8 +41,8 @@ export async function updateArticleForPublic(
   console.log("Checking getSession() from Server side: ", session.user);
 
   try {
-    const response = await communityRequest<IResponseFromAPI>(
-      `api/Article/approve?id=${id}`, //&DateUpload=${"2024-07-21T00:00:00"}&FilePath=${params.FilePath || ""}
+    const response = await communityRequest<IDataResponseFromAPI<null>>(
+      `api/Article/approve-article?id=${id}`, //&DateUpload=${"2024-07-21T00:00:00"}&FilePath=${params.FilePath || ""}
       {
         method: "PATCH",
         headers: {

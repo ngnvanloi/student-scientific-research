@@ -1,23 +1,23 @@
 "use client";
-import {
-  ParamsGetPublicationArticleAuthorIncludeContributor,
-  useGetPublicationArticleAuthorIncludeContributor,
-} from "@/hooks-query/queries/use-get-article-for-author";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import { ArticleCardForGuest } from "../ArticleCard/ArticleCard";
+import {
+  ParamsGetAllArticleForSystem,
+  useGetAllArticleForSystem,
+} from "@/hooks-query/queries/use-get-article-for-system";
 
 const HomepageArticleList = () => {
-  let params: ParamsGetPublicationArticleAuthorIncludeContributor = {
+  let params: ParamsGetAllArticleForSystem = {
     index: 1,
-    pageSize: 100,
+    pageSize: 10,
     nameSearch: "",
-    organizerName: "",
+    idSearch: "",
   };
   const {
     data: listPublicArticle,
     refetch: refetchListPublicArticle,
     isPending,
-  } = useGetPublicationArticleAuthorIncludeContributor(params);
+  } = useGetAllArticleForSystem(params);
 
   console.log("Checking public articles: ", listPublicArticle?.data.items);
   return (

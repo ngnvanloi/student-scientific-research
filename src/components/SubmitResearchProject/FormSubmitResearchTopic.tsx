@@ -1,8 +1,6 @@
 import { Button } from "antd";
 import FormField from "../FormCard/FormInputField";
 import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
-import RichTextEditor from "../RichTextEditor/RichTextEditor";
-import DragFileUpload from "../UploadFile/DragFileUpload";
 import {
   columns,
   DataTableAddContributors,
@@ -30,9 +28,12 @@ import { ModalAddContributor } from "../Modal/ModalAddContributorArticle";
 import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { useSession } from "next-auth/react";
 import ClickFileUpload from "../UploadFile/ClickFileUpload";
-import { useGetArticleAuthorByPublicationNoneContributor } from "@/hooks-query/queries/use-get-article-for-author";
 import { Competition } from "@/types/Competition";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
+import {
+  ParamsGetAllArticleForAuthorWithFilter,
+  useGetAllArticleForAuthorWithFilter,
+} from "@/hooks-query/queries/use-get-article-for-author-with-filter";
 
 interface IProps {
   competition: Competition | undefined;
@@ -49,8 +50,14 @@ const FormSubmitResearchTopic = (props: IProps) => {
   const [listContributors, setListContributors] = useState<CoAuthor[]>([]);
   const { data: disciplines } = useGetListDiscipline();
   const [isOpen, setModalAddContributorIsOpen] = useState<boolean>(false);
-  const { data: articles } =
-    useGetArticleAuthorByPublicationNoneContributor(true);
+
+  // lấy ra danh sách các bài báo đã public (bao gồm author và co-author)
+  let params: ParamsGetAllArticleForAuthorWithFilter = {
+    index: 1,
+    pageSize: 100,
+    acceptedForPublicationStatus: 1,
+  };
+  const { data: articles } = useGetAllArticleForAuthorWithFilter(params);
 
   // TOAST
   const { toast } = useToast();
@@ -93,10 +100,12 @@ const FormSubmitResearchTopic = (props: IProps) => {
       name: discipline.disciplineName,
     })
   );
-  const listArticles: SelectItem[] | undefined = articles?.data.map((item) => ({
-    id: item.articleId,
-    name: item.title,
-  }));
+  const listArticles: SelectItem[] | undefined = articles?.data.items.map(
+    (item) => ({
+      id: item.id,
+      name: item.title,
+    })
+  );
   // REACT HOOK FORM
   const {
     register,
