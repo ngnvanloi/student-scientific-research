@@ -24,12 +24,26 @@ export const useGetListCompetition = (params: ParamsGetListCompetition) => {
 export async function GetListCompetition(
   param: ParamsGetListCompetition
 ): Promise<IDataResponseFromAPI<IListDataResponseFromAPI<Competition>>> {
-  const response = (await communityRequest)(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/competitions/all?index=${param.index}&pageSize=${param.pageSize}`,
-    {
-      method: "GET",
-    }
-  );
+  const baseUrl = `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/competitions/all`;
+  // Sử dụng URLSearchParams để xây dựng query string
+  const queryParams = new URLSearchParams({
+    index: param.index.toString(),
+    pageSize: param.pageSize.toString(),
+  });
+
+  // Thêm các tham số khác nếu có
+  if (param.organizerName) {
+    queryParams.append("organizerName", param.organizerName);
+  }
+  if (param.nameSearch) {
+    queryParams.append("nameSearch", param.nameSearch);
+  }
+
+  const fullUrl = `${baseUrl}?${queryParams.toString()}`;
+  //
+  const response = (await communityRequest)(fullUrl, {
+    method: "GET",
+  });
   return response as unknown as IDataResponseFromAPI<
     IListDataResponseFromAPI<Competition>
   >;
@@ -52,12 +66,26 @@ export const useGetListCompetitionAdmin = (
 export async function GetListCompetitionaAdmin(
   param: ParamsGetListCompetition
 ): Promise<IDataResponseFromAPI<IListDataResponseFromAPI<Competition>>> {
-  const response = (await communityRequest)(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/competitions/organizer?index=${param.index}&pageSize=${param.pageSize}`,
-    {
-      method: "GET",
-    }
-  );
+  const baseUrl = `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/competitions/organizer`;
+  // Sử dụng URLSearchParams để xây dựng query string
+  const queryParams = new URLSearchParams({
+    index: param.index.toString(),
+    pageSize: param.pageSize.toString(),
+  });
+
+  // Thêm các tham số khác nếu có
+  if (param.organizerName) {
+    queryParams.append("organizerName", param.organizerName);
+  }
+  if (param.nameSearch) {
+    queryParams.append("nameSearch", param.nameSearch);
+  }
+
+  const fullUrl = `${baseUrl}?${queryParams.toString()}`;
+
+  const response = (await communityRequest)(fullUrl, {
+    method: "GET",
+  });
   return response as unknown as IDataResponseFromAPI<
     IListDataResponseFromAPI<Competition>
   >;

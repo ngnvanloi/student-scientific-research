@@ -31,7 +31,7 @@ export async function GetAllArticleForAuthorWithFilter(
   IDataResponseFromAPI<IListDataResponseFromAPI<ArticleWithContributors>>
 > {
   const baseUrl = `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article/paging-author`;
-
+  //
   // Sử dụng URLSearchParams để xây dựng query string
   const queryParams = new URLSearchParams({
     index: param.index.toString(),

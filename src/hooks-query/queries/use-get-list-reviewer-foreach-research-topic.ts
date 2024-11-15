@@ -34,12 +34,27 @@ export async function GetReviewCommitteeForEachResearchTopic(
 ): Promise<
   IDataResponseFromAPI<IListDataResponseFromAPI<ReviewCouncilWithMembers>>
 > {
-  const response = (await communityRequest)(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Organizer/review-committee/research-topic/${param.researchTopicId}?page=${param.page}&pageSize=${param.pageSize}`,
-    {
-      method: "GET",
-    }
-  );
+  const baseUrl = `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Organizer/review-committee/research-topic`;
+  //
+  // Sử dụng URLSearchParams để xây dựng query string
+  const queryParams = new URLSearchParams({
+    page: param.page.toString(),
+    pageSize: param.pageSize.toString(),
+  });
+
+  // Thêm các tham số khác nếu có
+  if (param.idSearch) {
+    queryParams.append("idSearch", param.idSearch.toString());
+  }
+  if (param.nameSearch) {
+    queryParams.append("nameSearch", param.nameSearch);
+  }
+
+  const fullUrl = `${baseUrl}/${param.researchTopicId}?${queryParams.toString()}`;
+
+  const response = (await communityRequest)(fullUrl, {
+    method: "GET",
+  });
   return response as unknown as IDataResponseFromAPI<
     IListDataResponseFromAPI<ReviewCouncilWithMembers>
   >;

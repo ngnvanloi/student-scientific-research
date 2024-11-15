@@ -34,12 +34,28 @@ export const useGetListRegistrationForm = (
 export async function GetListRegistrationForm(
   param: ParamsGetListRegistrationForm
 ): Promise<IDataResponseFromAPI<IListDataResponseFromAPI<RegistrationForm>>> {
-  const response = (await communityRequest)(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/RegistrationForm/competition?competitionId=${param.competitionId}&index=${param.index}&pageSize=${param.pageSize}&isAccepted=${param.isAccepted}`,
-    {
-      method: "GET",
-    }
-  );
+  const baseUrl = `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/RegistrationForm/competition`;
+  //
+  // Sử dụng URLSearchParams để xây dựng query string
+  const queryParams = new URLSearchParams({
+    competitionId: param.competitionId.toString(),
+    index: param.index.toString(),
+    pageSize: param.pageSize.toString(),
+    isAccepted: param.isAccepted.toString(),
+  });
+
+  // Thêm các tham số khác nếu có
+  if (param.idSearch) {
+    queryParams.append("idSearch", param.idSearch);
+  }
+  if (param.internalCodeSearch) {
+    queryParams.append("internalCodeSearch", param.internalCodeSearch);
+  }
+
+  const fullUrl = `${baseUrl}?${queryParams.toString()}`;
+  const response = (await communityRequest)(fullUrl, {
+    method: "GET",
+  });
   return response as unknown as IDataResponseFromAPI<
     IListDataResponseFromAPI<RegistrationForm>
   >;

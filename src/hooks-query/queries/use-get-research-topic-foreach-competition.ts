@@ -7,8 +7,9 @@ import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContribu
 export type ParamsGetListResearchTopicForeachCompetition = {
   competitionId: number;
   index: number;
-  reviewCommitteeId?: number;
   pageSize: number;
+
+  reviewCommitteeId?: number;
   nameTopicSearch?: string;
   disciplineId?: number;
   acceptedForPublicationStatus?: number;
@@ -39,23 +40,42 @@ export async function GetListResearchTopicForeachCompetition(
 ): Promise<
   IDataResponseFromAPI<IListDataResponseFromAPI<ResearchTopicWithContributors>>
 > {
-  // Xây dựng URL dựa trên các tham số có sẵn
-  let url = `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/ResearchTopic/competition/${params.competitionId}?index=${params.index}&pageSize=${params.pageSize}`;
+  const baseUrl = `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/ResearchTopic/competition`;
+  // Sử dụng URLSearchParams để xây dựng query string
+  const queryParams = new URLSearchParams({
+    index: params.index.toString(),
+    pageSize: params.pageSize.toString(),
+  });
 
-  // Thêm reviewCommitteeId nếu có
-  if (
-    params.reviewCommitteeId !== undefined &&
-    params.reviewCommitteeId !== null
-  ) {
-    url += `&reviewCommitteeId=${params.reviewCommitteeId}`;
+  // Thêm các tham số khác nếu có
+  if (params.reviewCommitteeId) {
+    queryParams.append(
+      "reviewCommitteeId",
+      params.reviewCommitteeId.toString()
+    );
+  }
+  if (params.nameTopicSearch) {
+    queryParams.append("nameTopicSearch", params.nameTopicSearch);
+  }
+  if (params.disciplineId) {
+    queryParams.append("disciplineId", params.disciplineId.toString());
+  }
+  if (params.acceptedForPublicationStatus) {
+    queryParams.append(
+      "acceptedForPublicationStatus",
+      params.acceptedForPublicationStatus.toString()
+    );
+  }
+  if (params.ReviewAcceptanceStatus) {
+    queryParams.append(
+      "ReviewAcceptanceStatus",
+      params.ReviewAcceptanceStatus.toString()
+    );
   }
 
-  // Thêm disciplineId nếu có
-  if (params.disciplineId !== undefined && params.disciplineId !== null) {
-    url += `&disciplineId=${params.disciplineId}`;
-  }
+  const fullUrl = `${baseUrl}/${params.competitionId}?${queryParams.toString()}`;
 
-  const response = (await communityRequest)(url, {
+  const response = (await communityRequest)(fullUrl, {
     method: "GET",
   });
 

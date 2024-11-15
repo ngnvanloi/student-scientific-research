@@ -54,12 +54,6 @@ export async function GetPublicationArticleForAdminIncludeContributor(
   >(fullUrl, {
     method: "GET",
   });
-  // const response = (await communityRequest)(
-  //   `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article/paging-admin?index=${param.index}&pageSize=${param.pageSize}&acceptedForPublicationStatus=${param.acceptedForPublicationStatus}`,
-  //   {
-  //     method: "GET",
-  //   }
-  // );
   return response as unknown as IDataResponseFromAPI<
     IListDataResponseFromAPI<ArticleWithContributors>
   >;

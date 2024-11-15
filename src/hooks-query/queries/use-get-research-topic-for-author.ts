@@ -37,12 +37,39 @@ export async function GetListResearchTopicForAuthorByRolename(
 ): Promise<
   IDataResponseFromAPI<IListDataResponseFromAPI<ResearchTopicWithContributors>>
 > {
-  const response = (await communityRequest)(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/ResearchTopic/author?roleName=${param.roleName}&index=${param.index}&pageSize=${param.pageSize}`,
-    {
-      method: "GET",
-    }
-  );
+  const baseUrl = `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/ResearchTopic/author`;
+  //
+  // Sử dụng URLSearchParams để xây dựng query string
+  const queryParams = new URLSearchParams({
+    roleName: param.roleName,
+    index: param.index.toString(),
+    pageSize: param.pageSize.toString(),
+  });
+
+  // Thêm các tham số khác nếu có
+  if (param.nameTopicSearch) {
+    queryParams.append("nameTopicSearch", param.nameTopicSearch);
+  }
+  if (param.acceptedForPublicationStatus) {
+    queryParams.append(
+      "acceptedForPublicationStatus",
+      param.acceptedForPublicationStatus.toString()
+    );
+  }
+  if (param.ReviewAcceptanceStatus) {
+    queryParams.append(
+      "ReviewAcceptanceStatus",
+      param.ReviewAcceptanceStatus.toString()
+    );
+  }
+  if (param.competitionId) {
+    queryParams.append("competitionId", param.competitionId.toString());
+  }
+
+  const fullUrl = `${baseUrl}?${queryParams.toString()}`;
+  const response = (await communityRequest)(fullUrl, {
+    method: "GET",
+  });
   return response as unknown as IDataResponseFromAPI<
     IListDataResponseFromAPI<ResearchTopicWithContributors>
   >;

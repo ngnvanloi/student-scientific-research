@@ -29,12 +29,26 @@ export async function GetAllArticleForSystem(
 ): Promise<
   IDataResponseFromAPI<IListDataResponseFromAPI<ArticleWithContributors>>
 > {
-  const response = (await communityRequest)(
-    `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article/paging-system?index=${param.index}&pageSize=${param.pageSize}`,
-    {
-      method: "GET",
-    }
-  );
+  const baseUrl = `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Article/paging-system`;
+  // Sử dụng URLSearchParams để xây dựng query string
+  const queryParams = new URLSearchParams({
+    index: param.index.toString(),
+    pageSize: param.pageSize.toString(),
+  });
+
+  // Thêm các tham số khác nếu có
+  if (param.idSearch) {
+    queryParams.append("idSearch", param.idSearch);
+  }
+  if (param.nameSearch) {
+    queryParams.append("nameSearch", param.nameSearch);
+  }
+
+  const fullUrl = `${baseUrl}?${queryParams.toString()}`;
+  const response = (await communityRequest)(fullUrl, {
+    method: "GET",
+  });
+
   return response as unknown as IDataResponseFromAPI<
     IListDataResponseFromAPI<ArticleWithContributors>
   >;
