@@ -1,8 +1,6 @@
 import { Button } from "antd";
 import FormField from "../FormCard/FormInputField";
 import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
-import RichTextEditor from "../RichTextEditor/RichTextEditor";
-import DragFileUpload from "../UploadFile/DragFileUpload";
 import {
   columns,
   DataTableAddContributors,
@@ -41,19 +39,26 @@ interface IProps {
 }
 const FormUpdateResearchTopic = (props: IProps) => {
   const { competition, setIsOpen, researchTopic, setIsLoadingSpinner } = props;
-  const listTempContributor: CoAuthor[] = researchTopic?.coAuthors
-    ? researchTopic.coAuthors
+  const listTempContributor: CoAuthor[] = researchTopic?.author_ResearchTopics
+    ? researchTopic.author_ResearchTopics
         .filter((item) => item.roleName === "co-author")
         .map((item) => ({
-          name: item.name,
-          email: item.email,
-          numberPhone: item.numberPhone,
-          dateOfBirth: item.dateOfBirth,
-          sex: item.sex,
-          roleName: item.roleName,
+          name: item.author.name,
+          email: item.author.email,
+          numberPhone: item.author.numberPhone,
+          dateOfBirth: item.author.dateOfBirth,
+          sex: item.author.sex,
+          roleName: "co-author",
         }))
     : [];
-
+  console.log(
+    "checking listTempContributor from form update research topic: ",
+    listTempContributor
+  );
+  console.log(
+    "=== checking respont author research topic: ",
+    JSON.stringify(researchTopic?.author_ResearchTopics, null, 2)
+  );
   const { data: session } = useSession();
   // STATE
   const [fileReport, setFileReport] = useState<File>();

@@ -10,11 +10,13 @@ export type ParamsGetListResearchTopicForAuthorByRolename = {
   index: number;
   pageSize: number;
   nameTopicSearch?: string;
+  acceptedForPublicationStatus?: number;
+  ReviewAcceptanceStatus?: number;
+  competitionId?: number;
 };
 export const useGetListResearchTopicForAuthorByRolename = (
   params: ParamsGetListResearchTopicForAuthorByRolename
 ) => {
-  //
   return useQuery<
     IDataResponseFromAPI<
       IListDataResponseFromAPI<ResearchTopicWithContributors>

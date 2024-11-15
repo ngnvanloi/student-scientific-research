@@ -24,7 +24,9 @@ const ResearchTopicComponentForAdmin = (props: IProps) => {
         <span className="flex gap-2 text-sm text-gray-600 mt-2">
           <UserGroupIcon width={20} />
           Nhóm tác giả:{" "}
-          {researchTopic.coAuthors?.map((item) => item.name).join(", ")}
+          {researchTopic.author_ResearchTopics
+            ?.map((item) => item.author.name)
+            .join(", ")}
         </span>
         <p className="text-sm text-gray-600 mt-3 flex gap-2">
           <FolderOpenIcon width={20} /> {researchTopic.disciplineName}

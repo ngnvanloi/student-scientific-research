@@ -27,9 +27,9 @@ const ResearchTopicAwaitingReviewPageDetailsPage = ({
     useGetResearchProjectTopicDetail(idResearchTopic);
   // console.log("file path: ", researchTopicDetail?.data.reportFilePath);
 
-  const authorAccountId = researchTopicDetail?.data.coAuthors.find(
+  const authorAccountId = researchTopicDetail?.data.author_ResearchTopics.find(
     (item) => item.roleName === "author"
-  )?.accountId;
+  )?.author.accountId;
   const [fileVersionUrl, setFileVersionUrl] = useState<string>(
     researchTopicDetail?.data.reportFilePath ||
       "https://firebasestorage.googleapis.com/v0/b/seminarclouds.appspot.com/o/ReportFile%2F8ad96830-bf95-41bf-aa05-1a5beb66e9eb_mongodb.pdf?alt=media"

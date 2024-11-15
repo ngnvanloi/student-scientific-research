@@ -20,4 +20,8 @@ export type MemberOfCouncil = {
   accountId: number;
   email: string;
   sex: string;
+
+  // bonus
+  academicDegree: null;
+  academicRank: null;
 };

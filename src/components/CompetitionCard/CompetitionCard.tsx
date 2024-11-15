@@ -276,8 +276,8 @@ const CompetitionCardForAuthor = (props: IProps) => {
   // kiểm tra account email có nằm trong mảng coAuthor với vai trò đồng tác giả hay không, nếu có thì ẩn nút chỉnh sửa đi
   function checkContributor(email: string, roleName: string): boolean {
     return (
-      researchTopicByCompetitionId?.coAuthors.some(
-        (item) => item.email === email && item.roleName === roleName
+      researchTopicByCompetitionId?.author_ResearchTopics.some(
+        (item) => item.author.email === email && item.roleName === roleName
       ) || false
     );
   }

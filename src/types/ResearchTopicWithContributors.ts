@@ -1,5 +1,6 @@
 import { Contributor } from "./Contributor";
 import { HistoryUpdateResearchTopic } from "./HistoryUpdateResearchTopic";
+import { Author_ResearchTopics } from "./ResearchProjectTopic";
 import { ReviewCouncilWithMembers } from "./ReviewCouncilWithMembers";
 
 export type ResearchTopicWithContributors = {
@@ -28,7 +29,8 @@ export type ResearchTopicWithContributors = {
   reviewCommitteeName?: string;
   competitionName: string;
   supervisor: string;
-  coAuthors: Contributor[];
+  // coAuthors: Contributor[];
   review_Committees: ReviewCouncilWithMembers;
   history_Update_ResearchTopics: HistoryUpdateResearchTopic[];
+  author_ResearchTopics: Author_ResearchTopics[];
 };

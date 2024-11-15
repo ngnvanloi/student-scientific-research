@@ -14,7 +14,6 @@ export const useGetResearchProjectTopicDetail = (id: number) => {
 export async function GetResearchProjectTopicDetail(
   id: number
 ): Promise<IDataResponseFromAPI<ResearchProjectTopic>> {
-  //
   const response = (await communityRequest)(
     `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/ResearchTopic/${id}`,
     {

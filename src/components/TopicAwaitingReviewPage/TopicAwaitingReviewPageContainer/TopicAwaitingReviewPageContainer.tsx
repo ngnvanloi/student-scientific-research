@@ -36,7 +36,9 @@ const TopicAwaitingReviewPageContainer = () => {
                 </p>
                 <p className="mt-1 flex gap-2">
                   <UserGroupIcon width={16} />
-                  {item.coAuthors?.map((ite) => ite.name).join(", ")}
+                  {item.author_ResearchTopics
+                    ?.map((ite) => ite.author.name)
+                    .join(", ")}
                 </p>
                 <p className="flex gap-2">
                   <CalendarDateRangeIcon width={16} />

@@ -26,7 +26,26 @@ export type ResearchProjectTopic = {
   review_CommitteeId?: number;
   competitionName: string;
   supervisor: string;
-  coAuthors: Contributor[];
+  //coAuthors: Contributor[];
   review_Committees: ReviewCouncilWithMembers;
   history_Update_ResearchTopics: HistoryUpdateResearchTopic[];
+  author_ResearchTopics: Author_ResearchTopics[];
+};
+export type Author_ResearchTopics = {
+  researchTopicId: number;
+  authorId: number;
+  roleName: string;
+  author: {
+    id: number;
+    name: string;
+    dateOfBirth: string;
+    sex: string;
+    numberPhone: string;
+    facultyId: number;
+    facultyName: string;
+    internalCode: string;
+    accountId: number;
+    email: string;
+  };
+  deletedAt: any;
 };

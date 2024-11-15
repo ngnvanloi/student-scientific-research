@@ -11,11 +11,11 @@ export type ParamsGetListResearchTopicForReviewer = {
   idSearch?: number;
   nameTopicSearch?: string;
   isStatus: number;
+  competitionId?: number;
 };
 export const useGetListResearchTopicForReviewer = (
   params: ParamsGetListResearchTopicForReviewer
 ) => {
-  //
   return useQuery<
     IDataResponseFromAPI<
       IListDataResponseFromAPI<ResearchTopicWithContributors>

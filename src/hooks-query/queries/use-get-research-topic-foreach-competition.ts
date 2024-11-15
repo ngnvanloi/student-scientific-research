@@ -11,12 +11,13 @@ export type ParamsGetListResearchTopicForeachCompetition = {
   pageSize: number;
   nameTopicSearch?: string;
   disciplineId?: number;
+  acceptedForPublicationStatus?: number;
+  ReviewAcceptanceStatus?: number;
 };
 // Hook để sử dụng useQuery cho việc lấy thông tin
 export const useGetListResearchTopicForeachCompetition = (
   params: ParamsGetListResearchTopicForeachCompetition
 ) => {
-  //
   return useQuery<
     IDataResponseFromAPI<
       IListDataResponseFromAPI<ResearchTopicWithContributors>

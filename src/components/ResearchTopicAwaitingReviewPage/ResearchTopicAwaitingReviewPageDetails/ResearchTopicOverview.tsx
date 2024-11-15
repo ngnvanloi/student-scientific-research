@@ -1,7 +1,7 @@
 import { formatCurrencyVND, formatDate } from "@/helper/extension-function";
 import { ResearchProjectTopic } from "@/types/ResearchProjectTopic";
 import { Avatar, List } from "antd";
-import avatarMale from "../../../assets/icon/icons8-writer-female-48.png";
+import avatarMale from "../../../assets/icon/icons8-writer-male-48.png";
 import avatarFemale from "../../../assets/icon/icons8-writer-female-48.png";
 interface IProps {
   researchTopic: ResearchProjectTopic | undefined;
@@ -11,7 +11,7 @@ const ResearchTopicOverview = (props: IProps) => {
   return (
     <div className="flex flex-col gap-4 text-justify">
       <div className="">
-        <div className="text-xl font-semibold uppercase text-center">
+        <div className="text-xl font-semibold uppercase text-center my-4">
           {researchTopic?.nameTopic}
         </div>
       </div>
@@ -81,18 +81,22 @@ const ResearchTopicOverview = (props: IProps) => {
         <h4 className="font-semibold text-base">Danh sách tác giả</h4>
         <div className="">
           <List
-            dataSource={researchTopic?.coAuthors}
+            dataSource={researchTopic?.author_ResearchTopics}
             className="max-w-[500px]"
             renderItem={(item) => (
-              <List.Item key={item.email}>
+              <List.Item key={item.author.email}>
                 <List.Item.Meta
                   avatar={
                     <Avatar
-                      src={item.sex == "Nữ" ? avatarFemale.src : avatarMale.src}
+                      src={
+                        item.author.sex == "Nữ"
+                          ? avatarFemale.src
+                          : avatarMale.src
+                      }
                     />
                   }
-                  title={item.name}
-                  description={item.email}
+                  title={item.author.name}
+                  description={item.author.email}
                 />
                 <div>{item.roleName}</div>
               </List.Item>
