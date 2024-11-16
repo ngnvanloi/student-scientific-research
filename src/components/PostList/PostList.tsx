@@ -16,6 +16,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/hooks-query/queries/query-keys";
 import { usePostManagementContext } from "../UseContextProvider/PostManagementContext";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
+import { useGetListPostForOrganizer } from "@/hooks-query/queries/use-get-posts-for-organizer";
 
 const PostList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -82,7 +83,7 @@ const PostListForAdmin = () => {
   const { isChange, setIsChange } = usePostManagementContext();
 
   // REACT QUERY - GET POSTS
-  const { data, refetch } = useGetListPost(params);
+  const { data, refetch } = useGetListPostForOrganizer(params);
 
   // REFETCH POSTS
   useEffect(() => {

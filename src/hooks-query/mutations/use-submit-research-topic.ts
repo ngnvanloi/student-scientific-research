@@ -1,8 +1,9 @@
 import { communityRequest } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
-import type { IResponseFromAPI } from "@/types/Meta";
+import type { APIErrorResponse, IResponseFromAPI } from "@/types/Meta";
 import { getSession } from "next-auth/react";
 import { CoAuthor } from "@/types/CoAuthor";
+import { HTTPError } from "ky";
 
 export type ParamsSubmitResearchTopic = {
   nameTopic: string;
@@ -22,20 +23,28 @@ export type ParamsSubmitResearchTopic = {
   coAuthors?: CoAuthor[];
 };
 
-export const useSubmitResearchTopicMutation = () => {
+export const useSubmitResearchTopicMutation = (
+  onErrorCallback?: (msg: string) => void
+) => {
   return useMutation<
     IResponseFromAPI,
-    Error,
+    APIErrorResponse,
     ParamsSubmitResearchTopic,
     unknown
   >({
     mutationFn: (data) => submitResearchTopic(data),
     onMutate: () => {},
     onSuccess: (result) => {
-      console.log("Check result if successfully: ", JSON.stringify(result));
+      console.log(
+        "Check result if submit research topic successfully: ",
+        JSON.stringify(result)
+      );
     },
     onError: (err) => {
       console.log("Error submit research topic: ", err);
+      if (onErrorCallback) {
+        onErrorCallback(err.errorMessage);
+      }
     },
   });
 };
@@ -62,7 +71,18 @@ export async function submitResearchTopic(
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error creating post:", error);
-    throw error;
+    if (error instanceof HTTPError) {
+      // Lấy thông tin lỗi từ response của server
+      const errorResponse = await error.response.json();
+      throw {
+        errorCode: errorResponse.errorCode,
+        errorMessage: errorResponse.errorMessage,
+      };
+    }
+    // Xử lý các lỗi khác
+    throw {
+      errorCode: "UnknownError",
+      errorMessage: "An unknown error occurred",
+    };
   }
 }

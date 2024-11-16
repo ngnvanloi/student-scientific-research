@@ -1,8 +1,6 @@
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
 import type { APIErrorResponse, IDataResponseFromAPI } from "@/types/Meta";
-import { UploadFile } from "antd";
-import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
 import ky, { HTTPError } from "ky";
 

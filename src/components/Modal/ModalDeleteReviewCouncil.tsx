@@ -1,10 +1,11 @@
 "use client";
 import * as Dialog from "@radix-ui/react-dialog";
-import { QueryClient } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useDeleteReviewCouncilMutation } from "@/hooks-query/mutations/use-delete-review-council-mutation";
 import { useGetReviewCouncilDetail } from "@/hooks-query/queries/use-get-review-council-detail";
+import { Alert } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
 
 interface IProps {
   isOpen: boolean;
@@ -32,7 +33,10 @@ const ModalDeleteReviewCouncil = (props: IProps) => {
   }, [reviewCouncilID, isOpen, refetchData]);
 
   // HANDLE LOGIC
-  const deletePostMutation = useDeleteReviewCouncilMutation();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const deletePostMutation = useDeleteReviewCouncilMutation((msg) => {
+    setErrorMessage(msg);
+  });
 
   const handleOnDelete = () => {
     deletePostMutation.mutate(reviewCouncilID, {
@@ -86,6 +90,21 @@ const ModalDeleteReviewCouncil = (props: IProps) => {
                   thực hiện thao tác
                 </p>
               </Dialog.Description>
+              {errorMessage && (
+                <div className="m-4">
+                  <Alert
+                    message="Oops! Đã có lỗi xảy ra"
+                    description={errorMessage}
+                    type="error"
+                    closable={{
+                      "aria-label": "close",
+                      closeIcon: <CloseOutlined />,
+                    }}
+                    onClose={() => setErrorMessage(null)}
+                    showIcon
+                  />
+                </div>
+              )}
               <div className="items-center gap-2 mt-3 text-sm sm:flex">
                 <div>
                   <button

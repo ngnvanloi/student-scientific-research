@@ -5,7 +5,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { useForm, useWatch } from "react-hook-form";
 
 import { FormReviewAssignment } from "../FormCard/ZodSchema";
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
@@ -42,6 +42,7 @@ import {
   MemberOfCouncil,
   ReviewCouncilWithMembers,
 } from "@/types/ReviewCouncilWithMembers";
+import { CloseOutlined } from "@ant-design/icons";
 
 interface IProps {
   isOpen: boolean;
@@ -63,7 +64,10 @@ const ModalReviewAssignment = (props: IProps) => {
   const { data: listReviewCouncil } =
     useGetListReviewCouncilForEachCompetition(params);
 
-  const { mutate, isPending, isError } = useReviewAssignmentMutation();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { mutate, isPending, isError } = useReviewAssignmentMutation((msg) => {
+    setErrorMessage(msg);
+  });
   const { mutate: notiMutation } = useCreateNotificationMutation();
 
   const listReviewCouncilName: SelectItem[] | undefined =
@@ -89,25 +93,26 @@ const ModalReviewAssignment = (props: IProps) => {
   });
 
   // Sử dụng useWatch để theo dõi sự thay đổi của review_CommitteeId
-  const selectedCommitteeId = useWatch({
+  let selectedCommitteeId = useWatch({
     control,
     name: "review_CommitteeId",
   });
 
   // Fetch danh sách reviewer dựa trên selectedCommitteeId
-  const { data: fetchedListReviewer } = useGetReviewCouncilDetail(
+  const { data: fetchedListReviewer, refetch } = useGetReviewCouncilDetail(
     Number(selectedCommitteeId)
   );
 
   useEffect(() => {
     if (fetchedListReviewer?.data) {
+      refetch();
       console.log(
         "-==============> fetched reviewers: ",
         JSON.stringify(fetchedListReviewer.data, null, 2)
       );
       setListReviewer(fetchedListReviewer.data);
     }
-  }, [fetchedListReviewer]);
+  }, [fetchedListReviewer, selectedCommitteeId]);
 
   const onSubmit = (data: TFormReviewAssignment) => {
     let params: ParamsReviewAssignment = {
@@ -142,7 +147,7 @@ const ModalReviewAssignment = (props: IProps) => {
             };
             notiMutation(paramsNoti);
           });
-
+          setErrorMessage(null);
           setIsOpen(false);
           reset();
         },
@@ -214,6 +219,21 @@ const ModalReviewAssignment = (props: IProps) => {
                 />
               </div>
             </Dialog.Description>
+            {errorMessage && (
+              <div className="m-4">
+                <Alert
+                  message="Oops! Đã có lỗi xảy ra"
+                  description={errorMessage}
+                  type="error"
+                  closable={{
+                    "aria-label": "close",
+                    closeIcon: <CloseOutlined />,
+                  }}
+                  onClose={() => setErrorMessage(null)}
+                  showIcon
+                />
+              </div>
+            )}
             <div className="flex items-center gap-3 p-4 border-t">
               <Dialog.Close asChild>
                 <Button

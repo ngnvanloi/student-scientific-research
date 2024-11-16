@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { TFormAddPost } from "../FormCard/FormInputsData";
 import { FormAddPostSchema } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import RichTextEditor from "../RichTextEditor/RichTextEditor";
 import React, { useState } from "react";
 import ClickFileUpload from "../UploadFile/ClickFileUpload";
@@ -23,6 +23,7 @@ import { ParamsRegisterCompetiton } from "@/hooks-query/mutations/use-register-c
 import { useToast } from "@/hooks/use-toast";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import DateTimePicker from "../DatePicker/DateTimePicker";
+import { CloseOutlined } from "@ant-design/icons";
 
 const ModalAddNewPost = () => {
   // STATE
@@ -30,8 +31,11 @@ const ModalAddNewPost = () => {
   const [file, setFile] = useState<File>();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const { toast } = useToast();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate, isSuccess, isError, error, isPending } =
-    useCreatePostMutation();
+    useCreatePostMutation((msg) => {
+      setErrorMessage(msg);
+    });
   const {
     mutate: fileMutation,
     isSuccess: fileIsSuccess,
@@ -120,7 +124,7 @@ const ModalAddNewPost = () => {
             });
             setIsChange(true);
             setIsOpen(false);
-
+            setErrorMessage(null);
             setContent("");
             setDate(new Date());
             setFile(undefined);
@@ -205,6 +209,21 @@ const ModalAddNewPost = () => {
                 /> */}
               </div>
             </Dialog.Description>
+            {errorMessage && (
+              <div className="m-4">
+                <Alert
+                  message="Oops! Đã có lỗi xảy ra"
+                  description={errorMessage}
+                  type="error"
+                  closable={{
+                    "aria-label": "close",
+                    closeIcon: <CloseOutlined />,
+                  }}
+                  onClose={() => setErrorMessage(null)}
+                  showIcon
+                />
+              </div>
+            )}
             <div className="flex items-center gap-3 p-4 border-t">
               <Dialog.Close asChild>
                 <Button

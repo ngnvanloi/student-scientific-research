@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import FormField from "../FormCard/FormInputField";
 import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
 import RichTextEditor from "../RichTextEditor/RichTextEditor";
@@ -7,7 +7,7 @@ import {
   columns,
   DataTableAddContributors,
 } from "../DataTable/DataTableAddCoAuthor";
-import { PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useGetListDiscipline } from "@/hooks-query/queries/use-get-discipline";
 import { CoAuthor } from "@/types/CoAuthor";
@@ -68,13 +68,16 @@ const FormUpdateArticle = (props: IProps) => {
     isPending: fileArticleIsPending,
   } = useUploadFileMutation();
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const {
     mutate: mutate,
     isSuccess: isSuccess,
     isError: isError,
     error: error,
     isPending: isPending,
-  } = useUpdateArticleMutation();
+  } = useUpdateArticleMutation((msg) => {
+    setErrorMessage(msg);
+  });
   console.log(
     ">>>>>>>>>> checking listTempContributor: ",
     JSON.stringify(listTempContributor, null, 2)
@@ -192,6 +195,7 @@ const FormUpdateArticle = (props: IProps) => {
               title: "",
               disciplineId: "",
             });
+            setErrorMessage(null);
             setFileArticle(undefined);
             setListContributors([]);
             setIsOpen(false);
@@ -320,6 +324,22 @@ const FormUpdateArticle = (props: IProps) => {
               setFile={setFileArticle}
             />
           </div>
+
+          {errorMessage && (
+            <div className="mt-4">
+              <Alert
+                message="Oops! Đã có lỗi xảy ra"
+                description={errorMessage}
+                type="error"
+                closable={{
+                  "aria-label": "close",
+                  closeIcon: <CloseOutlined />,
+                }}
+                onClose={() => setErrorMessage(null)}
+                showIcon
+              />
+            </div>
+          )}
 
           <Button
             onClick={handleSubmit(onSubmit, onError)}

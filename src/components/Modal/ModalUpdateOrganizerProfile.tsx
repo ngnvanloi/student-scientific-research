@@ -9,7 +9,7 @@ import {
 } from "../FormCard/FormInputsData";
 import { FormUpdateOrganizerSchema } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
@@ -19,6 +19,7 @@ import {
   ParamsUpdateOrganizerProfile,
   useUpdateOrganizerProfileMutation,
 } from "@/hooks-query/mutations/use-update-organizer-profile-mutation";
+import { CloseOutlined } from "@ant-design/icons";
 
 interface IProps {
   isOpen: boolean;
@@ -39,8 +40,12 @@ const ModalUpdateOrganizerProfile = (props: IProps) => {
   );
   console.log("checking list faculty: ", listFaculty);
   // MUTATION
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const { mutate, isPending, isSuccess, isError } =
-    useUpdateOrganizerProfileMutation();
+    useUpdateOrganizerProfileMutation((msg) => {
+      setErrorMessage(msg);
+    });
   const { toast } = useToast();
   // REACT HOOK FORM
   const {
@@ -101,6 +106,7 @@ const ModalUpdateOrganizerProfile = (props: IProps) => {
           });
           setIsChange(true);
           setIsOpen(false);
+          setErrorMessage(null);
         },
         onError: (error) => {
           alert("Lỗi khi cập nhật profile: " + error);
@@ -200,6 +206,22 @@ const ModalUpdateOrganizerProfile = (props: IProps) => {
                 />
               </div>
             </Dialog.Description>
+            {errorMessage && (
+              <div className="m-4">
+                <Alert
+                  message="Oops! Đã có lỗi xảy ra"
+                  description={errorMessage}
+                  type="error"
+                  closable={{
+                    "aria-label": "close",
+                    closeIcon: <CloseOutlined />,
+                  }}
+                  onClose={() => setErrorMessage(null)}
+                  showIcon
+                />
+              </div>
+            )}
+
             <div className="flex items-center gap-3 p-4 border-t">
               <Dialog.Close asChild>
                 <Button

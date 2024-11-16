@@ -15,6 +15,9 @@ import {
 } from "@/hooks-query/mutations/use-register-mutation";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { Alert } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
 
 const RegisterForm = () => {
   const router = useRouter();
@@ -23,8 +26,11 @@ const RegisterForm = () => {
   if (session) {
     router.push("/");
   }
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate, isSuccess, isError, error, isPending } =
-    useRegisterAccountMutation();
+    useRegisterAccountMutation((msg) => {
+      setErrorMessage(msg);
+    });
 
   // REACT HOOK FORM
   const {
@@ -47,6 +53,10 @@ const RegisterForm = () => {
       roleName: "author",
     };
 
+    // gọi API xác thực OTP
+    // => xác thực => đúng => lấy formData và gọi hàm đăng kí (mã otp có hạn)
+    // gửi lại OTP
+
     // gọi API đăng kí
     mutate(formData, {
       onSuccess: () => {
@@ -57,6 +67,7 @@ const RegisterForm = () => {
           description:
             "Tạo tài khoản thành công, vui lòng chuyển trang Login đăng nhập vào hệ thống",
         });
+        setErrorMessage(null);
         router.push("/login");
         // window.location.reload();
       },
@@ -184,6 +195,22 @@ const RegisterForm = () => {
                 className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
               />
             </div>
+            {errorMessage && (
+              <div className="m-4">
+                <Alert
+                  message="Oops! Đã có lỗi xảy ra"
+                  description={errorMessage}
+                  type="error"
+                  closable={{
+                    "aria-label": "close",
+                    closeIcon: <CloseOutlined />,
+                  }}
+                  onClose={() => setErrorMessage(null)}
+                  showIcon
+                />
+              </div>
+            )}
+
             <button
               type="submit"
               className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"

@@ -121,7 +121,7 @@ const NotificationCard = (props: IProps) => {
     }
     // REDIRECT TO REVIEWER
     else if (notification.notificationTypeId === 3) {
-      if (session?.user?.roleName === "author ") {
+      if (session?.user?.roleName === "author") {
         router.push(
           `/author/research-topic-awaiting-review/${notification.targetId}`
         );

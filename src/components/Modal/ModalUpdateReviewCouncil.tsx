@@ -6,12 +6,12 @@ import { useForm } from "react-hook-form";
 import { TFormEstablishReviewCouncil } from "../FormCard/FormInputsData";
 import { FormEstablishReviewCouncil } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { DatePicker } from "../DatePicker/DatePicker";
 import { useToast } from "@/hooks/use-toast";
 import { ModalAddReviewerForCouncil } from "./ModalAddReviewerForCouncil";
-import { PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { ReviewBoardMembers } from "@/types/ReviewBoardMembers";
 import {
   columns,
@@ -34,8 +34,12 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
   const { isOpen, setIsOpen, reviewCouncil } = props;
   console.log("==== checking reviewCouncil update: ", reviewCouncil);
   // MUTATION
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate, isPending, isSuccess, isError } =
-    useUpdateReviewCouncilMutation();
+    useUpdateReviewCouncilMutation((msg) => {
+      setErrorMessage(msg);
+    });
+
   const listReviewPreviously: ReviewBoardMembers[] =
     reviewCouncil?.reviewBoardMembers.map((item) => {
       return {
@@ -126,6 +130,7 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
           reset({
             name: "",
           });
+          setErrorMessage(null);
           setListReviewer([]);
           setDateStart(new Date());
           setDateEnd(() => {
@@ -219,6 +224,21 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
                   />
                 </div>
               </Dialog.Description>
+              {errorMessage && (
+                <div className="m-4">
+                  <Alert
+                    message="Oops! Đã có lỗi xảy ra"
+                    description={errorMessage}
+                    type="error"
+                    closable={{
+                      "aria-label": "close",
+                      closeIcon: <CloseOutlined />,
+                    }}
+                    onClose={() => setErrorMessage(null)}
+                    showIcon
+                  />
+                </div>
+              )}
               <div className="flex items-center gap-3 p-4 border-t">
                 <Dialog.Close asChild>
                   <Button

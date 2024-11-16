@@ -1,17 +1,24 @@
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
-import type { IDataResponseFromAPI, IResponseFromAPI } from "@/types/Meta";
+import type {
+  APIErrorResponse,
+  IDataResponseFromAPI,
+  IResponseFromAPI,
+} from "@/types/Meta";
 import { getSession } from "next-auth/react";
 import { CoAuthor } from "@/types/CoAuthor";
+import { HTTPError } from "ky";
 
 export type ParamsReviewAssignment = {
   review_CommitteeId: number | string;
 };
 
-export const useReviewAssignmentMutation = () => {
+export const useReviewAssignmentMutation = (
+  onErrorCallback?: (msg: string) => void
+) => {
   return useMutation<
     IResponseFromAPI,
-    Error,
+    APIErrorResponse,
     { researchTopicId: number; params: ParamsReviewAssignment },
     unknown
   >({
@@ -22,7 +29,10 @@ export const useReviewAssignmentMutation = () => {
       console.log("Check result if successfully: ", JSON.stringify(result));
     },
     onError: (err) => {
-      console.log("Error updating: ", err);
+      console.log("Error review assignment: ", err);
+      if (onErrorCallback) {
+        onErrorCallback(err.errorMessage);
+      }
     },
   });
 };
@@ -58,7 +68,18 @@ export async function updateResearchTopic(
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error updating post:", error);
-    throw error;
+    if (error instanceof HTTPError) {
+      // Lấy thông tin lỗi từ response của server
+      const errorResponse = await error.response.json();
+      throw {
+        errorCode: errorResponse.errorCode,
+        errorMessage: errorResponse.errorMessage,
+      };
+    }
+    // Xử lý các lỗi khác
+    throw {
+      errorCode: "UnknownError",
+      errorMessage: "An unknown error occurred",
+    };
   }
 }

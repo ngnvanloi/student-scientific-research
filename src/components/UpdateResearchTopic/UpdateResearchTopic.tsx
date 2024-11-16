@@ -1,11 +1,11 @@
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import FormField from "../FormCard/FormInputField";
 import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
 import {
   columns,
   DataTableAddContributors,
 } from "../DataTable/DataTableAddCoAuthor";
-import { PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useGetListDiscipline } from "@/hooks-query/queries/use-get-discipline";
 import { CoAuthor } from "@/types/CoAuthor";
@@ -84,8 +84,12 @@ const FormUpdateResearchTopic = (props: IProps) => {
   // TOAST
   const { toast } = useToast();
   // MUTATION DECLARE
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const { mutate, isSuccess, isError, error, isPending } =
-    useUpdateResearchTopicMutation();
+    useUpdateResearchTopicMutation((msg) => {
+      setErrorMessage(msg);
+    });
   const {
     mutate: fileReportMutation,
     isSuccess: fileIsSuccess,
@@ -274,6 +278,7 @@ const FormUpdateResearchTopic = (props: IProps) => {
               articleId: "",
               competitionId: 0,
             });
+            setErrorMessage(null);
             setFileBudget(undefined);
             setFileProduct(undefined);
             setFileReport(undefined);
@@ -536,6 +541,22 @@ const FormUpdateResearchTopic = (props: IProps) => {
           <ClickFileUpload limit={1} multiple={false} setFile={setFileBudget} />
         </div>
       </div>
+
+      {errorMessage && (
+        <div className="mt-4">
+          <Alert
+            message="Oops! Đã có lỗi xảy ra"
+            description={errorMessage}
+            type="error"
+            closable={{
+              "aria-label": "close",
+              closeIcon: <CloseOutlined />,
+            }}
+            onClose={() => setErrorMessage(null)}
+            showIcon
+          />
+        </div>
+      )}
       <Button
         onClick={handleSubmit(onSubmit, onError)}
         className="my-3"

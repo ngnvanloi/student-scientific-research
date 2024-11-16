@@ -18,7 +18,7 @@ const ResearchTopicAwaitingReviewPageContainer = () => {
   let params: ParamsGetListResearchTopicForReviewer = {
     index: 1,
     pageSize: 100,
-    isStatus: 1,
+    isStatus: 0,
   };
   const { data: listResearchTopicAwaitingReview } =
     useGetListResearchTopicForReviewer(params);

@@ -33,6 +33,9 @@ const LoginForm = () => {
       email: data.email,
       password: data.password,
     };
+    // chuyển hướng trang sang xác thực otp
+
+    // thực hiện login
     await authenticate(formData);
     if (!session?.expires) {
       router.push("/");

@@ -10,7 +10,7 @@ export type ReviewCouncilWithMembers = {
 
 export type MemberOfCouncil = {
   isStatus?: boolean;
-  description?: string;
+  description: string;
   id: number;
   name: string;
   dateOfBirth: string;

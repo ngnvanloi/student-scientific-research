@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TFormSubmitArticle } from "../FormCard/FormInputsData";
 import { FormSubmitArticle } from "../FormCard/ZodSchema";
@@ -18,7 +18,7 @@ import {
   DataTableAddContributors,
 } from "../DataTable/DataTableAddCoAuthor";
 import { CoAuthor } from "@/types/CoAuthor";
-import { PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { ModalAddContributor } from "../Modal/ModalAddContributorArticle";
 import {
   ParamsSubmitArticle,
@@ -50,7 +50,12 @@ const SubmitArticleComponent = () => {
   // TOAST
   const { toast } = useToast();
   // MUTATION DECLARE
-  const { mutate, isSuccess, isError, error } = useSubmitArticleMutation();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { mutate, isSuccess, isError, error } = useSubmitArticleMutation(
+    (msg) => {
+      setErrorMessage(msg);
+    }
+  );
   const {
     mutate: fileMutation,
     isSuccess: fileIsSuccess,
@@ -133,7 +138,7 @@ const SubmitArticleComponent = () => {
             setKeywords([]);
             setListContributors([]);
             setDate(new Date());
-
+            setErrorMessage(null);
             // gửi thông báo cho super admin
             const paramsNoti: ParamsCreateNotification = {
               notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.article.author}`,
@@ -255,7 +260,21 @@ const SubmitArticleComponent = () => {
               </label>
               <DragFileUpload limit={1} multiple={false} setFile={setFile} />
             </div>
-
+            {errorMessage && (
+              <div className="mt-2">
+                <Alert
+                  message="Oops! Đã có lỗi xảy ra"
+                  description={errorMessage}
+                  type="error"
+                  closable={{
+                    "aria-label": "close",
+                    closeIcon: <CloseOutlined />,
+                  }}
+                  onClose={() => setErrorMessage(null)}
+                  showIcon
+                />
+              </div>
+            )}
             <Button
               onClick={handleSubmit(onSubmit, onError)}
               className="mt-4"

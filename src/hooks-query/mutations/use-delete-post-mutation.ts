@@ -1,12 +1,20 @@
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { IDataResponseFromAPI } from "@/types/Meta";
+import type { APIErrorResponse, IDataResponseFromAPI } from "@/types/Meta";
 import { queryKeys } from "../queries/query-keys";
+import { HTTPError } from "ky";
 
-export const useDeletePostMutation = () => {
+export const useDeletePostMutation = (
+  onErrorCallback?: (msg: string) => void
+) => {
   const queryClient = useQueryClient();
 
-  return useMutation<IDataResponseFromAPI<null>, Error, number, unknown>({
+  return useMutation<
+    IDataResponseFromAPI<null>,
+    APIErrorResponse,
+    number,
+    unknown
+  >({
     mutationFn: (postID) => deletePost(postID),
     onMutate: () => {},
     onSuccess: (result) => {
@@ -18,6 +26,9 @@ export const useDeletePostMutation = () => {
     },
     onError: (err) => {
       console.log("Error delete post: ", err);
+      if (onErrorCallback) {
+        onErrorCallback(err.errorMessage);
+      }
     },
   });
 };
@@ -36,7 +47,18 @@ export async function deletePost(
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error delete post:", error);
-    throw error;
+    if (error instanceof HTTPError) {
+      // Lấy thông tin lỗi từ response của server
+      const errorResponse = await error.response.json();
+      throw {
+        errorCode: errorResponse.errorCode,
+        errorMessage: errorResponse.errorMessage,
+      };
+    }
+    // Xử lý các lỗi khác
+    throw {
+      errorCode: "UnknownError",
+      errorMessage: "An unknown error occurred",
+    };
   }
 }

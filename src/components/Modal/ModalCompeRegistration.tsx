@@ -2,7 +2,7 @@
 import { CloseModalIcon } from "@/assets/svg/close.modal";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useForm } from "react-hook-form";
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import DragFileUpload from "../UploadFile/DragFileUpload";
 import { useGetCompetitionDetail } from "@/hooks-query/queries/use-get-competition";
@@ -21,6 +21,7 @@ import {
 import { getSession, useSession } from "next-auth/react";
 import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
+import { CloseOutlined } from "@ant-design/icons";
 
 interface IProps {
   isOpen: boolean;
@@ -54,8 +55,11 @@ const ModalCompetitionRegistration = (props: IProps) => {
   const [file, setFile] = useState<File>();
 
   // REACT QUERY
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate, isSuccess, isError, error, isPending } =
-    useRegisterCompetitonMutation();
+    useRegisterCompetitonMutation((msg) => {
+      setErrorMessage(msg);
+    });
   const {
     mutate: fileMutation,
     isSuccess: fileIsSuccess,
@@ -111,6 +115,7 @@ const ModalCompetitionRegistration = (props: IProps) => {
                 console.error("Lỗi khi gửi thông báo:", error);
               },
             });
+            setErrorMessage(null);
             route.push("/competitions");
             setIsOpen(false);
             setFile(undefined);
@@ -157,6 +162,21 @@ const ModalCompetitionRegistration = (props: IProps) => {
                 <DragFileUpload limit={1} multiple={false} setFile={setFile} />
               </div>
             </Dialog.Description>
+            {errorMessage && (
+              <div className="m-4">
+                <Alert
+                  message="Oops! Đã có lỗi xảy ra"
+                  description={errorMessage}
+                  type="error"
+                  closable={{
+                    "aria-label": "close",
+                    closeIcon: <CloseOutlined />,
+                  }}
+                  onClose={() => setErrorMessage(null)}
+                  showIcon
+                />
+              </div>
+            )}
             <div className="flex items-center gap-3 p-4 border-t">
               <Dialog.Close asChild>
                 <Button

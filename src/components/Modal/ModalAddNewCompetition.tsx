@@ -4,19 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useForm } from "react-hook-form";
 import { TFormAddCompetition, TFormAddPost } from "../FormCard/FormInputsData";
-import {
-  FormAddCompetitonSchema,
-  FormAddPostSchema,
-} from "../FormCard/ZodSchema";
+import { FormAddCompetitonSchema } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
-import { Button } from "antd";
-import RichTextEditor from "../RichTextEditor/RichTextEditor";
+import { Alert, Button } from "antd";
 import React, { useState } from "react";
-import ClickFileUpload from "../UploadFile/ClickFileUpload";
-import { DatePicker } from "../DatePicker/DatePicker";
-import { useCreatePostMutation } from "@/hooks-query/mutations/use-create-post-mutation";
-import DragFileUpload from "../UploadFile/DragFileUpload";
-import { usePostManagementContext } from "../UseContextProvider/PostManagementContext";
 import { useCompetitionManagementContext } from "../UseContextProvider/CompetitionManagementContext";
 import {
   ParamsCreateCompetition,
@@ -24,6 +15,7 @@ import {
 } from "@/hooks-query/mutations/use-create-competition-mutation";
 import { useToast } from "@/hooks/use-toast";
 import DateTimePicker from "../DatePicker/DateTimePicker";
+import { CloseOutlined, CloseSquareFilled } from "@ant-design/icons";
 
 const ModalAddNewCompetition = () => {
   // STATE
@@ -82,7 +74,7 @@ const ModalAddNewCompetition = () => {
         });
         setIsChange(true);
         setIsOpen(false);
-
+        setErrorMessage(null);
         setContent("");
         setDateStart(new Date());
         setDateEnd(new Date());
@@ -117,9 +109,6 @@ const ModalAddNewCompetition = () => {
               </Dialog.Close>
             </div>
             <Dialog.Description className="space-y-2 p-4 mt-3 text-[15.5px] leading-relaxed text-gray-500">
-              {errorMessage && (
-                <p style={{ color: "red" }}>Error: {errorMessage}</p>
-              )}
               <div className="grid grid-cols-3 gap-5">
                 <div className="basis-1/3">
                   <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
@@ -185,6 +174,21 @@ const ModalAddNewCompetition = () => {
                 />
               </div>
             </Dialog.Description>
+            {errorMessage && (
+              <div className="m-4">
+                <Alert
+                  message="Oops! Đã có lỗi xảy ra"
+                  description={errorMessage}
+                  type="error"
+                  closable={{
+                    "aria-label": "close",
+                    closeIcon: <CloseOutlined />,
+                  }}
+                  onClose={() => setErrorMessage(null)}
+                  showIcon
+                />
+              </div>
+            )}
             <div className="flex items-center gap-3 p-4 border-t">
               <Dialog.Close asChild>
                 <Button

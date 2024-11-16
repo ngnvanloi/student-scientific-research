@@ -6,19 +6,16 @@ import { useForm } from "react-hook-form";
 import { TFormAddPost } from "../FormCard/FormInputsData";
 import { FormAddPostSchema } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import RichTextEditor from "../RichTextEditor/RichTextEditor";
 import React, { useEffect, useState } from "react";
 import ClickFileUpload from "../UploadFile/ClickFileUpload";
-import { DatePicker } from "../DatePicker/DatePicker";
 import { usePostManagementContext } from "../UseContextProvider/PostManagementContext";
 import { useGetPostDetail } from "@/hooks-query/queries/use-get-post";
-import {
-  ParamsUpdatePost,
-  useUpdatePostMutation,
-} from "@/hooks-query/mutations/use-update-post-mutation";
+import { useUpdatePostMutation } from "@/hooks-query/mutations/use-update-post-mutation";
 import { useToast } from "@/hooks/use-toast";
 import DateTimePicker from "../DatePicker/DateTimePicker";
+import { CloseOutlined } from "@ant-design/icons";
 
 interface IProps {
   isOpen: boolean;
@@ -32,7 +29,10 @@ const ModalUpdatePost = (props: IProps) => {
   const [file, setFile] = useState<File>();
   const [fileList, setFileList] = useState<File[]>([]);
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const { mutate, isSuccess, isError, error } = useUpdatePostMutation();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { mutate, isSuccess, isError, error } = useUpdatePostMutation((msg) => {
+    setErrorMessage(msg);
+  });
   const { toast } = useToast();
   // USE PROVIDER CONTEXT
   const { setIsChange } = usePostManagementContext();
@@ -100,7 +100,7 @@ const ModalUpdatePost = (props: IProps) => {
           });
           setIsChange(true);
           setIsOpen(false);
-
+          setErrorMessage(null);
           setContent("");
           setDate(new Date());
           setFile(undefined);
@@ -180,6 +180,21 @@ const ModalUpdatePost = (props: IProps) => {
                 /> */}
               </div>
             </Dialog.Description>
+            {errorMessage && (
+              <div className="m-4">
+                <Alert
+                  message="Oops! Đã có lỗi xảy ra"
+                  description={errorMessage}
+                  type="error"
+                  closable={{
+                    "aria-label": "close",
+                    closeIcon: <CloseOutlined />,
+                  }}
+                  onClose={() => setErrorMessage(null)}
+                  showIcon
+                />
+              </div>
+            )}
             <div className="flex items-center gap-3 p-4 border-t">
               <Dialog.Close asChild>
                 <Button

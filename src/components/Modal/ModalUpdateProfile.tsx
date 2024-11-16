@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { TFormUpdateAuthor } from "../FormCard/FormInputsData";
 import { FormUpdateAuthorSchema } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { DatePicker } from "../DatePicker/DatePicker";
 import { useToast } from "@/hooks/use-toast";
@@ -21,6 +21,7 @@ import {
 import { string } from "zod";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import DateTimePicker from "../DatePicker/DateTimePicker";
+import { CloseOutlined } from "@ant-design/icons";
 
 const gender: SelectItem[] = [
   { id: "Nam", name: "Nam" },
@@ -50,8 +51,11 @@ const ModalUpdateProfile = (props: IProps) => {
   const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(new Date());
 
   // MUTATION
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate, isPending, isSuccess, isError } =
-    useUpdateAuthorProfileMutation();
+    useUpdateAuthorProfileMutation((msg) => {
+      setErrorMessage(msg);
+    });
   const { toast } = useToast();
   // REACT HOOK FORM
   const {
@@ -118,6 +122,7 @@ const ModalUpdateProfile = (props: IProps) => {
             variant: "default",
             description: "Bạn đã cập nhật thông tin cá nhân thành công",
           });
+          setErrorMessage(null);
           setIsChange(true);
           setIsOpen(false);
         },
@@ -224,6 +229,22 @@ const ModalUpdateProfile = (props: IProps) => {
                 />
               </div>
             </Dialog.Description>
+            {errorMessage && (
+              <div className="m-4">
+                <Alert
+                  message="Oops! Đã có lỗi xảy ra"
+                  description={errorMessage}
+                  type="error"
+                  closable={{
+                    "aria-label": "close",
+                    closeIcon: <CloseOutlined />,
+                  }}
+                  onClose={() => setErrorMessage(null)}
+                  showIcon
+                />
+              </div>
+            )}
+
             <div className="flex items-center gap-3 p-4 border-t">
               <Dialog.Close asChild>
                 <Button

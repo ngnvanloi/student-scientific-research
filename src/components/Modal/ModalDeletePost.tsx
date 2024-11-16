@@ -1,13 +1,12 @@
 "use client";
 import { useDeletePostMutation } from "@/hooks-query/mutations/use-delete-post-mutation";
-import { queryKeys } from "@/hooks-query/queries/query-keys";
 import { useGetPostDetail } from "@/hooks-query/queries/use-get-post";
-import { IDataResponseFromAPI } from "@/types/Meta";
 import * as Dialog from "@radix-ui/react-dialog";
-import { QueryClient } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { usePostManagementContext } from "../UseContextProvider/PostManagementContext";
 import { useToast } from "@/hooks/use-toast";
+import { Alert } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
 
 interface IProps {
   isOpen: boolean;
@@ -33,7 +32,10 @@ const ModalDeletePost = (props: IProps) => {
   }, [postID, isOpen, refetchData]);
 
   // HANDLE LOGIC
-  const deletePostMutation = useDeletePostMutation();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const deletePostMutation = useDeletePostMutation((msg) => {
+    setErrorMessage(msg);
+  });
   const handleOnDelete = () => {
     deletePostMutation.mutate(postID, {
       onSuccess: () => {
@@ -89,6 +91,21 @@ const ModalDeletePost = (props: IProps) => {
                   thực hiện thao tác
                 </p>
               </Dialog.Description>
+              {errorMessage && (
+                <div className="m-4">
+                  <Alert
+                    message="Oops! Đã có lỗi xảy ra"
+                    description={errorMessage}
+                    type="error"
+                    closable={{
+                      "aria-label": "close",
+                      closeIcon: <CloseOutlined />,
+                    }}
+                    onClose={() => setErrorMessage(null)}
+                    showIcon
+                  />
+                </div>
+              )}
               <div className="items-center gap-2 mt-3 text-sm sm:flex">
                 <div>
                   <button

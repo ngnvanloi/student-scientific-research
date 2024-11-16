@@ -1,10 +1,11 @@
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { IDataResponseFromAPI } from "@/types/Meta";
+import type { APIErrorResponse, IDataResponseFromAPI } from "@/types/Meta";
 import { UploadFile } from "antd";
 import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
 import { queryKeys } from "../queries/query-keys";
+import { HTTPError } from "ky";
 
 export type ParamsCreatePost = {
   title: string;
@@ -12,11 +13,13 @@ export type ParamsCreatePost = {
   dateUpload: string | Date | undefined;
   filePath?: string;
 };
-export const useCreatePostMutation = () => {
+export const useCreatePostMutation = (
+  onErrorCallback?: (msg: string) => void
+) => {
   const queryClient = useQueryClient();
   return useMutation<
     IDataResponseFromAPI<null>,
-    Error,
+    APIErrorResponse,
     ParamsCreatePost,
     unknown
   >({
@@ -31,6 +34,9 @@ export const useCreatePostMutation = () => {
     },
     onError: (err) => {
       console.log("Error creating post: ", err);
+      if (onErrorCallback) {
+        onErrorCallback(err.errorMessage);
+      }
     },
   });
 };
@@ -55,8 +61,19 @@ export async function createNewPost(
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error creating post:", error);
-    throw error;
+    if (error instanceof HTTPError) {
+      // Lấy thông tin lỗi từ response của server
+      const errorResponse = await error.response.json();
+      throw {
+        errorCode: errorResponse.errorCode,
+        errorMessage: errorResponse.errorMessage,
+      };
+    }
+    // Xử lý các lỗi khác
+    throw {
+      errorCode: "UnknownError",
+      errorMessage: "An unknown error occurred",
+    };
   }
 }
 

@@ -1,9 +1,10 @@
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
-import type { IDataResponseFromAPI } from "@/types/Meta";
+import type { APIErrorResponse, IDataResponseFromAPI } from "@/types/Meta";
 import { UploadFile } from "antd";
 import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
+import { HTTPError } from "ky";
 
 export type ParamsUpdatePost = {
   Title: string;
@@ -12,10 +13,12 @@ export type ParamsUpdatePost = {
   FilePath?: string;
 };
 
-export const useUpdatePostMutation = () => {
+export const useUpdatePostMutation = (
+  onErrorCallback?: (msg: string) => void
+) => {
   return useMutation<
     IDataResponseFromAPI<null>,
-    Error,
+    APIErrorResponse,
     { data: FormData; params: ParamsUpdatePost },
     unknown
   >({
@@ -23,12 +26,15 @@ export const useUpdatePostMutation = () => {
     onMutate: () => {},
     onSuccess: (result) => {
       console.log(
-        "Check result if create post successfully: ",
+        "Check result if update post successfully: ",
         JSON.stringify(result)
       );
     },
     onError: (err) => {
-      console.log("Error creating post: ", err);
+      console.log("Error update post: ", err);
+      if (onErrorCallback) {
+        onErrorCallback(err.errorMessage);
+      }
     },
   });
 };
@@ -61,31 +67,18 @@ export async function updatePost(
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error updating post:", error);
-    throw error;
+    if (error instanceof HTTPError) {
+      // Lấy thông tin lỗi từ response của server
+      const errorResponse = await error.response.json();
+      throw {
+        errorCode: errorResponse.errorCode,
+        errorMessage: errorResponse.errorMessage,
+      };
+    }
+    // Xử lý các lỗi khác
+    throw {
+      errorCode: "UnknownError",
+      errorMessage: "An unknown error occurred",
+    };
   }
 }
-
-// HÀM DƯỚI ĐÂY VẪN HOẠT ĐỘNG TỐT (SỬ DỤNG FETCH THÔNG THƯỜNG, CÓ THỂ SỬ DỤNG AXIOS Ở ĐÂY)
-// export async function createNewPost(
-//   formData: FormData
-// ): Promise<IDataResponseFromAPI<null>> {
-//   const token =
-//     "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJyb2xlIjoib3JnYW5pemVyIiwiZXhwIjoxNzI5NTcxNDEyLCJpc3MiOiJzZW1pbmFyLW1hbmFnZW1lbnQtYmUiLCJhdWQiOiJzZW1pbmFyLW1hbmFnZW1lbnQtZmUifQ.3TcqSrQDOLrywdshuukRjh2UFZsOHG4xYC8xlUFOzEk"; // Lấy token từ localStorage hoặc context tùy vào cách bạn lưu trữ
-//   const response = await fetch(
-//     `${process.env.NEXT_PUBLIC_COMMUNITY_BASE_URL}api/Post`,
-//     {
-//       method: "POST",
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//       body: formData,
-//     }
-//   );
-
-//   if (!response.ok) {
-//     throw new Error(`Error: ${response.statusText}`);
-//   }
-
-//   return response.json() as Promise<IDataResponseFromAPI<null>>;
-// }

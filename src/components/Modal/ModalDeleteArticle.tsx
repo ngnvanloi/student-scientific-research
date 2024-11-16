@@ -1,10 +1,12 @@
 "use client";
 import * as Dialog from "@radix-ui/react-dialog";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useArticleManagementContext } from "../UseContextProvider/ArticleManagementContext";
 import { useGetArticleDetail } from "@/hooks-query/queries/use-get-article-detail";
 import { useDeleteArticleMutation } from "@/hooks-query/mutations/use-delete-article-mutation";
+import { Alert } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
 
 interface IProps {
   isOpen: boolean;
@@ -30,7 +32,10 @@ const ModalDeleteArticle = (props: IProps) => {
   }, [articleID, isOpen, refetchData]);
 
   // HANDLE LOGIC
-  const deleteArticleMutation = useDeleteArticleMutation();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const deleteArticleMutation = useDeleteArticleMutation((msg) => {
+    setErrorMessage(msg);
+  });
   const handleOnDelete = () => {
     deleteArticleMutation.mutate(articleID, {
       onSuccess: () => {
@@ -86,6 +91,21 @@ const ModalDeleteArticle = (props: IProps) => {
                   thực hiện thao tác
                 </p>
               </Dialog.Description>
+              {errorMessage && (
+                <div className="m-4">
+                  <Alert
+                    message="Oops! Đã có lỗi xảy ra"
+                    description={errorMessage}
+                    type="error"
+                    closable={{
+                      "aria-label": "close",
+                      closeIcon: <CloseOutlined />,
+                    }}
+                    onClose={() => setErrorMessage(null)}
+                    showIcon
+                  />
+                </div>
+              )}
               <div className="items-center gap-2 mt-3 text-sm sm:flex">
                 <div>
                   <button

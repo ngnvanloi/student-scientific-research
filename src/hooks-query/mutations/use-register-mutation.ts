@@ -1,7 +1,8 @@
 import { communityRequest } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
-import type { IResponseFromAPI } from "@/types/Meta";
+import type { APIErrorResponse, IResponseFromAPI } from "@/types/Meta";
 import { getSession } from "next-auth/react";
+import { HTTPError } from "ky";
 
 export type ParamsRegisterAccount = {
   name: string;
@@ -11,8 +12,15 @@ export type ParamsRegisterAccount = {
   roleName?: string;
 };
 
-export const useRegisterAccountMutation = () => {
-  return useMutation<IResponseFromAPI, Error, ParamsRegisterAccount, unknown>({
+export const useRegisterAccountMutation = (
+  onErrorCallback?: (msg: string) => void
+) => {
+  return useMutation<
+    IResponseFromAPI,
+    APIErrorResponse,
+    ParamsRegisterAccount,
+    unknown
+  >({
     mutationFn: (data) => createNewAccount(data),
     onMutate: () => {},
     onSuccess: (result) => {
@@ -23,6 +31,9 @@ export const useRegisterAccountMutation = () => {
     },
     onError: (err) => {
       console.log("Error creating account: ", err);
+      if (onErrorCallback) {
+        onErrorCallback(err.errorMessage);
+      }
     },
   });
 };
@@ -44,7 +55,18 @@ export async function createNewAccount(
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error creating account:", error);
-    throw error;
+    if (error instanceof HTTPError) {
+      // Lấy thông tin lỗi từ response của server
+      const errorResponse = await error.response.json();
+      throw {
+        errorCode: errorResponse.errorCode,
+        errorMessage: errorResponse.errorMessage,
+      };
+    }
+    // Xử lý các lỗi khác
+    throw {
+      errorCode: "UnknownError",
+      errorMessage: "An unknown error occurred",
+    };
   }
 }

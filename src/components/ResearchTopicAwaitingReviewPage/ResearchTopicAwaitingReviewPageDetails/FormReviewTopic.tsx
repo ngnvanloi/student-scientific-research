@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import FormSelect, { SelectItem } from "@/components/FormCard/FormSelectField";
 import { TFormReviewTopic } from "@/components/FormCard/FormInputsData";
 import { FormReviewTopicSchema } from "@/components/FormCard/ZodSchema";
@@ -25,6 +25,8 @@ import { useSession } from "next-auth/react";
 import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { useToast } from "@/hooks/use-toast";
 import { SpinnerLoading } from "@/components/SpinnerLoading/SpinnerLoading";
+import { useState } from "react";
+import { CloseOutlined } from "@ant-design/icons";
 
 interface IProps {
   version: HistoryUpdateResearchTopic;
@@ -57,9 +59,12 @@ const FormReviewTopic = (props: IProps) => {
     "Checking owner review version: ",
     JSON.stringify(version.review_Forms, null, 2)
   );
-
-  const { mutate, isPending, isError, isSuccess } =
-    useSubmitReviewFormMutation();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { mutate, isPending, isError, isSuccess } = useSubmitReviewFormMutation(
+    (msg) => {
+      setErrorMessage(msg);
+    }
+  );
   const {
     mutate: notiMutation,
     isSuccess: isNotiSuccess,
@@ -113,6 +118,7 @@ const FormReviewTopic = (props: IProps) => {
             console.error("Lỗi khi gửi thông báo:", error);
           },
         });
+        setErrorMessage(null);
       },
       onError: (error) => {
         console.error("Lỗi khi gửi thông báo:", error);
@@ -180,6 +186,22 @@ const FormReviewTopic = (props: IProps) => {
             />
           </div>
           <div className="mt-3">
+            {errorMessage && (
+              <div className="my-3">
+                <Alert
+                  message="Oops! Đã có lỗi xảy ra"
+                  description={errorMessage}
+                  type="error"
+                  closable={{
+                    "aria-label": "close",
+                    closeIcon: <CloseOutlined />,
+                  }}
+                  onClose={() => setErrorMessage(null)}
+                  showIcon
+                />
+              </div>
+            )}
+
             <Button
               onClick={handleSubmit(onSubmit, onError)}
               className="px-6 py-2 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "

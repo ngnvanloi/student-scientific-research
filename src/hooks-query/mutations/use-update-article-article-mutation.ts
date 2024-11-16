@@ -1,16 +1,19 @@
-import { IDataResponseFromAPI } from "@/types/Meta";
+import { APIErrorResponse, IDataResponseFromAPI } from "@/types/Meta";
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
+import { HTTPError } from "ky";
 import { getSession } from "next-auth/react";
 
 export type ParamsUpdateArticleForPublic = {
   AcceptedForPublicationStatus: number | string;
 };
 
-export const useApprovalArticleForPublicMutation = () => {
+export const useApprovalArticleForPublicMutation = (
+  onErrorCallback?: (msg: string) => void
+) => {
   return useMutation<
     IDataResponseFromAPI<null>,
-    Error,
+    APIErrorResponse,
     { id: number; requestbody: ParamsUpdateArticleForPublic },
     unknown
   >({
@@ -18,10 +21,16 @@ export const useApprovalArticleForPublicMutation = () => {
       updateArticleForPublic(id, requestbody),
     onMutate: () => {},
     onSuccess: (result) => {
-      console.log("Check result if successfully: ", JSON.stringify(result));
+      console.log(
+        "Check result if approval article successfully: ",
+        JSON.stringify(result)
+      );
     },
     onError: (err) => {
-      console.log("Error mutation: ", err);
+      console.log("Error approval article: ", err);
+      if (onErrorCallback) {
+        onErrorCallback(err.errorMessage);
+      }
     },
   });
 };
@@ -54,7 +63,18 @@ export async function updateArticleForPublic(
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error updating registration form:", error);
-    throw error;
+    if (error instanceof HTTPError) {
+      // Lấy thông tin lỗi từ response của server
+      const errorResponse = await error.response.json();
+      throw {
+        errorCode: errorResponse.errorCode,
+        errorMessage: errorResponse.errorMessage,
+      };
+    }
+    // Xử lý các lỗi khác
+    throw {
+      errorCode: "UnknownError",
+      errorMessage: "An unknown error occurred",
+    };
   }
 }

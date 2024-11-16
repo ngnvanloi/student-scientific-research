@@ -1,7 +1,8 @@
 import { communityRequest } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
-import type { IDataResponseFromAPI } from "@/types/Meta";
+import type { APIErrorResponse, IDataResponseFromAPI } from "@/types/Meta";
 import { getSession } from "next-auth/react";
+import { HTTPError } from "ky";
 
 export type ParamsUpdateAuthorProfile = {
   name: string;
@@ -13,20 +14,28 @@ export type ParamsUpdateAuthorProfile = {
   facultyId: number;
 };
 
-export const useUpdateAuthorProfileMutation = () => {
+export const useUpdateAuthorProfileMutation = (
+  onErrorCallback?: (msg: string) => void
+) => {
   return useMutation<
     IDataResponseFromAPI<null>,
-    Error,
+    APIErrorResponse,
     { data: ParamsUpdateAuthorProfile },
     unknown
   >({
     mutationFn: ({ data }) => updateAuthorProfile(data),
     onMutate: () => {},
     onSuccess: (result) => {
-      console.log("Check result if successfully: ", JSON.stringify(result));
+      console.log(
+        "Check result if update author profile successfully: ",
+        JSON.stringify(result)
+      );
     },
     onError: (err) => {
-      console.log("Error update: ", err);
+      console.log("Error update author profile: ", err);
+      if (onErrorCallback) {
+        onErrorCallback(err.errorMessage);
+      }
     },
   });
 };
@@ -57,7 +66,18 @@ export async function updateAuthorProfile(
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error updating post:", error);
-    throw error;
+    if (error instanceof HTTPError) {
+      // Lấy thông tin lỗi từ response của server
+      const errorResponse = await error.response.json();
+      throw {
+        errorCode: errorResponse.errorCode,
+        errorMessage: errorResponse.errorMessage,
+      };
+    }
+    // Xử lý các lỗi khác
+    throw {
+      errorCode: "UnknownError",
+      errorMessage: "An unknown error occurred",
+    };
   }
 }

@@ -1,32 +1,35 @@
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
-import type { IDataResponseFromAPI } from "@/types/Meta";
+import type { APIErrorResponse, IDataResponseFromAPI } from "@/types/Meta";
 import { UploadFile } from "antd";
 import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
+import { HTTPError } from "ky";
 
 export type ParamsRegisterCompetiton = {
   competitionId: number;
   filePath: string;
 };
 
-export const useRegisterCompetitonMutation = () => {
+export const useRegisterCompetitonMutation = (
+  onErrorCallback?: (msg: string) => void
+) => {
   return useMutation<
     IDataResponseFromAPI<null>,
-    Error,
+    APIErrorResponse,
     ParamsRegisterCompetiton,
     unknown
   >({
     mutationFn: (data) => createNewPost(data),
     onMutate: () => {},
     onSuccess: (result) => {
-      console.log(
-        "Check result if create post successfully: ",
-        JSON.stringify(result)
-      );
+      console.log("Check result if successfully: ", JSON.stringify(result));
     },
     onError: (err) => {
-      console.log("Error creating post: ", err);
+      console.log("Error register competition: ", err);
+      if (onErrorCallback) {
+        onErrorCallback(err.errorMessage);
+      }
     },
   });
 };
@@ -48,10 +51,20 @@ export async function createNewPost(
         data,
       }
     );
-    console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error creating post:", error);
-    throw error;
+    if (error instanceof HTTPError) {
+      // Lấy thông tin lỗi từ response của server
+      const errorResponse = await error.response.json();
+      throw {
+        errorCode: errorResponse.errorCode,
+        errorMessage: errorResponse.errorMessage,
+      };
+    }
+    // Xử lý các lỗi khác
+    throw {
+      errorCode: "UnknownError",
+      errorMessage: "An unknown error occurred",
+    };
   }
 }

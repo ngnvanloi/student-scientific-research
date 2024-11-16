@@ -18,8 +18,9 @@ import { useToast } from "@/hooks/use-toast";
 import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { ResearchProjectTopic } from "@/types/ResearchProjectTopic";
 import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-firebase";
+import { CloseOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -48,8 +49,12 @@ const SubmitNewResearchTopicVersion = (props: IProps) => {
     error: fileProductError,
     isPending: fileProductIsPending,
   } = useUploadFileMutation();
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate, isSuccess, isError, isPending } =
-    useSubmitNewVersionResearchTopicMutation();
+    useSubmitNewVersionResearchTopicMutation((msg) => {
+      setErrorMessage(msg);
+    });
 
   const {
     mutate: notiMutation,
@@ -145,6 +150,7 @@ const SubmitNewResearchTopicVersion = (props: IProps) => {
           reset({
             summary: "",
           });
+          setErrorMessage(null);
           setFileProduct(undefined);
           setFileReport(undefined);
 
@@ -225,6 +231,21 @@ const SubmitNewResearchTopicVersion = (props: IProps) => {
           className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
         />
       </div>
+      {errorMessage && (
+        <div className="mt-4">
+          <Alert
+            message="Oops! Đã có lỗi xảy ra"
+            description={errorMessage}
+            type="error"
+            closable={{
+              "aria-label": "close",
+              closeIcon: <CloseOutlined />,
+            }}
+            onClose={() => setErrorMessage(null)}
+            showIcon
+          />
+        </div>
+      )}
       <Button
         onClick={handleSubmit(onSubmit, onError)}
         className="my-3"

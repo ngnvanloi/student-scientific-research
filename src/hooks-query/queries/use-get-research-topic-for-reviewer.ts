@@ -8,9 +8,10 @@ import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContribu
 export type ParamsGetListResearchTopicForReviewer = {
   index: number;
   pageSize: number;
+  isStatus: number;
+
   idSearch?: number;
   nameTopicSearch?: string;
-  isStatus: number;
   competitionId?: number;
 };
 export const useGetListResearchTopicForReviewer = (

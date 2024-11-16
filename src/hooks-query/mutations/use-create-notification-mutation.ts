@@ -1,7 +1,8 @@
 import { communityRequest, setAuthToken } from "@/web-configs/community-api";
 import { useMutation } from "@tanstack/react-query";
-import type { IDataResponseFromAPI } from "@/types/Meta";
+import type { APIErrorResponse, IDataResponseFromAPI } from "@/types/Meta";
 import { getSession } from "next-auth/react";
+import { HTTPError } from "ky";
 
 export type ParamsCreateNotification = {
   notificationContent: string;
@@ -11,10 +12,12 @@ export type ParamsCreateNotification = {
   targetId: number;
 };
 
-export const useCreateNotificationMutation = () => {
+export const useCreateNotificationMutation = (
+  onErrorCallback?: (msg: string) => void
+) => {
   return useMutation<
     IDataResponseFromAPI<null>,
-    Error,
+    APIErrorResponse,
     ParamsCreateNotification,
     unknown
   >({
@@ -28,6 +31,9 @@ export const useCreateNotificationMutation = () => {
     },
     onError: (err) => {
       console.log("Error creating post: ", err);
+      if (onErrorCallback) {
+        onErrorCallback(err.errorMessage);
+      }
     },
   });
 };
@@ -54,7 +60,18 @@ export async function createNewNotification(
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error creating post:", error);
-    throw error;
+    if (error instanceof HTTPError) {
+      // Lấy thông tin lỗi từ response của server
+      const errorResponse = await error.response.json();
+      throw {
+        errorCode: errorResponse.errorCode,
+        errorMessage: errorResponse.errorMessage,
+      };
+    }
+    // Xử lý các lỗi khác
+    throw {
+      errorCode: "UnknownError",
+      errorMessage: "An unknown error occurred",
+    };
   }
 }

@@ -1,3 +1,4 @@
+"use client";
 import {
   ParamsUpdateRegistrationForm,
   useApprovalRegistrationFormMutation,
@@ -18,6 +19,8 @@ import { useSession } from "next-auth/react";
 import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { useGetRegistrationCompetitionDetail } from "@/hooks-query/queries/use-get-registration-competition-detail";
 import { auth } from "@/auth";
+import { Alert } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
 
 interface IProps {
   isOpen: boolean;
@@ -56,7 +59,11 @@ const ModalApprovalRegisterForm = (props: IProps) => {
   console.log("check delete registrationFormID: ", registrationFormID);
 
   // HANDLE LOGIC
-  const approvalRegisMutation = useApprovalRegistrationFormMutation();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const approvalRegisMutation = useApprovalRegistrationFormMutation((msg) => {
+    setErrorMessage(msg);
+  });
 
   // HANDLE LOGIC
   const onSubmit = (data: TFormApprovalRegistration) => {
@@ -112,6 +119,7 @@ const ModalApprovalRegisterForm = (props: IProps) => {
               console.error("Lỗi khi gửi thông báo:", error);
             },
           });
+          setErrorMessage(null);
           setIsOpen(false);
         },
         onError: (error) => {
@@ -169,6 +177,21 @@ const ModalApprovalRegisterForm = (props: IProps) => {
                 label="Chọn tình trạng phê duyệt"
                 className="relative z-20 w-full appearance-none rounded-lg border border-stroke dark:border-dark-3 bg-transparent py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2"
               />
+              {errorMessage && (
+                <div className="m-4">
+                  <Alert
+                    message="Oops! Đã có lỗi xảy ra"
+                    description={errorMessage}
+                    type="error"
+                    closable={{
+                      "aria-label": "close",
+                      closeIcon: <CloseOutlined />,
+                    }}
+                    onClose={() => setErrorMessage(null)}
+                    showIcon
+                  />
+                </div>
+              )}
               <div className="items-center gap-2 mt-3 text-sm sm:flex">
                 <div>
                   <button

@@ -1,8 +1,9 @@
 import { communityRequest } from "@/web-configs/community-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { IResponseFromAPI } from "@/types/Meta";
+import type { APIErrorResponse, IResponseFromAPI } from "@/types/Meta";
 import { getSession } from "next-auth/react";
 import { queryKeys } from "../queries/query-keys";
+import { HTTPError } from "ky";
 
 export type ParamsSubmitReviewForm = {
   content: string;
@@ -10,19 +11,32 @@ export type ParamsSubmitReviewForm = {
   concludeId: number;
 };
 
-export const useSubmitReviewFormMutation = () => {
+export const useSubmitReviewFormMutation = (
+  onErrorCallback?: (msg: string) => void
+) => {
   const queryClient = useQueryClient();
-  return useMutation<IResponseFromAPI, Error, ParamsSubmitReviewForm, unknown>({
+  return useMutation<
+    IResponseFromAPI,
+    APIErrorResponse,
+    ParamsSubmitReviewForm,
+    unknown
+  >({
     mutationFn: (data) => createNewCompetition(data),
     onMutate: () => {},
     onSuccess: (result) => {
-      console.log("Check result if successfully: ", JSON.stringify(result));
+      console.log(
+        "Check result if submit review form successfully: ",
+        JSON.stringify(result)
+      );
       queryClient.invalidateQueries({
         queryKey: [queryKeys.researchTopicDetail],
       });
     },
     onError: (err) => {
-      console.log("Error creating post: ", err);
+      console.log("Error submit review form: ", err);
+      if (onErrorCallback) {
+        onErrorCallback(err.errorMessage);
+      }
     },
   });
 };
@@ -49,7 +63,18 @@ export async function createNewCompetition(
     console.log("Response:", response);
     return response;
   } catch (error) {
-    console.error("Error creating post:", error);
-    throw error;
+    if (error instanceof HTTPError) {
+      // Lấy thông tin lỗi từ response của server
+      const errorResponse = await error.response.json();
+      throw {
+        errorCode: errorResponse.errorCode,
+        errorMessage: errorResponse.errorMessage,
+      };
+    }
+    // Xử lý các lỗi khác
+    throw {
+      errorCode: "UnknownError",
+      errorMessage: "An unknown error occurred",
+    };
   }
 }

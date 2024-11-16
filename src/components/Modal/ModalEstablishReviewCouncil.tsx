@@ -4,20 +4,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useForm } from "react-hook-form";
 import { TFormEstablishReviewCouncil } from "../FormCard/FormInputsData";
-import {
-  FormAddContributorSchema,
-  FormEstablishReviewCouncil,
-} from "../FormCard/ZodSchema";
+import { FormEstablishReviewCouncil } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import React, { useState } from "react";
-import { DatePicker } from "../DatePicker/DatePicker";
 import { useToast } from "@/hooks/use-toast";
-import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
-import { CoAuthor } from "@/types/CoAuthor";
+
 import { Competition } from "@/types/Competition";
 import { ModalAddReviewerForCouncil } from "./ModalAddReviewerForCouncil";
-import { ConsoleSqlOutlined, PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { ReviewBoardMembers } from "@/types/ReviewBoardMembers";
 import {
   columns,
@@ -38,8 +33,11 @@ interface IProps {
 const ModalEstablishReviewCouncil = (props: IProps) => {
   const { isOpen, setIsOpen, competition } = props;
   // MUTATION
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate, isPending, isSuccess, isError } =
-    useEstablishReviewCouncilMutation();
+    useEstablishReviewCouncilMutation((msg) => {
+      setErrorMessage(msg);
+    });
   // STATE
   const [listReviewer, setListReviewer] = useState<ReviewBoardMembers[]>([]);
   const [isModalAddReviewer, setModalAddReviewer] = useState<boolean>(false);
@@ -86,6 +84,7 @@ const ModalEstablishReviewCouncil = (props: IProps) => {
         reset({
           name: "",
         });
+        setErrorMessage(null);
         setListReviewer([]);
         setDateStart(new Date());
         setDateEnd(() => {
@@ -178,6 +177,21 @@ const ModalEstablishReviewCouncil = (props: IProps) => {
                   />
                 </div>
               </Dialog.Description>
+              {errorMessage && (
+                <div className="m-4">
+                  <Alert
+                    message="Oops! Đã có lỗi xảy ra"
+                    description={errorMessage}
+                    type="error"
+                    closable={{
+                      "aria-label": "close",
+                      closeIcon: <CloseOutlined />,
+                    }}
+                    onClose={() => setErrorMessage(null)}
+                    showIcon
+                  />
+                </div>
+              )}
               <div className="flex items-center gap-3 p-4 border-t">
                 <Dialog.Close asChild>
                   <Button
