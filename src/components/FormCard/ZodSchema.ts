@@ -18,6 +18,7 @@ import {
   TFormUpdateArticle,
   TFormUpdateAuthor,
   TFormUpdateOrganizer,
+  TFormUpdateReviewer,
 } from "./FormInputsData";
 import { title } from "process";
 
@@ -149,6 +150,18 @@ export const FormUpdateAuthorSchema: ZodType<TFormUpdateAuthor> = z.object({
   // dateOfBirth: z.string(),
   sex: z.string(),
   facultyId: z.string(),
+});
+
+export const FormUpdateReviewerSchema: ZodType<TFormUpdateReviewer> = z.object({
+  name: z.string(),
+  email: z.string(),
+  numberPhone: z.string(),
+  // dateOfBirth: z.string(),
+  sex: z.string(),
+  facultyId: z.string(),
+
+  academicRank: z.string(),
+  academicDegree: z.string(),
 });
 
 export const FormUpdateOrganizerSchema: ZodType<TFormUpdateOrganizer> =

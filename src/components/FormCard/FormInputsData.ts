@@ -102,6 +102,16 @@ export type TFormUpdateAuthor = {
   sex?: string;
   facultyId?: string;
 };
+export type TFormUpdateReviewer = {
+  name: string;
+  email: string;
+  numberPhone: string;
+  dateOfBirth?: string;
+  sex?: string;
+  academicRank?: string;
+  academicDegree?: string;
+  facultyId?: string;
+};
 
 export type TFormUpdateOrganizer = {
   name: string;
