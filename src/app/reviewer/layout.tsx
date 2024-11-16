@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import {
   BellOutlined,
+  EditOutlined,
   FileTextOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -65,6 +66,13 @@ export default function AdminLayout({
       <UserOutlined />,
       undefined,
       "/reviewer/my-profile"
+    ),
+    getItem(
+      "Cập nhật mật khẩu",
+      "6",
+      <EditOutlined />,
+      undefined,
+      "/reviewer/reset-password"
     ),
   ];
 

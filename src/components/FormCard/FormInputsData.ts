@@ -9,6 +9,11 @@ export type TFormRegisterData = {
   numberPhone: string;
   roleName?: string;
 };
+export type TFormResetPassword = {
+  password: string;
+  newPassword: string;
+  confirmPassword: string;
+};
 export type TFormSubmitResearchProjectTabOveriew = {
   researchProject_ID: number;
   researchProject_Name: string;

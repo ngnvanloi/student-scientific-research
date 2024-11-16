@@ -8,6 +8,7 @@ import {
   TFormEstablishReviewCouncil,
   TFormLoginData,
   TFormRegisterData,
+  TFormResetPassword,
   TFormReviewAssignment,
   TFormReviewTopic,
   TFormSubmitArticle,
@@ -40,6 +41,26 @@ export const FormRegisterSchema: ZodType<TFormRegisterData> = z.object({
   numberPhone: z.string(),
   roleName: z.string().optional(),
 });
+
+export const FormResetPasswordSchema: ZodType<TFormResetPassword> = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "Password is too short" })
+      .max(20, { message: "Password is too long" }),
+    newPassword: z
+      .string()
+      .min(8, { message: "Password is too short" })
+      .max(20, { message: "Password is too long" }),
+    confirmPassword: z
+      .string()
+      .min(8, { message: "Password is too short" })
+      .max(20, { message: "Password is too long" }),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"], // Đặt lỗi tại confirmPassword nếu không khớp
+  });
 export const FormTabOverviewSchema: ZodType<TFormSubmitResearchProjectTabOveriew> =
   z.object({
     researchProject_ID: z.number(),
