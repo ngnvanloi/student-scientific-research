@@ -42,7 +42,7 @@ let httpCommunity = ky.create({
 });
 
 // SET ACCESS TOKEN CHO CÁC REQUEST
-export function setAuthToken(token: string | undefined) {
+export function setAuthToken(token: string | undefined | null) {
   if (!token) {
     console.log("Token is undefined, removing Authorization header.");
     httpCommunity = httpCommunity.extend({

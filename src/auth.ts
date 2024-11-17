@@ -1,5 +1,6 @@
 import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 import {
   login,
   LoginParams,
@@ -33,12 +34,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const res = await login(params);
         console.log("Checking res: ", res);
 
-        if (!res.data.tokenResponse?.accessToken) {
+        if (!res.data.tokenResponse?.refreshToken) {
           return null;
         }
 
         // Đặt access token sau khi đăng nhập thành công
-        setAuthToken(res.data.tokenResponse?.accessToken);
+        setAuthToken(res.data.tokenResponse?.refreshToken);
 
         let user_profile = null;
         if (res.data.tokenResponse.account.roleName !== "superadmin") {
@@ -77,6 +78,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return user;
       },
     }),
+    Google,
   ],
 
   callbacks: {

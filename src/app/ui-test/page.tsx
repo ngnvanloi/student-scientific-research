@@ -1,15 +1,24 @@
-"use client";
-import DateTimePicker from "@/components/DatePicker/DateTimePicker";
-import ReviewResearchTopicContainer from "@/components/ReviewResearchTopic/ReviewResearchTopicContainer";
-import FormSubmitResearchTopic from "@/components/SubmitResearchProject/FormSubmitResearchTopic";
-import { useState } from "react";
+import { auth, signIn } from "@/auth";
+import { signOut } from "next-auth/react";
 
-const UITest = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  return (
+export default async function SignIn() {
+  const session = await auth();
+
+  return session?.user ? (
     <div>
-      <ReviewResearchTopicContainer />
+      <p>Welcome: {session?.user.name}</p>
+      <button className="border p-3">Signout</button>
     </div>
+  ) : (
+    <form
+      action={async () => {
+        "use server";
+        await signIn("google");
+      }}
+    >
+      <button type="submit" className="border p-3">
+        Signin with Google
+      </button>
+    </form>
   );
-};
-export default UITest;
+}

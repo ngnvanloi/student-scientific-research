@@ -46,5 +46,5 @@ export async function login(
 export function handleOnLoginSuccess(
   result: IDataWithTokenResponseFromAPI<Account>
 ) {
-  setAuthToken(result.data.tokenResponse?.accessToken);
+  setAuthToken(result.data.tokenResponse?.refreshToken);
 }

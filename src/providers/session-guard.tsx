@@ -10,7 +10,7 @@ export default function SessionGuard({ children }: { children: ReactNode }) {
     if (!session) return;
     if (session.user?.accessToken) {
       console.log("Access toke has changed!");
-      setAuthToken(session.user?.accessToken);
+      setAuthToken(session.user?.refreshToken);
     }
   }, [session]);
 
