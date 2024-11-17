@@ -51,6 +51,7 @@ const RegisterForm = () => {
       name: data.name,
       numberPhone: data.numberPhone,
       roleName: "author",
+      otpCode: "",
     };
 
     // gọi API xác thực OTP

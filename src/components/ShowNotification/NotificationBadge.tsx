@@ -21,6 +21,7 @@ import { Avatar, Badge } from "antd";
 import { ScrollArea } from "../ui/scroll-area";
 import { useGetListNotification } from "@/hooks-query/queries/use-get-notifications";
 import { countUnreadNotifications } from "@/helper/extension-function";
+import { useMarkAsReadAllNotificationMutation } from "@/hooks-query/mutations/use-update-markasread-all-notification-mutation";
 
 export function NotificationBadge() {
   const [isChanged, setIsChanged] = useState<boolean>(false);
@@ -32,6 +33,20 @@ export function NotificationBadge() {
   useEffect(() => {
     refetch();
   }, [isChanged]);
+  const { mutate, isSuccess, isError, error, isPending } =
+    useMarkAsReadAllNotificationMutation();
+  const handleMarkAllRead = () => {
+    mutate(null, {
+      onSuccess: () => {
+        // alert("Mark as read success");
+        setIsChanged(!isChanged);
+        refetch();
+      },
+      onError: () => {
+        alert("Mark as read failed");
+      },
+    });
+  };
   return (
     <Fragment>
       <DropdownMenu>
@@ -73,10 +88,12 @@ export function NotificationBadge() {
               </ScrollArea>
             </CardContent>
             <CardFooter>
-              <Button className="w-full bg-[#03509d]">
+              <Button
+                className="w-full bg-[#03509d]"
+                onClick={() => handleMarkAllRead()}
+              >
                 <Check className="mr-2 h-4 w-4" /> Mark all as read
               </Button>
-              {/* <p className="text-center">You reach the end of the world !</p> */}
             </CardFooter>
           </Card>
         </DropdownMenuContent>
