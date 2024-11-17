@@ -9,6 +9,9 @@ export type TFormRegisterData = {
   numberPhone: string;
   roleName?: string;
 };
+export type TFormEmail = {
+  email: string;
+};
 export type TFormResetPassword = {
   password: string;
   newPassword: string;

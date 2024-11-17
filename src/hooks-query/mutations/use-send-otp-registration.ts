@@ -4,34 +4,20 @@ import type { APIErrorResponse, IResponseFromAPI } from "@/types/Meta";
 import { getSession } from "next-auth/react";
 import { HTTPError } from "ky";
 
-export type ParamsRegisterAccount = {
-  name: string;
-  email: string;
-  password: string;
-  numberPhone: string;
-  roleName?: string;
-  otpCode: string;
-};
-
-export const useRegisterAccountMutation = (
+export const useSendRegistrationMutation = (
   onErrorCallback?: (msg: string) => void
 ) => {
-  return useMutation<
-    IResponseFromAPI,
-    APIErrorResponse,
-    ParamsRegisterAccount,
-    unknown
-  >({
+  return useMutation<IResponseFromAPI, APIErrorResponse, string, unknown>({
     mutationFn: (data) => createNewAccount(data),
     onMutate: () => {},
     onSuccess: (result) => {
       console.log(
-        "Check result if create account successfully: ",
+        "Check result if send otp successfully: ",
         JSON.stringify(result)
       );
     },
     onError: (err) => {
-      console.log("Error creating account: ", err);
+      console.log("Error send otp: ", err);
       if (onErrorCallback) {
         onErrorCallback(err.errorMessage);
       }
@@ -40,17 +26,16 @@ export const useRegisterAccountMutation = (
 };
 
 export async function createNewAccount(
-  data: ParamsRegisterAccount
+  email: string
 ): Promise<IResponseFromAPI> {
   try {
     const response = await communityRequest<IResponseFromAPI>(
-      `api/Auth/register`,
+      `api/Auth/send-registration-otp?email=${email}`,
       {
         method: "POST",
         headers: {
           // "Content-Type": "application/json",
         },
-        data,
       }
     );
     console.log("Response:", response);

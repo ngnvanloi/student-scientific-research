@@ -34,3 +34,13 @@ export function formatCurrencyVND(amount: number): string {
 
   return amount.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 }
+export function formatTimeMMSS(seconds: number) {
+  // Tính số phút và giây
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+
+  // Đảm bảo giây luôn có hai chữ số (VD: 09 thay vì 9)
+  const formattedSeconds = remainingSeconds.toString().padStart(2, "0");
+
+  return `${minutes}:${formattedSeconds}`;
+}

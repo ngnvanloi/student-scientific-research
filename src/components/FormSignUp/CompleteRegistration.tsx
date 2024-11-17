@@ -1,0 +1,186 @@
+"use client";
+import { useForm } from "react-hook-form";
+import { TFormRegisterData } from "../FormCard/FormInputsData";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormRegisterSchema } from "../FormCard/ZodSchema";
+import FormField from "../FormCard/FormInputField";
+import { useSendRegistrationMutation } from "@/hooks-query/mutations/use-send-otp-registration";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { Alert } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
+import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
+import { GoogleSVG } from "@/assets/svg/google.icon";
+
+interface IProps {
+  onNext: () => void;
+  setName: React.Dispatch<React.SetStateAction<string>>;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  setPassword: React.Dispatch<React.SetStateAction<string>>;
+  setNumberphone: React.Dispatch<React.SetStateAction<string>>;
+}
+const CompleteRegistration = (props: IProps) => {
+  const { onNext, setName, setEmail, setPassword, setNumberphone } = props;
+  // REACT HOOK FORM
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<TFormRegisterData>({
+    resolver: zodResolver(FormRegisterSchema),
+  });
+
+  const { toast } = useToast();
+  // OTP MUTATION
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { mutate, isPending, isError, isSuccess } = useSendRegistrationMutation(
+    (msg) => {
+      setErrorMessage(msg);
+    }
+  );
+  // HANDLE LOGIC
+  const handleOnSubmitRegister = async (data: TFormRegisterData) => {
+    console.log("SUCCESS", data);
+    // lưu giá trị
+    setName(data.name);
+    setEmail(data.email);
+    setPassword(data.password);
+    setNumberphone(data.numberPhone);
+    // gọi API lấy OTP
+    mutate(data.email, {
+      onSuccess: () => {
+        // alert("Register success");
+        toast({
+          title: "Thông báo",
+          variant: "default",
+          description:
+            "Chúng tôi vừa gửi một mã OTP đến email của bạn, vui lòng kiểm tra và hoàn tất quá trình đăng kí",
+        });
+        setErrorMessage(null);
+        // chuyển đến trang tiếp theo
+        onNext();
+      },
+      onError: () => {
+        alert("Sending OTP failed");
+      },
+    });
+  };
+
+  const onSubmit = (data: TFormRegisterData) => {
+    handleOnSubmitRegister(data);
+  };
+
+  const onError = (errors: any) => {
+    console.log("FORM ERRORS", errors); // Kiểm tra các lỗi của form
+  };
+  return (
+    <div>
+      <div className="w-full max-w-md space-y-8 px-4 bg-white text-gray-600 sm:px-0 mb-4">
+        <div className="">
+          <img
+            src="https://floatui.com/logo.svg"
+            width={150}
+            className="lg:hidden"
+          />
+          <div className="mt-5 space-y-2">
+            <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
+              Đăng kí tài khoản
+            </h3>
+            <p className="">
+              Bạn đã có tài khoản?{" "}
+              <a
+                href="/login"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Đăng nhập
+              </a>
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 gap-2">
+          <button className="flex items-center justify-center py-2.5 border rounded-lg hover:bg-gray-50 duration-150 active:bg-gray-100">
+            <div className="mr-2">Continue with Google</div>
+            <GoogleSVG />
+          </button>
+        </div>
+        <div className="relative">
+          <span className="block w-full h-px bg-gray-300"></span>
+          <p className="inline-block w-fit text-sm bg-white px-2 absolute -top-2 inset-x-0 mx-auto">
+            Bạn có thể tiếp tục với
+          </p>
+        </div>
+      </div>
+      {isPending ? <SpinnerLoading /> : ""}
+
+      <form className="space-y-5" onSubmit={handleSubmit(onSubmit, onError)}>
+        <div>
+          <label className="font-medium">Họ và tên</label>
+          <FormField
+            type="text"
+            placeholder="Nhập họ và tên ..."
+            name="name"
+            register={register}
+            error={errors.name}
+            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+          />
+        </div>
+        <div>
+          <label className="font-medium">Số điện thoại</label>
+          <FormField
+            type="text"
+            placeholder="Nhập số điện thoại ..."
+            name="numberPhone"
+            register={register}
+            error={errors.numberPhone}
+            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+          />
+        </div>
+        <div>
+          <label className="font-medium">Email</label>
+          <FormField
+            type="email"
+            placeholder="Email"
+            name="email"
+            register={register}
+            error={errors.email}
+            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+          />
+        </div>
+        <div>
+          <label className="font-medium">Password</label>
+          <FormField
+            type="password"
+            placeholder="Password"
+            name="password"
+            register={register}
+            error={errors.password}
+            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+          />
+        </div>
+        {errorMessage && (
+          <div className="mt-4">
+            <Alert
+              message="Oops! Đã có lỗi xảy ra"
+              description={errorMessage}
+              type="error"
+              closable={{
+                "aria-label": "close",
+                closeIcon: <CloseOutlined />,
+              }}
+              onClose={() => setErrorMessage(null)}
+              showIcon
+            />
+          </div>
+        )}
+        <button
+          type="submit"
+          className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
+        >
+          Tạo tài khoản
+        </button>
+      </form>
+    </div>
+  );
+};
+export { CompleteRegistration };

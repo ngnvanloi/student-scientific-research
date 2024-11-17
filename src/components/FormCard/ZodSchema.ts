@@ -5,6 +5,7 @@ import {
   TFormAddPost,
   TFormAddReviewer,
   TFormApprovalRegistration,
+  TFormEmail,
   TFormEstablishReviewCouncil,
   TFormLoginData,
   TFormRegisterData,
@@ -40,6 +41,9 @@ export const FormRegisterSchema: ZodType<TFormRegisterData> = z.object({
     .max(20, { message: "Password is too long" }),
   numberPhone: z.string(),
   roleName: z.string().optional(),
+});
+export const FormVerifyEmailSchema: ZodType<TFormEmail> = z.object({
+  email: z.string().email(),
 });
 
 export const FormResetPasswordSchema: ZodType<TFormResetPassword> = z
