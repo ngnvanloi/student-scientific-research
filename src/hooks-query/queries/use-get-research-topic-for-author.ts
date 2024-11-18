@@ -50,19 +50,25 @@ export async function GetListResearchTopicForAuthorByRolename(
   if (param.nameTopicSearch) {
     queryParams.append("nameTopicSearch", param.nameTopicSearch);
   }
-  if (param.acceptedForPublicationStatus) {
+  if (
+    param.acceptedForPublicationStatus !== undefined &&
+    param.acceptedForPublicationStatus !== null
+  ) {
     queryParams.append(
       "acceptedForPublicationStatus",
       param.acceptedForPublicationStatus.toString()
     );
   }
-  if (param.ReviewAcceptanceStatus) {
+  if (
+    param.ReviewAcceptanceStatus !== null &&
+    param.ReviewAcceptanceStatus !== undefined
+  ) {
     queryParams.append(
       "ReviewAcceptanceStatus",
       param.ReviewAcceptanceStatus.toString()
     );
   }
-  if (param.competitionId) {
+  if (param.competitionId !== null && param.competitionId !== undefined) {
     queryParams.append("competitionId", param.competitionId.toString());
   }
 

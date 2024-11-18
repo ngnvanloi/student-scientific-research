@@ -136,3 +136,7 @@ export type TFormReviewTopic = {
 export type TFormEstablishReviewCouncil = {
   name: string;
 };
+
+export type TFormFilter = {
+  competitionId?: string;
+};

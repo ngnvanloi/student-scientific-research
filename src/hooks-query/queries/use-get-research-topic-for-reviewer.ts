@@ -48,13 +48,13 @@ export async function GetListResearchTopicForReviewer(
   });
 
   // Thêm các tham số khác nếu có
-  if (param.idSearch) {
+  if (param.idSearch !== null && param.idSearch !== undefined) {
     queryParams.append("idSearch", param.idSearch.toString());
   }
   if (param.nameTopicSearch) {
     queryParams.append("nameTopicSearch", param.nameTopicSearch);
   }
-  if (param.competitionId) {
+  if (param.competitionId !== null && param.competitionId !== undefined) {
     queryParams.append("competitionId", param.competitionId.toString());
   }
 

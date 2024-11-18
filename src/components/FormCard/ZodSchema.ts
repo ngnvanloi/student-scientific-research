@@ -7,6 +7,7 @@ import {
   TFormApprovalRegistration,
   TFormEmail,
   TFormEstablishReviewCouncil,
+  TFormFilter,
   TFormLoginData,
   TFormRegisterData,
   TFormResetPassword,
@@ -207,3 +208,7 @@ export const FormEstablishReviewCouncil: ZodType<TFormEstablishReviewCouncil> =
   z.object({
     name: z.string(),
   });
+
+export const FormFilterSchema: ZodType<TFormFilter> = z.object({
+  competitionId: z.string().optional(),
+});

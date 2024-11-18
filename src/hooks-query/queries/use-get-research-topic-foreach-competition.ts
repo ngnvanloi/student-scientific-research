@@ -8,7 +8,6 @@ export type ParamsGetListResearchTopicForeachCompetition = {
   competitionId: number;
   index: number;
   pageSize: number;
-
   reviewCommitteeId?: number;
   nameTopicSearch?: string;
   disciplineId?: number;
@@ -30,6 +29,7 @@ export const useGetListResearchTopicForeachCompetition = (
       params.competitionId,
       params.index,
       params.pageSize,
+      params.ReviewAcceptanceStatus,
     ],
     queryFn: () => GetListResearchTopicForeachCompetition(params),
   });
@@ -48,7 +48,10 @@ export async function GetListResearchTopicForeachCompetition(
   });
 
   // Thêm các tham số khác nếu có
-  if (params.reviewCommitteeId) {
+  if (
+    params.reviewCommitteeId !== undefined &&
+    params.reviewCommitteeId !== null
+  ) {
     queryParams.append(
       "reviewCommitteeId",
       params.reviewCommitteeId.toString()
@@ -57,16 +60,22 @@ export async function GetListResearchTopicForeachCompetition(
   if (params.nameTopicSearch) {
     queryParams.append("nameTopicSearch", params.nameTopicSearch);
   }
-  if (params.disciplineId) {
+  if (params.disciplineId !== undefined && params.disciplineId !== null) {
     queryParams.append("disciplineId", params.disciplineId.toString());
   }
-  if (params.acceptedForPublicationStatus) {
+  if (
+    params.acceptedForPublicationStatus !== null &&
+    params.acceptedForPublicationStatus !== undefined
+  ) {
     queryParams.append(
       "acceptedForPublicationStatus",
       params.acceptedForPublicationStatus.toString()
     );
   }
-  if (params.ReviewAcceptanceStatus) {
+  if (
+    params.ReviewAcceptanceStatus !== undefined &&
+    params.ReviewAcceptanceStatus !== null
+  ) {
     queryParams.append(
       "ReviewAcceptanceStatus",
       params.ReviewAcceptanceStatus.toString()

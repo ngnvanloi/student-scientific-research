@@ -41,5 +41,15 @@ export const NotificationContentSample = {
     reviewAssignment: {
       reviewer: " đã phân công bạn phản biện cho đề tài ",
     },
+
+    // tình trạng đề tài đủ yêu cầu để nghiệm thu hay không
+    reviewAcceptance: {
+      organizer: {
+        accept:
+          " xác nhận đề tài của bạn đã đạt đủ yêu cầu để tiến hành nghiệm thu. Trong thời gian sắp tới hãy nỗ lực hoàn thành sản phẩm đúng thời hạn được giao. Chúc các bạn thành công. ",
+        reject:
+          " rất lấy làm tiếc khi đề tài của bạn chưa đạt đủ yêu cầu để tiến hành nghiệm thu. Nhà trường rất cảm ơn và luôn ghi nhận những đóng góp của các em trong lĩnh vực khoa học. ",
+      },
+    },
   },
 };

@@ -3,8 +3,12 @@ import { ResearchProjectTopic } from "@/types/ResearchProjectTopic";
 import { Avatar, List } from "antd";
 import avatarMale from "../../../assets/icon/icons8-writer-male-48.png";
 import avatarFemale from "../../../assets/icon/icons8-writer-female-48.png";
+import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContributors";
 interface IProps {
-  researchTopic: ResearchProjectTopic | undefined;
+  researchTopic:
+    | ResearchProjectTopic
+    | ResearchTopicWithContributors
+    | undefined;
 }
 const ResearchTopicOverview = (props: IProps) => {
   const { researchTopic } = props;
@@ -45,7 +49,8 @@ const ResearchTopicOverview = (props: IProps) => {
           />
         </div>
       </div>
-      <div className="flex justify-between">
+      {/* flex justify-between */}
+      <div className="">
         <div className="">
           <p className="font-semibold text-base">
             Ngày đăng tải:{" "}

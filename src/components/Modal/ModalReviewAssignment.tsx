@@ -104,8 +104,8 @@ const ModalReviewAssignment = (props: IProps) => {
   );
 
   useEffect(() => {
+    refetch();
     if (fetchedListReviewer?.data) {
-      refetch();
       console.log(
         "-==============> fetched reviewers: ",
         JSON.stringify(fetchedListReviewer.data, null, 2)

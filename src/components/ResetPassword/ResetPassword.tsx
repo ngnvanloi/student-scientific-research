@@ -125,7 +125,7 @@ const ResetPassword = () => {
         </div>
 
         {errorMessage && (
-          <div className="m-4">
+          <div className="mt-4">
             <Alert
               message="Oops! Đã có lỗi xảy ra"
               description={errorMessage}

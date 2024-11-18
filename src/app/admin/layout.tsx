@@ -6,7 +6,6 @@ import {
   CarryOutOutlined,
   CloudServerOutlined,
   FileTextOutlined,
-  FireOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
@@ -15,7 +14,6 @@ import {
   ScheduleOutlined,
   SignatureOutlined,
   SolutionOutlined,
-  TeamOutlined,
   TrophyOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -97,11 +95,11 @@ export default function AdminLayout({
         "/admin/project-reviewer-assignment"
       ),
       getItem(
-        "Quản lý tình trạng đề tài",
+        "Tình trạng phản biện đề tài",
         "7",
         <CarryOutOutlined />,
         undefined,
-        "/admin/"
+        "/admin/track-the-status-of-project-review"
       ),
     ]),
     getItem("Quản lý quy trình nghiệm thu", "sub2", <CloudServerOutlined />, [

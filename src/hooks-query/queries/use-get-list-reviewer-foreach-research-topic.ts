@@ -43,7 +43,7 @@ export async function GetReviewCommitteeForEachResearchTopic(
   });
 
   // Thêm các tham số khác nếu có
-  if (param.idSearch) {
+  if (param.idSearch !== null && param.idSearch !== undefined) {
     queryParams.append("idSearch", param.idSearch.toString());
   }
   if (param.nameSearch) {
