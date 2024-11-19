@@ -81,6 +81,20 @@ export const NotificationContentSample = {
         reject:
           " rất lấy làm tiếc vì đề tài của bạn vẫn chưa nghiệm thu thành công. Tuy nhiên chúng tôi có một số góp ý cho bạn như sau: ",
       },
+      admin: {
+        forAuthor: {
+          accept:
+            "Chúc mừng, Nhà trường đã phê duyệt nghiệm thu của bạn. Giờ đây sản phẩm của bạn sẽ được công khai lên hệ thống website. Nhà trường rất cảm ơn và ghi nhận những đóng góp to lớn của bạn trong lĩnh vực khoa học.",
+          reject:
+            "Nhà trường rất lấy làm tiếc vì một số lý do khách quan mà sản phẩm nghiệm thu của bạn không thể được phê duyệt để đăng tải lên hệ thống. Nhà trường rất lấy làm niềm tự hào vì những đóng góp to lớn của nhóm tác giả cho lĩnh vực khoa học",
+        },
+        forOrganizer: {
+          accept:
+            "Chúc mừng, nghiệm thu bạn vừa đề xuất đã được nhà Trường phê duyệt. Giờ đây sản phẩm nghiệm thu sẽ được công khai trên hệ thống website. Nhà trường rất cảm ơn sự điều hành mang lại kết quả tốt đẹp của ban tổ chức",
+          reject:
+            "Nhà trường rất lấy làm tiếc vì một số lý do khách quan mà sản phẩm nghiệm thu không thể được phê duyệt để đăng tải lên hệ thống. Nhà trường rất lấy làm niềm tự hào vì những đóng góp to lớn của ban tổ chức cho lĩnh vực khoa học",
+        },
+      },
     },
   },
 };

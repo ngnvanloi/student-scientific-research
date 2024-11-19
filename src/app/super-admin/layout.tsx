@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import {
   AppstoreAddOutlined,
+  AuditOutlined,
   BulbOutlined,
   CarryOutOutlined,
   CloudServerOutlined,
@@ -63,22 +64,29 @@ export default function AdminLayout({
     getItem("Quản lý bài báo", "sub2", <CloudServerOutlined />, [
       getItem(
         "Bài báo chờ phê duyệt",
-        "7",
+        "2",
         <SignatureOutlined />,
         undefined,
         "/super-admin/pending-approval-article"
       ),
       getItem(
         "Bài báo đã xuất bản",
-        "8",
+        "3",
         <SafetyCertificateOutlined />,
         undefined,
         "/super-admin"
       ),
     ]),
     getItem(
+      "Phê duyệt nghiệm thu",
+      "6",
+      <AuditOutlined />,
+      undefined,
+      "/super-admin/track-ongoing-project-evaluations"
+    ),
+    getItem(
       "Quản lý người dùng",
-      "9",
+      "5",
       <UserOutlined />,
       undefined,
       "/super-admin/user-administration"
