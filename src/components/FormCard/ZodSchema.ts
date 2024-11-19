@@ -5,11 +5,14 @@ import {
   TFormAddPost,
   TFormAddReviewer,
   TFormApprovalRegistration,
+  TFormApprovedAcceptance,
+  TFormCreateAcceptance,
   TFormEmail,
   TFormEstablishReviewCouncil,
   TFormFilter,
   TFormLoginData,
   TFormRegisterData,
+  TFormRequestAcceptanceDeadline,
   TFormResetPassword,
   TFormReviewAssignment,
   TFormReviewTopic,
@@ -118,6 +121,9 @@ export const FormUpdateResearchTopicc: ZodType<TFormSubmitResearchTopic> =
     articleId: z.string().optional(),
     disciplineId: z.string(),
     competitionId: z.number(),
+
+    // dành cho nội dung cập nhật nghiệm thu
+    contentForUpdateAcceptance: z.string().optional(),
   });
 export const FormUpdateArticlee: ZodType<TFormUpdateArticle> = z.object({
   title: z.string(),
@@ -204,11 +210,28 @@ export const FormReviewTopicSchema: ZodType<TFormReviewTopic> = z.object({
   concludeId: z.string(),
 });
 
+export const FormApprovedAcceptanceSchema: ZodType<TFormApprovedAcceptance> =
+  z.object({
+    description: z.string(),
+    isAccepted: z.string(),
+  });
+
 export const FormEstablishReviewCouncil: ZodType<TFormEstablishReviewCouncil> =
   z.object({
     name: z.string(),
   });
 
+export const FormCreateAcceptanceSchema: ZodType<TFormCreateAcceptance> =
+  z.object({
+    name: z.string(),
+    researchTopicId: z.string(),
+  });
+
 export const FormFilterSchema: ZodType<TFormFilter> = z.object({
   competitionId: z.string().optional(),
 });
+
+export const FormRequestAcceptanceDeadlineSchema: ZodType<TFormRequestAcceptanceDeadline> =
+  z.object({
+    month: z.number().optional(),
+  });

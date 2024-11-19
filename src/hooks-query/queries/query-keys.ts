@@ -31,4 +31,5 @@ export const queryKeys = {
     "listReviewCommitteeForEachResearchTopic",
   ],
   listReviewerResearchTopic: ["listReviewerResearchTopic"],
+  listAcceptanceForAllRole: ["listAcceptanceForAllRole"],
 };

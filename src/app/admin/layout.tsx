@@ -108,7 +108,7 @@ export default function AdminLayout({
         "8",
         <SignatureOutlined />,
         undefined,
-        "/admin"
+        "/admin/track-ongoing-project-evaluations"
       ),
       getItem(
         "Đề tài đã xuất bản",

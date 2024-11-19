@@ -1,22 +1,18 @@
 import { formatCurrencyVND, formatDate } from "@/helper/extension-function";
-import { ResearchProjectTopic } from "@/types/ResearchProjectTopic";
 import { Avatar, List } from "antd";
-import avatarMale from "../../../assets/icon/icons8-writer-male-48.png";
-import avatarFemale from "../../../assets/icon/icons8-writer-female-48.png";
-import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContributors";
+import avatarMale from "../../assets/icon/icons8-writer-male-48.png";
+import avatarFemale from "../../assets/icon/icons8-writer-female-48.png";
+import { Acceptance } from "@/types/Acceptance";
 interface IProps {
-  researchTopic:
-    | ResearchProjectTopic
-    | ResearchTopicWithContributors
-    | undefined;
+  acceptance: Acceptance | undefined;
 }
-const ResearchTopicOverview = (props: IProps) => {
-  const { researchTopic } = props;
+const AcceptanceOverview = (props: IProps) => {
+  const { acceptance } = props;
   return (
     <div className="flex flex-col gap-4 text-justify">
       <div className="">
         <div className="text-xl font-semibold uppercase text-center my-4">
-          {researchTopic?.nameTopic}
+          {acceptance?.name}
         </div>
       </div>
       <div className="">
@@ -24,7 +20,7 @@ const ResearchTopicOverview = (props: IProps) => {
         <div className="">
           <div
             dangerouslySetInnerHTML={{
-              __html: researchTopic?.description ?? "",
+              __html: acceptance?.researchTopic.description ?? "",
             }}
           />
         </div>
@@ -34,7 +30,7 @@ const ResearchTopicOverview = (props: IProps) => {
         <div className="">
           <div
             dangerouslySetInnerHTML={{
-              __html: researchTopic?.target ?? "",
+              __html: acceptance?.researchTopic.target ?? "",
             }}
           />
         </div>
@@ -44,18 +40,20 @@ const ResearchTopicOverview = (props: IProps) => {
         <div className="">
           <div
             dangerouslySetInnerHTML={{
-              __html: researchTopic?.achievedResults ?? "",
+              __html: acceptance?.researchTopic.achievedResults ?? "",
             }}
           />
         </div>
       </div>
       {/* flex justify-between */}
-      <div className="">
+      <div className="flex flex-col gap-2">
         <div className="">
           <p className="font-semibold text-base">
             Ngày đăng tải:{" "}
             <span className="font-normal">
-              {formatDate((researchTopic?.dateUpLoad as string) || "")}
+              {formatDate(
+                (acceptance?.researchTopic.dateUpLoad as string) || ""
+              )}
             </span>
           </p>
         </div>
@@ -63,7 +61,7 @@ const ResearchTopicOverview = (props: IProps) => {
           <p className="font-semibold text-base">
             Thời gian cần thực hiện:{" "}
             <span className="font-normal">
-              {researchTopic?.projectDuration} tháng
+              {acceptance?.researchTopic.projectDuration} tháng
             </span>
           </p>
         </div>
@@ -71,7 +69,7 @@ const ResearchTopicOverview = (props: IProps) => {
           <p className="font-semibold text-base">
             Kinh phí:{" "}
             <span className="font-normal">
-              {formatCurrencyVND(researchTopic?.budget || 0)}
+              {formatCurrencyVND(acceptance?.researchTopic.budget || 0)}
             </span>
           </p>
         </div>
@@ -79,14 +77,16 @@ const ResearchTopicOverview = (props: IProps) => {
       <div className="">
         <p className="font-semibold text-base">
           Giáo viên hướng dẫn:{" "}
-          <span className="font-normal">{researchTopic?.supervisor}</span>
+          <span className="font-normal">
+            {acceptance?.researchTopic.supervisor}
+          </span>
         </p>
       </div>
       <div className="">
         <h4 className="font-semibold text-base">Danh sách tác giả</h4>
         <div className="">
           <List
-            dataSource={researchTopic?.author_ResearchTopics}
+            dataSource={acceptance?.researchTopic.author_ResearchTopics}
             className="max-w-[500px]"
             renderItem={(item) => (
               <List.Item key={item.author.email}>
@@ -115,7 +115,7 @@ const ResearchTopicOverview = (props: IProps) => {
           <div className="">
             <span>
               <a
-                href={researchTopic?.reportFilePath}
+                href={acceptance?.researchTopic.reportFilePath}
                 target="_blank"
                 className="hover:cursor-pointer hover:text-blue-400"
               >
@@ -123,11 +123,11 @@ const ResearchTopicOverview = (props: IProps) => {
               </a>
             </span>
           </div>
-          {researchTopic?.productFilePath ? (
+          {acceptance?.researchTopic.productFilePath ? (
             <div className="">
               <span>
                 <a
-                  href={researchTopic?.productFilePath}
+                  href={acceptance?.researchTopic.productFilePath}
                   target="_blank"
                   className="hover:cursor-pointer hover:text-blue-400"
                 >
@@ -141,7 +141,7 @@ const ResearchTopicOverview = (props: IProps) => {
           <div className="">
             <span>
               <a
-                href={researchTopic?.budgetFilePath}
+                href={acceptance?.researchTopic.budgetFilePath}
                 target="_blank"
                 className="hover:cursor-pointer hover:text-blue-400"
               >
@@ -151,15 +151,15 @@ const ResearchTopicOverview = (props: IProps) => {
           </div>
         </div>
       </div>
-      {researchTopic?.articleId ? (
+      {acceptance?.researchTopic.articleId ? (
         <div className="flex flex-col gap-2">
           <h4 className="font-semibold text-base">Bài báo khoa học đính kèm</h4>
           <p className="border-l-2 border-blue-600 pl-2">
-            {researchTopic.articleName}
+            {acceptance.researchTopic.articleName}
           </p>
           <a
             className="hover:underline hover:text-blue-500"
-            href={`/article/${researchTopic.articleId}`}
+            href={`/article/${acceptance.researchTopic.articleId}`}
           >
             Tham khảo bài báo tại đây
           </a>
@@ -170,4 +170,4 @@ const ResearchTopicOverview = (props: IProps) => {
     </div>
   );
 };
-export default ResearchTopicOverview;
+export default AcceptanceOverview;

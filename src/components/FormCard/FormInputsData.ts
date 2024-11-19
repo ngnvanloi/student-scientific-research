@@ -50,6 +50,9 @@ export type TFormSubmitResearchTopic = {
   articleId?: string;
   disciplineId: string;
   competitionId?: number;
+
+  // dành cho nội dung cập nghiệm thu
+  contentForUpdateAcceptance?: string;
 };
 export type TFormUpdateArticle = {
   title: string;
@@ -136,7 +139,20 @@ export type TFormReviewTopic = {
 export type TFormEstablishReviewCouncil = {
   name: string;
 };
+export type TFormCreateAcceptance = {
+  researchTopicId: string;
+  name: string;
+};
 
 export type TFormFilter = {
   competitionId?: string;
+};
+
+export type TFormRequestAcceptanceDeadline = {
+  month?: number;
+};
+
+export type TFormApprovedAcceptance = {
+  description: string;
+  isAccepted: string;
 };

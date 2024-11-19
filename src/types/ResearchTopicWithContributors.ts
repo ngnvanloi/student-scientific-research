@@ -18,8 +18,8 @@ export type ResearchTopicWithContributors = {
   budgetFilePath: string;
   productFilePath: string;
   reportFilePath: string;
-  dateStart: string | Date;
-  dateEnd: string | Date;
+  dateStart: string;
+  dateEnd: string;
   articleId: number;
   articleName: string;
   disciplineId: number;
@@ -33,4 +33,5 @@ export type ResearchTopicWithContributors = {
   review_Committees: ReviewCouncilWithMembers;
   history_Update_ResearchTopics: HistoryUpdateResearchTopic[];
   author_ResearchTopics: Author_ResearchTopics[];
+  acceptance?: null | any;
 };

@@ -11,6 +11,7 @@ import {
   FileTextOutlined,
   FileZipOutlined,
   FireOutlined,
+  InboxOutlined,
   Loading3QuartersOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -96,19 +97,19 @@ export default function AdminLayout({
         "/author/research-topic-awaiting-review"
       ),
       getItem(
-        "Đề tài chờ nghiệm thu",
+        "Nộp nghiệm thu đề tài",
         "9",
-        <Loading3QuartersOutlined />,
+        <FileZipOutlined />,
         undefined,
-        "#"
+        "/author/topic-awaiting-acceptance"
       ),
     ]),
     getItem(
-      "Đề tài đang nghiệm thu",
+      "Theo dõi tình trạng nghiệm thu",
       "10",
-      <FileZipOutlined />,
+      <InboxOutlined />,
       undefined,
-      "#"
+      "/author/monitor-the-acceptance-status"
     ),
     getItem("Thông báo", "11", <BellOutlined />, undefined, "#"),
     getItem(
