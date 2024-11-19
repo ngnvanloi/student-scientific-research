@@ -34,6 +34,7 @@ import {
   ParamsGetAllArticleForAuthorWithFilter,
   useGetAllArticleForAuthorWithFilter,
 } from "@/hooks-query/queries/use-get-article-for-author-with-filter";
+import DragFileUpload from "../UploadFile/DragFileUpload";
 
 interface IProps {
   competition: Competition | undefined;
@@ -451,28 +452,18 @@ const FormSubmitResearchTopic = (props: IProps) => {
           setData={setListContributors}
         />
       </div>
-      <div className="flex gap-4 mt-3">
-        <div>
+      <div className="">
+        <div className="mt-3">
           <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
             File thuyết minh
           </label>
-          <ClickFileUpload limit={1} multiple={false} setFile={setFileReport} />
+          <DragFileUpload limit={1} multiple={false} setFile={setFileReport} />
         </div>
-        <div>
-          <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-            File sản phẩm
-          </label>
-          <ClickFileUpload
-            limit={1}
-            multiple={false}
-            setFile={setFileProduct}
-          />
-        </div>
-        <div>
+        <div className="mt-3">
           <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
             File dự trù kinh phí
           </label>
-          <ClickFileUpload limit={1} multiple={false} setFile={setFileBudget} />
+          <DragFileUpload limit={1} multiple={false} setFile={setFileBudget} />
         </div>
       </div>
       {errorMessage && (
