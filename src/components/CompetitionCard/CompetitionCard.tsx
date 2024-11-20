@@ -254,13 +254,13 @@ const CompetitionCardForAuthor = (props: IProps) => {
     index: 1,
     pageSize: 999,
   };
-  const { data: ownResearchTopic } =
+  const { data: ownResearchTopic, refetch: refetchListRT } =
     useGetListResearchTopicForAuthorByRolename(params);
 
-  // console.log(
-  //   "checking list research topic by owner: ",
-  //   JSON.stringify(ownResearchTopic?.data.items, null, 2)
-  // );
+  console.log(
+    "checking list research topic by owner: ",
+    JSON.stringify(ownResearchTopic?.data.items, null, 2)
+  );
   let isSubmitted = ownResearchTopic?.data.items.some(
     (topic) => topic.competitionId === competition?.id
   );
@@ -272,6 +272,7 @@ const CompetitionCardForAuthor = (props: IProps) => {
     `=====> checking research topic by competition ID = ${competition?.id}: `,
     researchTopicByCompetitionId
   );
+  console.log("checking isSubmitted: ", isSubmitted);
 
   // kiểm tra account email có nằm trong mảng coAuthor với vai trò đồng tác giả hay không, nếu có thì ẩn nút chỉnh sửa đi
   function checkContributor(email: string, roleName: string): boolean {

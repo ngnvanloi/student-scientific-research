@@ -12,7 +12,7 @@ const TrackOngoingProjectEvaluations = () => {
   let params: ParamsGetListAcceptanceForAllRole = {
     index: 1,
     pageSize: 100,
-    facultyAcceptedStatus: 0,
+    facultyAcceptedStatus: 3,
   };
   const { data: listAcceptance, refetch: refetchListAcceptance } =
     useGetListAcceptanceForAllRole(params);
