@@ -76,7 +76,7 @@ export function NotificationBadge() {
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
-              <ScrollArea className="max-h-72 w-full">
+              <ScrollArea className="max-h-72 w-full pr-2">
                 {listNotification?.data.map((notification, index) => (
                   <NotificationCard
                     key={index}

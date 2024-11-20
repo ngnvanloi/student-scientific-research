@@ -11,6 +11,10 @@ import imgNotiTypeRegis from "../../assets/icon/icons8-regis-100.png";
 import imgNotiTypeAssignment from "../../assets/icon/icons8-task-100.png";
 import imgNotiTypeReview from "../../assets/icon/icons8-communication-100.png";
 import imgNotiTypeTopic from "../../assets/icon/icons8-submit-document-100.png";
+import imgNotiTypeReviewAcceptance from "../../assets/icon/icons8-pass-fail-100.png";
+import imgNotiTypeApprovedAcceptance from "../../assets/icon/icons8-diploma-100.png";
+import imgNotiTypeExtendAcceptanceDeadline from "../../assets/icon/icons8-deadline-100.png";
+import imgNotiTypeAcceptance from "../../assets/icon/icons8-archive-folder-100.png";
 
 import {
   ArchiveBoxXMarkIcon,
@@ -148,11 +152,55 @@ const NotificationCard = (props: IProps) => {
     // REDIRECT TO PHÂN CÔNG PHẢN BIỆN (chưa cần)
     else if (notification.notificationTypeId === 5) {
       if (session?.user?.roleName === "reviewer") {
-        router.push("/reviewer/");
+        router.push("/reviewer/research-topic-awaiting-review");
         handleMarkAsRead();
       }
       if (session?.user?.roleName === "organizer") {
         router.push("/admin/");
+        handleMarkAsRead();
+      }
+    }
+    // REDIRECT TO APPROVAL REVIEW ACCEPTED
+    else if (notification.notificationTypeId === 6) {
+      if (session?.user?.roleName === "author") {
+        router.push("/author/topic-awaiting-acceptance");
+        handleMarkAsRead();
+      }
+    }
+    // REDIRECT TO ACCEPTANCE
+    else if (notification.notificationTypeId === 7) {
+      if (session?.user?.roleName === "author") {
+        router.push("/author/monitor-the-acceptance-status");
+        handleMarkAsRead();
+      }
+      if (session?.user?.roleName === "organizer") {
+        router.push("/admin/track-ongoing-project-evaluations");
+        handleMarkAsRead();
+      }
+    }
+    // REDIRECT EXTEND ACCEPTANCE DEADLINE
+    else if (notification.notificationTypeId === 8) {
+      if (session?.user?.roleName === "author") {
+        router.push("/author/topic-awaiting-acceptance");
+        handleMarkAsRead();
+      }
+      if (session?.user?.roleName === "organizer") {
+        router.push("/admin/track-ongoing-project-evaluations");
+        handleMarkAsRead();
+      }
+    }
+    // REDIRECT ACCEPTANCE APPROVED
+    else if (notification.notificationTypeId === 9) {
+      if (session?.user?.roleName === "author") {
+        router.push("/author/monitor-the-acceptance-status");
+        handleMarkAsRead();
+      }
+      if (session?.user?.roleName === "superadmin") {
+        router.push("/super-admin/track-ongoing-project-evaluations");
+        handleMarkAsRead();
+      }
+      if (session?.user?.roleName === "organizer") {
+        router.push("/admin/track-ongoing-project-evaluations");
         handleMarkAsRead();
       }
     }
@@ -176,6 +224,16 @@ const NotificationCard = (props: IProps) => {
             return <img src={imgNotiTypeRegis.src} width={30} />;
           } else if (notification.notificationTypeId === 5) {
             return <img src={imgNotiTypeAssignment.src} width={30} />;
+          } else if (notification.notificationTypeId === 6) {
+            return <img src={imgNotiTypeReviewAcceptance.src} width={30} />;
+          } else if (notification.notificationTypeId === 7) {
+            return <img src={imgNotiTypeAcceptance.src} width={30} />;
+          } else if (notification.notificationTypeId === 8) {
+            return (
+              <img src={imgNotiTypeExtendAcceptanceDeadline.src} width={30} />
+            );
+          } else if (notification.notificationTypeId === 9) {
+            return <img src={imgNotiTypeApprovedAcceptance.src} width={30} />;
           }
         })()}
       </div>

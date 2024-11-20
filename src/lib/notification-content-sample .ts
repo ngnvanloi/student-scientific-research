@@ -11,13 +11,11 @@ export const NotificationContentSample = {
           " rất lấy làm tiếc khi bài báo của bạn chưa được phê duyệt. Vui lòng kiểm tra lại nội dung hoặc liên hệ với quản trị viên để biết thêm chi tiết. ",
       },
     },
-
     // Đề tài (2)
     researchTopic: {
       author:
         " đã nộp đề tài lên hệ thống. Vui lòng kiểm tra thông tin và tiến hành phân công phản biện đúng thời hạn.",
     },
-
     // Phản biện (3)
     reviewProcess: {
       author:
@@ -25,7 +23,6 @@ export const NotificationContentSample = {
       reviewer:
         " đã phản biện đề tài của bạn. Vui lòng xem xét phản hồi và tiếp tục hoàn thiện nội dung ",
     },
-
     // Phiếu đăng ký (4)
     registration: {
       author: " đã đăng ký tham gia cuộc thi ",
@@ -36,12 +33,10 @@ export const NotificationContentSample = {
           " Phiếu đăng ký của bạn chưa được chấp nhận. Vui lòng kiểm tra lại thông tin đăng ký và thử lại. ",
       },
     },
-
     // Phân công phản biện (5)
     reviewAssignment: {
       reviewer: " đã phân công bạn phản biện cho đề tài ",
     },
-
     // tình trạng đề tài đủ yêu cầu để nghiệm thu hay không (6)
     reviewAcceptance: {
       organizer: {
@@ -71,8 +66,10 @@ export const NotificationContentSample = {
       author:
         " đã gửi một yêu cầu xin gia hạn thời gian làm nghiệm thu cho đề tài ",
       organizer: {
-        accept: "",
-        reject: "",
+        accept:
+          " đã chấp nhận yêu cầu xin gia hạn thời gian nghiệm thu của bạn. Lưu ý thời gian để hoàn thành đúng tiến độ, chúc các bạn hoàn thành thật tốt nghiệm thu ",
+        reject:
+          " vì một số lý do đã không chấp nhận yêu cầu xin gia hạn nghiệm thu của bạn, vui lòng đến gặp ban tổ chức ở văn phòng Khoa để biết thêm chi tiết ",
       },
     },
     // phê duyệt nghiệm thu (9)
