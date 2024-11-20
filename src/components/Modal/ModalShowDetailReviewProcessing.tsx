@@ -151,7 +151,7 @@ const ModalShowDetailReviewProcessing = (props: IProps) => {
             researchTopic?.author_ResearchTopics.find((item) => {
               return (item.roleName = "author");
             })?.author.accountId || -1,
-          notificationTypeId: 4,
+          notificationTypeId: 6,
           targetId: -1,
         };
         notiMutation(paramsNoti, {

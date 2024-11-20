@@ -103,7 +103,7 @@ const ModalCreateAcceptance = (props: IProps) => {
           notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.acceptance.author.submit}`,
           notificationDate: new Date().toISOString(),
           recevierId: competitionDetail?.data.accountId || 0,
-          notificationTypeId: 4,
+          notificationTypeId: 7,
           targetId: -1,
         };
         notiMutation(paramsNoti, {

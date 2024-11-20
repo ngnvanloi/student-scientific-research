@@ -142,7 +142,7 @@ const ModalReviewAssignment = (props: IProps) => {
               notificationContent: notiContent,
               notificationDate: new Date().toISOString(),
               recevierId: item.accountId || -1,
-              notificationTypeId: 3,
+              notificationTypeId: 5,
               targetId: researchTopic.id,
             };
             notiMutation(paramsNoti);

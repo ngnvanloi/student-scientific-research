@@ -112,7 +112,7 @@ const ApprovalAcceptanceForOrganizer = (props: IProps) => {
               acceptance?.researchTopic.author_ResearchTopics.find(
                 (item) => item.roleName === "author"
               )?.author.accountId || 0,
-            notificationTypeId: 4,
+            notificationTypeId: 9,
             targetId: -1,
           };
           notiMutation(paramsNoti, {

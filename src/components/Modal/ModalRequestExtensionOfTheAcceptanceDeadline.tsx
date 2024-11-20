@@ -62,12 +62,12 @@ const ModalRequestExtensionOfTheAcceptanceDeadline = (props: IProps) => {
       ". Thời gian yêu cầu là " +
       data.month +
       " tháng";
-    // gửi thông báo cho người đăng kí
+    // gửi thông báo cho ban tổ chức
     const paramsNoti: ParamsCreateNotification = {
       notificationContent: contentNoti,
       notificationDate: new Date().toISOString(),
       recevierId: competitionDetail?.data.accountId || -1,
-      notificationTypeId: 4,
+      notificationTypeId: 8,
       targetId: -1,
     };
     notiMutation(paramsNoti, {
@@ -77,7 +77,7 @@ const ModalRequestExtensionOfTheAcceptanceDeadline = (props: IProps) => {
           title: "Thành công",
           variant: "default",
           description:
-            "Bạn đã gủi yêu cầu gia hạn nghiệm thu thành công. Bạn sẽ nhận được phản hồi sớm nhất từ ban tổ chức, vui lòng kiểm tra thông báo thường xuyên",
+            "Bạn đã gửi yêu cầu gia hạn nghiệm thu thành công. Bạn sẽ nhận được phản hồi sớm nhất từ ban tổ chức, vui lòng kiểm tra thông báo thường xuyên",
         });
         setIsOpen(false);
       },

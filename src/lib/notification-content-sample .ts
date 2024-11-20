@@ -70,9 +70,12 @@ export const NotificationContentSample = {
     extendAcceptanceDeadline: {
       author:
         " đã gửi một yêu cầu xin gia hạn thời gian làm nghiệm thu cho đề tài ",
+      organizer: {
+        accept: "",
+        reject: "",
+      },
     },
-
-    // phê duyệt nghiệm thu
+    // phê duyệt nghiệm thu (9)
     approvedAcceptance: {
       organizer: {
         accept:

@@ -286,7 +286,7 @@ const FormUpdateAcceptance = (props: IProps) => {
               notificationContent: session?.user?.name + contentNoti,
               notificationDate: new Date().toISOString(),
               recevierId: competitionDetail?.data.accountId || 0,
-              notificationTypeId: 4,
+              notificationTypeId: 7,
               targetId: -1,
             };
             notiMutation(paramsNoti, {
