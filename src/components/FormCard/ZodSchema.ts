@@ -6,6 +6,7 @@ import {
   TFormAddReviewer,
   TFormApprovalRegistration,
   TFormApprovedAcceptance,
+  TFormAskAI,
   TFormCreateAcceptance,
   TFormEmail,
   TFormEstablishReviewCouncil,
@@ -16,6 +17,7 @@ import {
   TFormResetPassword,
   TFormReviewAssignment,
   TFormReviewTopic,
+  TFormSendEmail,
   TFormSubmitArticle,
   TFormSubmitNewTopicVersion,
   TFormSubmitResearchProjectTabGoalResult,
@@ -235,3 +237,13 @@ export const FormRequestAcceptanceDeadlineSchema: ZodType<TFormRequestAcceptance
   z.object({
     month: z.number().optional(),
   });
+export const FormSendEmailSchema: ZodType<TFormSendEmail> = z.object({
+  receiverEmail: z.string().email(),
+  receiverName: z.string().optional(),
+  subject: z.string(),
+  content: z.string(),
+});
+
+export const FormAskAISchema: ZodType<TFormAskAI> = z.object({
+  prompt: z.string(),
+});

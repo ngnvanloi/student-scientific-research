@@ -1,25 +1,18 @@
 "use client";
 import React, { useState } from "react";
 import {
-  AppstoreAddOutlined,
   BellOutlined,
-  CarryOutOutlined,
-  CloudServerOutlined,
   CommentOutlined,
   DeliveredProcedureOutlined,
   FileProtectOutlined,
   FileTextOutlined,
   FileZipOutlined,
-  FireOutlined,
   InboxOutlined,
-  Loading3QuartersOutlined,
+  MailOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
   ReconciliationOutlined,
-  SignatureOutlined,
-  SolutionOutlined,
-  TeamOutlined,
   TrophyOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -111,7 +104,7 @@ export default function AdminLayout({
       undefined,
       "/author/monitor-the-acceptance-status"
     ),
-    getItem("Thông báo", "11", <BellOutlined />, undefined, "#"),
+    getItem("Tin nhắn", "11", <MailOutlined />, undefined, "/author/inbox"),
     getItem(
       "Quản lý tài khoản",
       "12",

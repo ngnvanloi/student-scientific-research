@@ -156,3 +156,14 @@ export type TFormApprovedAcceptance = {
   description: string;
   isAccepted: string;
 };
+
+export type TFormSendEmail = {
+  receiverEmail: string;
+  receiverName?: string;
+  subject: string;
+  content: string;
+};
+
+export type TFormAskAI = {
+  prompt: string;
+};
