@@ -28,6 +28,7 @@ import {
 } from "@/hooks-query/mutations/use-ask-ai";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingSpinner } from "../SpinnerLoading/LoadingSpinner";
+import { ChatbotTypingIndicator } from "../Inbox/ChatbotTypingIndicator";
 
 const ModalAskAI = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -142,7 +143,13 @@ const ModalAskAI = () => {
         <div>
           <p className="font-semibold text-blue-900 flex gap-2">
             <SparklesIcon width={20} />
-            {!isPending ? "AI trả lời" : "AI đang suy nghĩ, chờ một lát nhé"}
+            {!isPending ? (
+              "AI trả lời"
+            ) : (
+              <div className="flex items-center justify-center bg-gray-100 gap-2">
+                AI đang suy nghĩ, chờ một lát nhé <ChatbotTypingIndicator />
+              </div>
+            )}
           </p>
           <p className="text-justify">{contentGenerate}</p>
         </div>
