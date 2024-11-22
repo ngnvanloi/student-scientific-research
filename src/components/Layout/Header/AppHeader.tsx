@@ -94,7 +94,7 @@ export default function AppHeader() {
             Bài báo khoa học
           </Link>
           <Link
-            href="/"
+            href="/research-topic"
             className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "topic" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
             onClick={() => setCurrentTab("topic")}
           >
@@ -175,7 +175,7 @@ export default function AppHeader() {
                   Bài báo khoa học
                 </a>
                 <a
-                  href="/"
+                  href="/research-topic"
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   Đề tài khoa học

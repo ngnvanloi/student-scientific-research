@@ -12,6 +12,7 @@ export type ParamsGetListAcceptanceForAllRole = {
 
   idSearch?: number;
   nameTopicSearch?: string;
+  nameSearch?: string;
   facultyAcceptedStatus?: number;
   acceptedForPublicationStatus?: number;
   competitionId?: number;
@@ -47,6 +48,9 @@ export async function GetListAcceptanceForAllRole(
   // Thêm các tham số khác nếu có
   if (param.nameTopicSearch) {
     queryParams.append("nameTopicSearch", param.nameTopicSearch);
+  }
+  if (param.nameSearch) {
+    queryParams.append("nameSearch", param.nameSearch);
   }
   if (
     param.acceptedForPublicationStatus !== undefined &&

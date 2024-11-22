@@ -231,6 +231,7 @@ export const FormCreateAcceptanceSchema: ZodType<TFormCreateAcceptance> =
 
 export const FormFilterSchema: ZodType<TFormFilter> = z.object({
   competitionId: z.string().optional(),
+  facultyId: z.string().optional(),
 });
 
 export const FormRequestAcceptanceDeadlineSchema: ZodType<TFormRequestAcceptanceDeadline> =

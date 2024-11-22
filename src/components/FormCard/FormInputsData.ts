@@ -146,6 +146,7 @@ export type TFormCreateAcceptance = {
 
 export type TFormFilter = {
   competitionId?: string;
+  facultyId?: string;
 };
 
 export type TFormRequestAcceptanceDeadline = {

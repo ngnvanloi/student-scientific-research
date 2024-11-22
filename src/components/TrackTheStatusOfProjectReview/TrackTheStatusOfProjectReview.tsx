@@ -7,7 +7,10 @@ import { ResearchTopicCardForAdmin } from "../ResearchProjectCard/ResearchProjec
 import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
 import { useForm, useWatch } from "react-hook-form";
 import { TFormAddContributor, TFormFilter } from "../FormCard/FormInputsData";
-import { FormAddContributorSchema } from "../FormCard/ZodSchema";
+import {
+  FormAddContributorSchema,
+  FormFilterSchema,
+} from "../FormCard/ZodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ParamsGetListCompetition,
@@ -54,7 +57,7 @@ const TrackTheStatusOfProjectReview = () => {
     reset,
     control,
   } = useForm<TFormFilter>({
-    resolver: zodResolver(FormAddContributorSchema),
+    resolver: zodResolver(FormFilterSchema),
   });
 
   // refetch danh sách đề tài theo selected
