@@ -10,6 +10,7 @@ import { useState } from "react";
 import { ModalUpdateAcceptance } from "../Modal/ModalUpdateAcceptance";
 import { ModalShowDetailAcceptanceOfResearchTopic } from "../Modal/ModalShowDetailAcceptanceOfResearchTopic";
 import { ModalApprovedAcceptanceForOrganizer } from "../Modal/ModalApprovedAcceptanceForOrganizer";
+import { ModalExtendTheAcceptanceDeadline } from "../Modal/ModalExtendTheAcceptanceDeadline";
 
 interface IProps {
   acceptance: Acceptance | undefined;
@@ -18,6 +19,8 @@ const AcceptanceCardForOrganizer = (props: IProps) => {
   const { acceptance } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState<boolean>(false);
+  const [isModalExtendDeadlineOpen, setIsModalExtendDeadlineOpen] =
+    useState<boolean>(false);
   return (
     <div className="border rounded-md py-3 px-4 flex mb-3 gap-x-2 border-l-4 border-l-blue-900">
       <div className="flex-1">
@@ -80,10 +83,17 @@ const AcceptanceCardForOrganizer = (props: IProps) => {
         >
           Xem chi tiết
         </Button>
+
         {acceptance?.facultyAcceptedStatus === 1 ? (
           ""
         ) : (
           <>
+            <Button
+              className="hover:cursor-pointer hover:text-blue-500 gap-2 mt-1"
+              onClick={() => setIsModalExtendDeadlineOpen(true)}
+            >
+              Gia hạn thời gian
+            </Button>
             <Button
               className="hover:cursor-pointer hover:text-blue-500 gap-2 mt-1"
               onClick={() => setIsModalUpdateOpen(true)}
@@ -102,6 +112,11 @@ const AcceptanceCardForOrganizer = (props: IProps) => {
         acceptance={acceptance}
         isOpen={isModalUpdateOpen}
         setIsOpen={setIsModalUpdateOpen}
+      />
+      <ModalExtendTheAcceptanceDeadline
+        researchTopic={acceptance?.researchTopic}
+        isOpen={isModalExtendDeadlineOpen}
+        setIsOpen={setIsModalExtendDeadlineOpen}
       />
     </div>
   );
