@@ -6,6 +6,7 @@ import {
   CarryOutOutlined,
   CloudServerOutlined,
   FileTextOutlined,
+  MailOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
@@ -118,9 +119,10 @@ export default function AdminLayout({
         "/admin"
       ),
     ]),
+    getItem("Tin nhắn", "10", <MailOutlined />, undefined, "/admin/inbox"),
     getItem(
       "Quản lý tài khoản",
-      "10",
+      "11",
       <UserOutlined />,
       undefined,
       "/admin/my-profile"

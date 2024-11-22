@@ -4,6 +4,7 @@ import {
   BellOutlined,
   EditOutlined,
   FileTextOutlined,
+  MailOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
@@ -59,7 +60,7 @@ export default function AdminLayout({
       undefined,
       "/reviewer/research-topic-awaiting-review"
     ),
-    getItem("Thông báo", "4", <BellOutlined />, undefined, "#"),
+    getItem("Tin nhắn", "4", <MailOutlined />, undefined, "/reviewer/inbox"),
     getItem(
       "Quản lý tài khoản",
       "5",

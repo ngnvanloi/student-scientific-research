@@ -8,6 +8,7 @@ import {
   CloudServerOutlined,
   FileTextOutlined,
   FireOutlined,
+  MailOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
@@ -79,14 +80,15 @@ export default function AdminLayout({
     ]),
     getItem(
       "Phê duyệt nghiệm thu",
-      "6",
+      "4",
       <AuditOutlined />,
       undefined,
       "/super-admin/track-ongoing-project-evaluations"
     ),
+    getItem("Tin nhắn", "5", <MailOutlined />, undefined, "/super-admin/inbox"),
     getItem(
       "Quản lý người dùng",
-      "5",
+      "6",
       <UserOutlined />,
       undefined,
       "/super-admin/user-administration"

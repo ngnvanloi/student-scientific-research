@@ -1,8 +1,8 @@
 import { MailBoxContainer } from "@/components/Inbox/MyMailContainer";
 import { SendingMessage } from "@/components/Inbox/SendingMessage";
 
-const AuthorInboxPage = () => {
+const SuperAdminInboxPage = () => {
   // return <SendingMessage />;
   return <MailBoxContainer />;
 };
-export default AuthorInboxPage;
+export default SuperAdminInboxPage;
