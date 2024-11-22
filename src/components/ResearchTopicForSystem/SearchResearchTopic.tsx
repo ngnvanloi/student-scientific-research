@@ -20,7 +20,7 @@ const SearchResearchTopic = () => {
     console.log("checking keywords search: ", content);
     const newParamsFilter = {
       ...paramsFilter,
-      nameTopicSearch: content,
+      nameSearch: content,
     };
     // Cập nhật state hoặc context
     setParamsFilter(newParamsFilter);

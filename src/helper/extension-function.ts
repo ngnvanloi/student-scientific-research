@@ -44,3 +44,16 @@ export function formatTimeMMSS(seconds: number) {
 
   return `${minutes}:${formattedSeconds}`;
 }
+
+export function isValid(value: any): boolean {
+  if (typeof value === "string") {
+    return value.trim() !== "";
+  }
+  return (
+    value !== null &&
+    value !== undefined &&
+    value !== 0 &&
+    value !== false &&
+    value !== "Unknown"
+  );
+}

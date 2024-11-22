@@ -1,11 +1,44 @@
+"use client";
 import { CooperationUnit } from "./CooperationUnit";
 import { HomepageOverview } from "./HomepageOverview";
 import { HomepageNotification } from "./HomepageNotification";
 import { HomepageCarousel } from "./HomepageCarousel";
 import { HomepageArticleList } from "./HomepageArticleList";
 import { HomepageQuestionAndAnswer } from "./Q&A";
+import { getSession, useSession } from "next-auth/react";
+import { isValid } from "@/helper/extension-function";
+import { useRouter } from "next/navigation";
 
 const HomePage = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  // chuyển hướng
+  const redirectToProfileIfIncomplete = (rolePath: string) => {
+    if (
+      !isValid(session?.user?.numberPhone) ||
+      !isValid(session?.user?.facultyId) ||
+      !isValid(session?.user?.facultyName)
+    ) {
+      router.push(rolePath);
+    }
+  };
+  if (session?.user?.roleName) {
+    switch (session.user.roleName) {
+      case "reviewer":
+        redirectToProfileIfIncomplete("/reviewer/my-profile");
+        break;
+      case "organizer":
+        redirectToProfileIfIncomplete("/admin/my-profile");
+        break;
+      case "author":
+        redirectToProfileIfIncomplete("/author/my-profile");
+        break;
+      default:
+        router.push("/");
+    }
+  } else {
+    console.log("Something went wrong in HomePage.tsx");
+  }
   return (
     <div className="flex gap-1">
       <div className="basis-2/3 gap-1 flex flex-col">

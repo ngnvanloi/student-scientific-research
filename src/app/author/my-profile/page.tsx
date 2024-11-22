@@ -1,15 +1,16 @@
 "use client";
 import { ModalUpdateProfile } from "@/components/Modal/ModalUpdateProfile";
-import { formatDate } from "@/helper/extension-function";
+import { formatDate, isValid } from "@/helper/extension-function";
 import { useGetProfile } from "@/hooks-query/queries/use-get-user-profile";
 import { Author } from "@/types/Author";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
-import { Button } from "antd";
+import { Alert, Button } from "antd";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 export default function MyProfile() {
   const { data: user } = useGetProfile();
-
+  const { data: session } = useSession();
   console.log("check user author profile: ", user);
   let author: Author = {
     name: user?.data.name || "",
@@ -41,9 +42,22 @@ export default function MyProfile() {
             />
           </div>
         </div>
-        <p className="mt-1 max-w-2xl text-sm/6 text-gray-500">
-          Hoàn thiện hồ sơ cá nhân của bạn
-        </p>
+        {(() => {
+          if (
+            !isValid(session?.user?.facultyName) ||
+            !isValid(session?.user?.facultyId) ||
+            !isValid(session?.user?.numberPhone)
+          ) {
+            return (
+              <Alert
+                message="Vui lòng hoàn thiện hồ sơ cá nhân của bạn để tránh các trường hợp lỗi sau này"
+                type="warning"
+                showIcon
+                className="mt-3"
+              />
+            );
+          }
+        })()}
       </div>
       <div className="mt-6 border-t border-gray-100">
         <dl className="divide-y divide-gray-100">

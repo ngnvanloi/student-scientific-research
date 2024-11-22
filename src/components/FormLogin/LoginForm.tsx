@@ -7,12 +7,13 @@ import { FormLoginSchema } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
 import { GoogleSVG } from "@/assets/svg/google.icon";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
+import { isValid } from "@/helper/extension-function";
 
 const LoginForm = () => {
   const router = useRouter();
-  const { data: session } = useSession();
-  if (session) {
+  const { data: sessionn } = useSession();
+  if (sessionn) {
     router.push("/");
   }
 
@@ -33,13 +34,36 @@ const LoginForm = () => {
       email: data.email,
       password: data.password,
     };
-    // chuyển hướng trang sang xác thực otp
 
     // thực hiện login
     await authenticate(formData);
-    if (!session?.expires) {
-      router.push("/");
-      window.location.reload();
+
+    const session = await getSession();
+    // chuyển hướng
+    const redirectToProfileIfIncomplete = (rolePath: string) => {
+      if (
+        !isValid(session?.user?.numberPhone) ||
+        !isValid(session?.user?.facultyId) ||
+        !isValid(session?.user?.facultyName)
+      ) {
+        router.push(rolePath);
+        window.location.reload();
+      }
+    };
+    if (session?.user?.roleName) {
+      switch (session.user.roleName) {
+        case "reviewer":
+          redirectToProfileIfIncomplete("/reviewer/my-profile");
+          break;
+        case "organizer":
+          redirectToProfileIfIncomplete("/admin/my-profile");
+          break;
+        case "author":
+          redirectToProfileIfIncomplete("/author/my-profile");
+          break;
+        default:
+          router.push("/");
+      }
     } else {
       console.log("Login failed");
     }

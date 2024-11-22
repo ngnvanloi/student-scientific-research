@@ -9,6 +9,7 @@ export type ParamsGetListCompetition = {
   pageSize: number;
   nameSearch?: string;
   organizerName?: string;
+  facultyId?: number;
 };
 // Hook để sử dụng useQuery cho việc lấy danh sách cuộc thi
 export const useGetListCompetition = (params: ParamsGetListCompetition) => {
@@ -38,7 +39,9 @@ export async function GetListCompetition(
   if (param.nameSearch) {
     queryParams.append("nameSearch", param.nameSearch);
   }
-
+  if (param.facultyId) {
+    queryParams.append("facultyId", param.facultyId.toString());
+  }
   const fullUrl = `${baseUrl}?${queryParams.toString()}`;
   //
   const response = (await communityRequest)(fullUrl, {
@@ -80,6 +83,9 @@ export async function GetListCompetitionaAdmin(
   if (param.nameSearch) {
     queryParams.append("nameSearch", param.nameSearch);
   }
+  // if (param.facultyId) {
+  //   queryParams.append("facultyId", param.facultyId.toString());
+  // }
 
   const fullUrl = `${baseUrl}?${queryParams.toString()}`;
 

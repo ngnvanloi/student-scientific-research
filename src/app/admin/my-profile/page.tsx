@@ -1,13 +1,15 @@
 "use client";
 import { ModalUpdateOrganizerProfile } from "@/components/Modal/ModalUpdateOrganizerProfile";
+import { isValid } from "@/helper/extension-function";
 import { useGetProfile } from "@/hooks-query/queries/use-get-user-profile";
 import { Organizer } from "@/types/Organizer";
-import { Button } from "antd";
+import { Alert, Button } from "antd";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 export default function MyProfile() {
   const { data: user, refetch } = useGetProfile();
-
+  const { data: session } = useSession();
   console.log("check user organizer profile: ", user);
   let organizer: Organizer = {
     name: user?.data.name || "",
@@ -41,9 +43,22 @@ export default function MyProfile() {
             />
           </div>
         </div>
-        <p className="mt-1 max-w-2xl text-sm/6 text-gray-500">
-          Hoàn thiện hồ sơ cá nhân của bạn
-        </p>
+        {(() => {
+          if (
+            !isValid(session?.user?.facultyName) ||
+            !isValid(session?.user?.facultyId) ||
+            !isValid(session?.user?.numberPhone)
+          ) {
+            return (
+              <Alert
+                message="Vui lòng hoàn thiện hồ sơ cá nhân của bạn để tránh các trường hợp lỗi sau này"
+                type="warning"
+                showIcon
+                className="mt-3"
+              />
+            );
+          }
+        })()}
       </div>
       <div className="mt-6 border-t border-gray-100">
         <dl className="divide-y divide-gray-100">

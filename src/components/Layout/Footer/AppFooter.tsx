@@ -53,9 +53,7 @@ const AppFooter = () => {
         ))}
       </ul>
       <div className="mt-8 items-center justify-between sm:flex">
-        <div className="mt-4 sm:mt-0">
-          &copy; 2024 NguyenVanLoi - DoBaoToan - NguyenThiMai
-        </div>
+        <div className="mt-4 sm:mt-0">&copy; 2024 NguyenVanLoi - DoBaoToan</div>
         <div className="mt-6 sm:mt-0">
           <ul className="flex items-center space-x-4">
             <li className="w-10 h-10 border rounded-full flex items-center justify-center">

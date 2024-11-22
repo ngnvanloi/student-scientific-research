@@ -12,6 +12,7 @@ import { useGetListFaculty } from "@/hooks-query/queries/use-get-faculties";
 import { Button } from "antd";
 import { FunnelIcon } from "@heroicons/react/24/outline";
 import { useListPubicResearchTopicContext } from "./ListPublicResearchTopicContext";
+import { useEffect } from "react";
 
 const SidebarFilter = () => {
   // USE PROVIDER CONTEXT
@@ -25,6 +26,7 @@ const SidebarFilter = () => {
   let param: ParamsGetListCompetition = {
     index: 1,
     pageSize: 8,
+    facultyId: 0,
   };
   const {
     data: listCompetitions,
@@ -51,6 +53,10 @@ const SidebarFilter = () => {
   let selectedCompetitionId = useWatch({
     control,
     name: "competitionId",
+  });
+  let selectedFacultyId = useWatch({
+    control,
+    name: "facultyId",
   });
 
   // LẤY DANH SÁCH KHOA
@@ -83,6 +89,13 @@ const SidebarFilter = () => {
   const onError = (errors: any) => {
     console.log("FORM ERRORS", errors);
   };
+
+  useEffect(() => {
+    if (selectedFacultyId) {
+      param.facultyId = Number(selectedFacultyId);
+      refetchCompetitions();
+    }
+  }, [selectedFacultyId, refetchCompetitions]);
   // render UI
   return (
     <div>
