@@ -111,7 +111,7 @@ const ModalAskAI = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="px-4 py-2 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 ">
+        <Button className="px-4 py-2 text-white rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
           Hỏi AI
           <CursorArrowRippleIcon width={20} />
         </Button>
@@ -142,7 +142,7 @@ const ModalAskAI = () => {
         <div>
           <p className="font-semibold text-blue-900 flex gap-2">
             <SparklesIcon width={20} />
-            AI trả lời
+            {!isPending ? "AI trả lời" : "AI đang suy nghĩ, chờ một lát nhé"}
           </p>
           <p className="text-justify">{contentGenerate}</p>
         </div>

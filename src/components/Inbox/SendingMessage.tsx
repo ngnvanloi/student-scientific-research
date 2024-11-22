@@ -59,17 +59,17 @@ const SendingMessage = () => {
           variant: "default",
           description: `Bạn đã gửi email thành công`,
         });
+        // RESET FORM UPDATE
+        reset({
+          content: "",
+          subject: "",
+          receiverEmail: "",
+          receiverName: "",
+        });
       },
       onError: (error) => {
         console.error("Lỗi khi gửi email:", error);
       },
-    });
-    // RESET FORM UPDATE
-    reset({
-      content: "",
-      subject: "",
-      receiverEmail: "",
-      receiverName: "",
     });
   };
 
@@ -78,7 +78,7 @@ const SendingMessage = () => {
   };
 
   return (
-    <div className="w-2/3 mx-auto">
+    <div className="mx-auto w-full">
       <div>{isPending ? <LoadingSpinner /> : ""}</div>
       <div>
         <label className="mb-[10px] block text-base font-bold text-dark dark:text-white border-l-2 border-l-blue-600 pl-2">
