@@ -149,6 +149,7 @@ const NotificationCard = (props: IProps) => {
         handleMarkAsRead();
       }
     }
+
     // REDIRECT TO PHÂN CÔNG PHẢN BIỆN (chưa cần)
     else if (notification.notificationTypeId === 5) {
       if (session?.user?.roleName === "reviewer") {
@@ -160,6 +161,7 @@ const NotificationCard = (props: IProps) => {
         handleMarkAsRead();
       }
     }
+
     // REDIRECT TO APPROVAL REVIEW ACCEPTED
     else if (notification.notificationTypeId === 6) {
       if (session?.user?.roleName === "author") {
@@ -167,6 +169,7 @@ const NotificationCard = (props: IProps) => {
         handleMarkAsRead();
       }
     }
+
     // REDIRECT TO ACCEPTANCE
     else if (notification.notificationTypeId === 7) {
       if (session?.user?.roleName === "author") {
@@ -178,6 +181,7 @@ const NotificationCard = (props: IProps) => {
         handleMarkAsRead();
       }
     }
+
     // REDIRECT EXTEND ACCEPTANCE DEADLINE
     else if (notification.notificationTypeId === 8) {
       if (session?.user?.roleName === "author") {

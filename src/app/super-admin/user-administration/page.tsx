@@ -1,4 +1,11 @@
-const UserAdministrationPage = () => {
-  return <div>UserAdministrationPage</div>;
+import { UserManagement } from "@/components/UserManagement/UserManagement";
+
+const UserManagementPage = () => {
+  return (
+    <div>
+      <UserManagement />
+    </div>
+  );
 };
-export default UserAdministrationPage;
+
+export default UserManagementPage;

@@ -154,7 +154,7 @@ const ModalEstablishReviewCouncil = (props: IProps) => {
                 </div>
                 <div className="flex justify-between items-center justify-items-center mb-3 mt-3">
                   <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-                    Thêm đồng tác giả
+                    Thêm người phản biện
                   </label>
                   <Button
                     className="bg-green-600 text-white"

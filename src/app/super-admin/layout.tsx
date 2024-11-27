@@ -93,6 +93,13 @@ export default function AdminLayout({
       undefined,
       "/super-admin/user-administration"
     ),
+    getItem(
+      "Sao lưu phục hồi dữ liệu",
+      "6",
+      <UserOutlined />,
+      undefined,
+      "/super-admin/backup-restore-database"
+    ),
   ];
 
   return (

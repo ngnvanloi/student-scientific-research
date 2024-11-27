@@ -34,4 +34,5 @@ export const queryKeys = {
   listAcceptanceForAllRole: ["listAcceptanceForAllRole"],
   statisticForOrganizer: ["statisticForOrganizer"],
   acceptanceDetail: ["acceptanceDetail"],
+  listAccountManagement: ["listAccountManagement"],
 };
