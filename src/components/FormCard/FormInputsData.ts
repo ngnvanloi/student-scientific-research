@@ -158,6 +158,11 @@ export type TFormApprovedAcceptance = {
   isAccepted: string;
 };
 
+export type TFormCreateBackup = {
+  backupType: string;
+  backupPath: string;
+};
+
 export type TFormSendEmail = {
   receiverEmail: string;
   receiverName?: string;

@@ -57,3 +57,7 @@ export function isValid(value: any): boolean {
     value !== "Unknown"
   );
 }
+
+export function formatDirectionPath(inputPath: string): string {
+  return inputPath.replace(/\\/g, "\\\\");
+}

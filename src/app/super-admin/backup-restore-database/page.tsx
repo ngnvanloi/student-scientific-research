@@ -1,4 +1,10 @@
+import { BackupRestoreDatabase } from "@/components/BackupRestoreDatabase/BackupRestoreDatabase";
+
 const BackupRestoreDatabasePage = () => {
-  return <div>backup and restore data</div>;
+  return (
+    <div>
+      <BackupRestoreDatabase />
+    </div>
+  );
 };
 export default BackupRestoreDatabasePage;

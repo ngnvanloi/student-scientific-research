@@ -8,6 +8,7 @@ import {
   TFormApprovedAcceptance,
   TFormAskAI,
   TFormCreateAcceptance,
+  TFormCreateBackup,
   TFormEmail,
   TFormEstablishReviewCouncil,
   TFormFilter,
@@ -217,6 +218,18 @@ export const FormApprovedAcceptanceSchema: ZodType<TFormApprovedAcceptance> =
     description: z.string(),
     isAccepted: z.string(),
   });
+export const FormCreateBackupSchema: ZodType<TFormCreateBackup> = z.object({
+  backupType: z.string(),
+  backupPath: z
+    .string()
+    .refine(
+      (path) =>
+        /^[a-zA-Z]:\\(?:[^\\:*?"<>|\r\n]+\\)*[^\\:*?"<>|\r\n]*$/.test(path),
+      {
+        message: "File path không hợp lệ !",
+      }
+    ),
+});
 
 export const FormEstablishReviewCouncil: ZodType<TFormEstablishReviewCouncil> =
   z.object({

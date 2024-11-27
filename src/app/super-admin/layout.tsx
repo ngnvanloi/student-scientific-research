@@ -95,8 +95,8 @@ export default function AdminLayout({
     ),
     getItem(
       "Sao lưu phục hồi dữ liệu",
-      "6",
-      <UserOutlined />,
+      "7",
+      <CloudServerOutlined />,
       undefined,
       "/super-admin/backup-restore-database"
     ),
