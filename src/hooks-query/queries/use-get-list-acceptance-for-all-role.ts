@@ -17,6 +17,7 @@ export type ParamsGetListAcceptanceForAllRole = {
   acceptedForPublicationStatus?: number;
   competitionId?: number;
   facultyId?: number;
+  accountId?: number;
 };
 export const useGetListAcceptanceForAllRole = (
   params: ParamsGetListAcceptanceForAllRole
@@ -78,6 +79,9 @@ export async function GetListAcceptanceForAllRole(
   }
   if (param.facultyId !== null && param.facultyId !== undefined) {
     queryParams.append("facultyId", param.facultyId.toString());
+  }
+  if (param.accountId !== null && param.accountId !== undefined) {
+    queryParams.append("accountId", param.accountId.toString());
   }
 
   const fullUrl = `${baseUrl}?${queryParams.toString()}`;

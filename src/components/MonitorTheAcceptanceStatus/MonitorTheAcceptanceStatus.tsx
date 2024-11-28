@@ -5,12 +5,15 @@ import {
   useGetListAcceptanceForAllRole,
 } from "@/hooks-query/queries/use-get-list-acceptance-for-all-role";
 import { AcceptanceCardForAuthor } from "../AcceptanceCard/AcceptanceCardForAuthor";
+import { useSession } from "next-auth/react";
 
 const MonitorTheAcceptanceStatus = () => {
+  const { data: session } = useSession();
   // lấy ra danh sách các sản phẩm nghiệm thu
   let params: ParamsGetListAcceptanceForAllRole = {
     index: 1,
     pageSize: 100,
+    accountId: session?.user?.accountId,
   };
   const { data: listAcceptance, refetch: refetchListAcceptance } =
     useGetListAcceptanceForAllRole(params);
