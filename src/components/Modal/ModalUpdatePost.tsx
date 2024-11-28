@@ -11,48 +11,54 @@ import RichTextEditor from "../RichTextEditor/RichTextEditor";
 import React, { useEffect, useState } from "react";
 import ClickFileUpload from "../UploadFile/ClickFileUpload";
 import { usePostManagementContext } from "../UseContextProvider/PostManagementContext";
-import { useGetPostDetail } from "@/hooks-query/queries/use-get-post";
-import { useUpdatePostMutation } from "@/hooks-query/mutations/use-update-post-mutation";
+import {
+  ParamsUpdatePost,
+  useUpdatePostMutation,
+} from "@/hooks-query/mutations/use-update-post-mutation";
 import { useToast } from "@/hooks/use-toast";
 import DateTimePicker from "../DatePicker/DateTimePicker";
 import { CloseOutlined } from "@ant-design/icons";
+import { string } from "zod";
+import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-firebase";
+import { useUploadFileMutation } from "@/hooks-query/mutations/use-upload-file-mutation";
+import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 
 interface IProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  postID: number;
+  post: Post;
 }
 const ModalUpdatePost = (props: IProps) => {
   // STATE
-  const { isOpen, setIsOpen, postID } = props;
+  const { isOpen, setIsOpen, post } = props;
   const [content, setContent] = useState<string>("");
   const [file, setFile] = useState<File>();
-  const [fileList, setFileList] = useState<File[]>([]);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { mutate, isSuccess, isError, error } = useUpdatePostMutation((msg) => {
-    setErrorMessage(msg);
-  });
+  const { mutate, isSuccess, isError, error, isPending } =
+    useUpdatePostMutation((msg) => {
+      setErrorMessage(msg);
+    });
   const { toast } = useToast();
+  const {
+    mutate: fileMutation,
+    isSuccess: fileIsSuccess,
+    isError: fileIsError,
+    error: fileError,
+    isPending: fileIsPending,
+  } = useUploadFileMutation();
   // USE PROVIDER CONTEXT
   const { setIsChange } = usePostManagementContext();
 
-  // POST DETAILS
-  let { data: post, refetch: refetchData } = useGetPostDetail(postID);
-  console.log("checking post details: ", JSON.stringify(post, null, 2));
-
-  // REFETCH DATA
-  useEffect(() => {
-    if (isOpen && postID > 0) {
-      refetchData();
-    }
-  }, [postID, isOpen, refetchData]);
   useEffect(() => {
     if (post) {
-      setContent(post.data.content);
-      setDate(new Date(post.data.dateUpLoad));
-      if (post.data.filePath) {
-        setFile(new File([post.data.filePath], post.data.filePath));
+      setContent(post.content);
+      setDate(new Date(post.dateUpLoad));
+      reset({
+        title: post?.title || "",
+      });
+      if (post.filePath) {
+        setFile(new File([post.filePath], post.filePath));
       }
     }
   }, [post]);
@@ -63,53 +69,85 @@ const ModalUpdatePost = (props: IProps) => {
     handleSubmit,
     formState: { errors },
     setError,
+    reset,
   } = useForm<TFormAddPost>({
     resolver: zodResolver(FormAddPostSchema),
+    defaultValues: {
+      title: post?.title || "",
+    },
   });
-
+  const uploadFile = (mutation: any, formData: any) => {
+    return new Promise<string>((resolve, reject) => {
+      mutation(formData, {
+        onSuccess: (result: any) => {
+          // Kiểm tra result.data có là chuỗi không, nếu không thì trả về chuỗi rỗng
+          if (typeof result.data === "string") {
+            resolve(result.data);
+          } else {
+            reject(new Error("Invalid file URL"));
+          }
+        },
+        onError: (error: any) => reject(error),
+      });
+    });
+  };
   // HANDLE LOGIC
-  const onSubmit = (data: TFormAddPost) => {
-    // console.log("Check title: ", JSON.stringify(data.title));
-    // console.log("Check file: ", JSON.stringify(fileList[0]));
-    // console.log("Check content: ", content);
-    // console.log("Check date: ", date);
-
-    // gọi API thêm Post
-    const formData = new FormData();
-    formData.append("id", postID.toString());
+  const onSubmit = async (data: TFormAddPost) => {
+    // GỌI API UPLOAD FILE
+    const formDataUploadFile = new FormData();
     if (file) {
-      formData.append("NewFilePath", file);
+      formDataUploadFile.append("File", file);
+      formDataUploadFile.append(
+        "FolderName",
+        FolderNameUploadFirebase.PostFolder
+      );
     }
-    mutate(
-      {
-        params: {
-          Title: data.title,
-          Content: content,
-          DateUpload: date, // Ngày có thể là chuỗi hoặc Date
-          FilePath: post?.data.filePath, // FilePath nếu có
+    try {
+      // Khởi tạo các promise upload file nếu file tồn tại
+      const fileUploadPromises = [
+        file
+          ? uploadFile(fileMutation, formDataUploadFile)
+          : Promise.resolve(""),
+      ];
+
+      // Thực hiện các promise upload file đồng thời và đợi tất cả hoàn tất
+      const [filePath] = await Promise.all(fileUploadPromises);
+
+      // gọi API thêm Post
+      let params: ParamsUpdatePost = {
+        Title: data.title,
+        Content: content,
+        DateUpload: date,
+        FilePath: filePath || post.filePath || "",
+      };
+      mutate(
+        {
+          id: post.id,
+          data: params,
         },
-        data: formData, // FormData chứa nội dung cập nhật
-      },
-      {
-        onSuccess: () => {
-          // alert("Update post successfully");
-          toast({
-            title: "Thông báo",
-            variant: "default",
-            description: "Chúc mừng! Bạn đã cập nhật bài viết thành công",
-          });
-          setIsChange(true);
-          setIsOpen(false);
-          setErrorMessage(null);
-          setContent("");
-          setDate(new Date());
-          setFile(undefined);
-        },
-        onError: (error) => {
-          console.error("Lỗi khi cập nhật bài viết:", error);
-        },
-      }
-    );
+        {
+          onSuccess: () => {
+            // alert("Update post successfully");
+            toast({
+              title: "Thông báo",
+              variant: "default",
+              description: "Chúc mừng! Bạn đã cập nhật bài viết thành công",
+            });
+            setIsChange(true);
+            setIsOpen(false);
+            setErrorMessage(null);
+            setContent("");
+            setDate(new Date());
+            setFile(undefined);
+          },
+          onError: (error) => {
+            console.error("Lỗi khi cập nhật bài viết:", error);
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Lỗi khi upload file:", error);
+    }
   };
 
   const onError = (errors: any) => {
@@ -122,6 +160,7 @@ const ModalUpdatePost = (props: IProps) => {
       {/* <Dialog.Trigger className="w-32 py-2 shadow-sm rounded-md bg-indigo-600 text-white mt-4 flex items-center justify-center">
         Thêm bài viết
       </Dialog.Trigger> */}
+      {isPending || fileIsPending ? <SpinnerLoading /> : ""}
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 w-full h-full bg-black opacity-40 " />
         <Dialog.Content className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full max-w-4xl mx-auto px-4 ">
@@ -166,6 +205,16 @@ const ModalUpdatePost = (props: IProps) => {
                   />
                 </div>
               </div>
+              {post?.filePath ? (
+                <div className="mt-5">
+                  <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
+                    File đính kèm trước đó:
+                  </label>
+                  <a href={post?.filePath}>Xem tại đây</a>
+                </div>
+              ) : (
+                ""
+              )}
               <div>
                 <ClickFileUpload
                   limit={1} // Chỉ cho phép 1 file

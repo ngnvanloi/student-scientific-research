@@ -19,10 +19,10 @@ export const useUpdatePostMutation = (
   return useMutation<
     IDataResponseFromAPI<null>,
     APIErrorResponse,
-    { data: FormData; params: ParamsUpdatePost },
+    { data: ParamsUpdatePost; id: number },
     unknown
   >({
-    mutationFn: ({ params, data }) => updatePost(params, data),
+    mutationFn: ({ id, data }) => updatePost(id, data),
     onMutate: () => {},
     onSuccess: (result) => {
       console.log(
@@ -40,8 +40,8 @@ export const useUpdatePostMutation = (
 };
 
 export async function updatePost(
-  params: ParamsUpdatePost,
-  data: FormData
+  id: number,
+  data: ParamsUpdatePost
 ): Promise<IDataResponseFromAPI<null>> {
   const session = await getSession();
   if (!session) {
@@ -55,13 +55,13 @@ export async function updatePost(
 
   try {
     const response = await communityRequest<IDataResponseFromAPI<null>>(
-      `api/Post?Title=${params.Title}&Content=${params.Content}`, //&DateUpload=${"2024-07-21T00:00:00"}&FilePath=${params.FilePath || ""}
+      `api/Post?id=${id}`,
       {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`, // Truyền token vào header
         },
-        data, // FormData bao gồm file và nội dung bài viết
+        data, // ParamsUpdatePost bao gồm file và nội dung bài viết
       }
     );
     console.log("Response:", response);

@@ -26,10 +26,10 @@ const menuItems = {
 
 export default function PostContextMenu({
   children,
-  postID,
+  post,
 }: Readonly<{
   children: React.ReactNode;
-  postID: number;
+  post: Post;
 }>) {
   // STATE
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
@@ -37,17 +37,13 @@ export default function PostContextMenu({
   const [postTarget, setPostTarget] = useState(-1);
 
   // HANDLE LOGIC
-  const handleOnUpdate = (id: number) => {
-    setPostTarget(id);
+  const handleOnUpdate = () => {
     setIsModalUpdateOpen(true);
   };
-  const handleOnDelete = (id: number) => {
-    setPostTarget(id);
+  const handleOnDelete = () => {
     setIsModalDeleteOpen(true);
   };
-  const handleOnShow = (id: number) => {
-    alert(`Show post ID:, ${id}`);
-  };
+  const handleOnShow = () => {};
 
   // RENDER UI
   return (
@@ -60,7 +56,7 @@ export default function PostContextMenu({
       <ModalUpdatePost
         isOpen={isModalUpdateOpen}
         setIsOpen={setIsModalUpdateOpen}
-        postID={postTarget}
+        post={post}
       />
       <ContextMenu.Root>
         <ContextMenu.Trigger>{children}</ContextMenu.Trigger>
@@ -77,11 +73,11 @@ export default function PostContextMenu({
                   key={idx}
                   onClick={() => {
                     if (idx === 0) {
-                      handleOnShow(postID);
+                      handleOnShow();
                     } else if (idx === 1) {
-                      handleOnUpdate(postID);
+                      handleOnUpdate();
                     } else {
-                      handleOnDelete(postID);
+                      handleOnDelete();
                     }
                   }}
                   className="group w-full flex items-center justify-between gap-x-2 px-2 py-1.5 data-[highlighted]:text-white data-[highlighted]:bg-blue-600 rounded-lg duration-150 outline-none select-none"

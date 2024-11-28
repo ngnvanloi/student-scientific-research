@@ -95,7 +95,7 @@ const PostListForAdmin = () => {
     <div className="w-full mt-3">
       <div className="mt-12 grid gap-4 divide-y md:grid-cols-2 md:divide-y-0 lg:grid-cols-3">
         {data?.data.items?.map((item, idx) => (
-          <PostContextMenu postID={item.id}>
+          <PostContextMenu post={item}>
             <PostCardForAdmin key={idx} post={item} />
           </PostContextMenu>
         ))}
