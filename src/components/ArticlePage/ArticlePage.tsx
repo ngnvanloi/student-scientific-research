@@ -39,6 +39,7 @@ const ArticlePageComponent = () => {
         <Input
           type="text"
           placeholder="Nhập bài báo cần tìm kiếm..."
+          className="h-10"
           value={nameSearch}
           onChange={(e) => {
             setNameSearch(e.target.value);

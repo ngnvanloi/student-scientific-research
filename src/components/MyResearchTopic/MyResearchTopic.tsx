@@ -33,11 +33,6 @@ const MyResearchTopic = () => {
   const { data: listAcceptance, refetch: refetchListAcceptance } =
     useGetListAcceptanceForAllRole(params);
 
-  console.log(
-    "======= checking list acceptance: ",
-    JSON.stringify(listAcceptance?.data.items, null, 2)
-  );
-
   useEffect(() => {
     const filterAcceptance = listAcceptance?.data.items.filter((acc) =>
       acc.researchTopic.author_ResearchTopics.some(

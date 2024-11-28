@@ -1,7 +1,6 @@
-import { Input } from "@/components/ui/input";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { ColumnSpacingIcon } from "@radix-ui/react-icons";
-import { Button } from "antd";
+import { Button, Input } from "antd";
 import { useState } from "react";
 import { useListPubicResearchTopicContext } from "./ListPublicResearchTopicContext";
 
@@ -30,12 +29,13 @@ const SearchResearchTopic = () => {
       <Input
         type="text"
         placeholder="Nhập tìm kiếm ở đây..."
+        className="h-10"
         value={content}
         onChange={(e) => setContent(e.target.value)}
       />
       <Button
         onClick={handleSearch}
-        className="px-3 py-[6px] h-full text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "
+        className="px-3 py-[6px] h-10 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "
       >
         <MagnifyingGlassIcon width="16" />
         Tìm kiếm

@@ -9,15 +9,18 @@ import {
   useGetListCompetitionAdmin,
 } from "@/hooks-query/queries/use-get-competitions";
 import { CompetitionContextMenu } from "../ContextMenu/ContextMenu";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCompetitionManagementContext } from "../UseContextProvider/CompetitionManagementContext";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import { useGetRegistrationCompetitionDetailForAuthor } from "@/hooks-query/queries/use-get-registration-competition-detail-author";
+import { Input } from "antd";
 
 const CompetitionList = () => {
+  const [nameSearch, setNameSearch] = useState<string>("");
   let params: ParamsGetListCompetition = {
     index: 1,
     pageSize: 8,
+    nameSearch: nameSearch,
   };
   const {
     data: listCompetitions,
@@ -27,9 +30,22 @@ const CompetitionList = () => {
   return (
     <section className="mt-12 max-w-screen-lg mx-auto px-4 md:px-8">
       {isPending ? <SpinnerLoading /> : ""}
+
       <div>
         <h1 className="text-gray-800 text-3xl font-semibold">
           Explore The Competitions
+          <div className="mt-3">
+            <Input
+              type="text"
+              className="h-10"
+              placeholder="Nhập cuộc thi cần tìm kiếm..."
+              value={nameSearch}
+              onChange={(e) => {
+                setNameSearch(e.target.value);
+                refetchCompetitions();
+              }}
+            />
+          </div>
           {listCompetitions?.data.items?.map((item, index) => {
             return <CompetitionCard competition={item} key={index} />;
           })}

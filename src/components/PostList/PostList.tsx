@@ -8,22 +8,24 @@ import {
   ParamsGetListPost,
   useGetListPost,
 } from "@/hooks-query/queries/use-get-posts";
-import { Divider, Pagination } from "antd";
+import { Divider, Input, Pagination } from "antd";
 // import { useGetPosts } from "@/hooks-query/queries/use-get-posts";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PostContextMenu from "../ContextMenu/ContextMenu";
-import { QueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@/hooks-query/queries/query-keys";
 import { usePostManagementContext } from "../UseContextProvider/PostManagementContext";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import { useGetListPostForOrganizer } from "@/hooks-query/queries/use-get-posts-for-organizer";
 
 const PostList = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(3);
+  const [pageSize, setPageSize] = useState(5);
+  const [nameSearch, setNameSearch] = useState<string>("");
+
   let params: ParamsGetListPost = {
     index: currentPage,
     pageSize,
+    idSearch: "",
+    nameSearch: nameSearch,
   };
   const {
     data: posts,
@@ -48,6 +50,18 @@ const PostList = () => {
             We're currently looking talent software engineers, and designers to
             help us in our missions and to grow up.
           </p>
+        </div>
+        <div className="mt-3">
+          <Input
+            type="text"
+            placeholder="Nhập bài viết cần tìm kiếm..."
+            className="h-10"
+            value={nameSearch}
+            onChange={(e) => {
+              setNameSearch(e.target.value);
+              refetchPosts();
+            }}
+          />
         </div>
         {posts?.data.items?.map((post, index) => {
           return (
