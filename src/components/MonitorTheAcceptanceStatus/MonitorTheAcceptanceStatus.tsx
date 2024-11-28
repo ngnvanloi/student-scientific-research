@@ -17,7 +17,12 @@ const MonitorTheAcceptanceStatus = () => {
 
   console.log(
     "========= checking list acceptance: ",
-    JSON.stringify(listAcceptance, null, 2)
+    JSON.stringify(
+      listAcceptance?.data.items[0].researchTopic.author_ResearchTopics[0]
+        .roleName,
+      null,
+      2
+    )
   );
   // mỗi AcceptanceCard bao gồm: tên, tác giả, thời gian tạo nghiệm thu, tình trạng phê duyệt của ban tổ chức + nhà trường
   return (

@@ -4,6 +4,8 @@ import { ModalDeletePost } from "../Modal/ModalDeletePost";
 import { usePostManagementContext } from "../UseContextProvider/PostManagementContext";
 import { ModalUpdatePost } from "../Modal/ModalUpdatePost";
 import { ModalDeleteCompetition } from "../Modal/ModalDeleteCompetition";
+import { ModalUpdateCompetition } from "../Modal/ModalUpdateCompetition";
+import { Competition } from "@/types/Competition";
 
 const menuItems = {
   group_1: [
@@ -100,9 +102,11 @@ export default function PostContextMenu({
 function CompetitionContextMenu({
   children,
   competitionID,
+  competition,
 }: Readonly<{
   children: React.ReactNode;
   competitionID: number;
+  competition: Competition;
 }>) {
   // STATE
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
@@ -130,11 +134,11 @@ function CompetitionContextMenu({
         setIsOpen={setIsModalDeleteOpen}
         competitionID={competitionTarget}
       />
-      {/* <ModalUpdateCompetition
+      <ModalUpdateCompetition
         isOpen={isModalUpdateOpen}
         setIsOpen={setIsModalUpdateOpen}
-        competitionID={competitionTarget}
-      /> */}
+        competition={competition}
+      />
       <ContextMenu.Root>
         <ContextMenu.Trigger>{children}</ContextMenu.Trigger>
         <ContextMenu.Portal>

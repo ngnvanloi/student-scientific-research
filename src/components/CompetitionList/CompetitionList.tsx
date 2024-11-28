@@ -67,7 +67,10 @@ const CompetitionListForAdmin = () => {
         <h1 className="text-gray-800 text-3xl font-semibold">
           {listCompetitions?.data.items?.map((item, index) => {
             return (
-              <CompetitionContextMenu competitionID={item.id}>
+              <CompetitionContextMenu
+                competitionID={item.id}
+                competition={item}
+              >
                 <CompetitionCardForAdmin competition={item} key={index} />
               </CompetitionContextMenu>
             );

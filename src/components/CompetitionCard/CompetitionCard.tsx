@@ -195,7 +195,7 @@ const CompetitionCardForAdmin = (props: IProps) => {
       >
         <a href={`/competitions/${competition?.id}`}>
           <span className="block text-gray-400 text-sm">
-            {formatDate(competition?.dateStart || "")}
+            {formatDate(competition?.dateStart || "")} {" -> "}
             {formatDate(competition?.dateEnd || "")}
           </span>
           <div className="mt-2">

@@ -16,6 +16,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import DateTimePicker from "../DatePicker/DateTimePicker";
 import { CloseOutlined, CloseSquareFilled } from "@ant-design/icons";
+import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 
 const ModalAddNewCompetition = () => {
   // STATE
@@ -29,11 +30,10 @@ const ModalAddNewCompetition = () => {
   );
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { mutate, isSuccess, isError, error } = useCreateCompetitionMutation(
-    (msg) => {
+  const { mutate, isSuccess, isError, error, isPending } =
+    useCreateCompetitionMutation((msg) => {
       setErrorMessage(msg);
-    }
-  );
+    });
   // State để điều khiển modal
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { toast } = useToast();
@@ -93,6 +93,7 @@ const ModalAddNewCompetition = () => {
   // RENDER UI
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+      {isPending ? <SpinnerLoading /> : ""}
       <Dialog.Trigger className="w-32 py-2 shadow-sm rounded-md bg-indigo-600 text-white mt-4 flex items-center justify-center">
         Tạo cuộc thi mới
       </Dialog.Trigger>
