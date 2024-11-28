@@ -24,6 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import DateTimePicker from "../DatePicker/DateTimePicker";
 import { CloseOutlined } from "@ant-design/icons";
+import { DEFAULT_RICHTEXTEDITOR_LENGTH } from "@/lib/enum";
 
 const ModalAddNewPost = () => {
   // STATE
@@ -61,83 +62,88 @@ const ModalAddNewPost = () => {
 
   // HANDLE LOGIC
   const onSubmit = (data: TFormAddPost) => {
-    const formDataUploadFile = new FormData();
-    if (file) {
-      formDataUploadFile.append("File", file);
-      formDataUploadFile.append(
-        "FolderName",
-        FolderNameUploadFirebase.PostFolder
+    if (content === "" || content.length <= DEFAULT_RICHTEXTEDITOR_LENGTH) {
+      setErrorMessage(
+        `Nội dung bài viết chưa đảm bảo độ dài cần thiết (tối thiểu ${DEFAULT_RICHTEXTEDITOR_LENGTH} chữ)`
       );
+    } else {
+      const formDataUploadFile = new FormData();
+      if (file) {
+        formDataUploadFile.append("File", file);
+        formDataUploadFile.append(
+          "FolderName",
+          FolderNameUploadFirebase.PostFolder
+        );
+      }
+      fileMutation(formDataUploadFile, {
+        onSuccess: (result) => {
+          // alert("Upload file successfully");
+          // gọi API thêm Post
+          let bodyRequest: ParamsCreatePost = {
+            title: data.title,
+            content: content,
+            dateUpload: date?.toISOString(),
+            filePath: result.data,
+          };
+          mutate(bodyRequest, {
+            onSuccess: () => {
+              toast({
+                title: "Thành công",
+                variant: "default",
+                description:
+                  "Chúc mừng! Bài viết đã được tạo thành công và đăng tải trên hệ thống, bạn có thể kiểm tra hoặc chỉnh sửa nếu cần.",
+              });
+              // setIsChange(!isChange);
+              setIsOpen(false);
+
+              setContent("");
+              setDate(new Date());
+              setFile(undefined);
+
+              reset({
+                title: "",
+              });
+            },
+            onError: (error) => {
+              console.error("Lỗi khi xóa bài viết:", error);
+            },
+          });
+        },
+        onError: (error) => {
+          // console.error("Lỗi khi upload file:", error);
+          // alert("Create post without file");
+          // gọi API thêm Post
+          let bodyRequest: ParamsCreatePost = {
+            title: data.title,
+            content: content,
+            dateUpload: date?.toISOString(),
+            // filePath: "",
+          };
+          mutate(bodyRequest, {
+            onSuccess: () => {
+              toast({
+                title: "Thành công",
+                variant: "default",
+                description:
+                  "Chúc mừng! Bài viết đã được tạo thành công và đăng tải trên hệ thống, bạn có thể kiểm tra hoặc chỉnh sửa nếu cần.",
+              });
+              setIsChange(true);
+              setIsOpen(false);
+              setErrorMessage(null);
+              setContent("");
+              setDate(new Date());
+              setFile(undefined);
+              reset({
+                title: "",
+              });
+            },
+            onError: (error) => {
+              console.error("Lỗi khi tạo bài viết:", error);
+            },
+          });
+        },
+      });
     }
-
-    fileMutation(formDataUploadFile, {
-      onSuccess: (result) => {
-        // alert("Upload file successfully");
-        // gọi API thêm Post
-        let bodyRequest: ParamsCreatePost = {
-          title: data.title,
-          content: content,
-          dateUpload: date?.toISOString(),
-          filePath: result.data,
-        };
-        mutate(bodyRequest, {
-          onSuccess: () => {
-            toast({
-              title: "Thành công",
-              variant: "default",
-              description:
-                "Chúc mừng! Bài viết đã được tạo thành công và đăng tải trên hệ thống, bạn có thể kiểm tra hoặc chỉnh sửa nếu cần.",
-            });
-            // setIsChange(!isChange);
-            setIsOpen(false);
-
-            setContent("");
-            setDate(new Date());
-            setFile(undefined);
-
-            reset({
-              title: "",
-            });
-          },
-          onError: (error) => {
-            console.error("Lỗi khi xóa bài viết:", error);
-          },
-        });
-      },
-      onError: (error) => {
-        // console.error("Lỗi khi upload file:", error);
-        // alert("Create post without file");
-        // gọi API thêm Post
-        let bodyRequest: ParamsCreatePost = {
-          title: data.title,
-          content: content,
-          dateUpload: date?.toISOString(),
-          // filePath: "",
-        };
-        mutate(bodyRequest, {
-          onSuccess: () => {
-            toast({
-              title: "Thành công",
-              variant: "default",
-              description:
-                "Chúc mừng! Bài viết đã được tạo thành công và đăng tải trên hệ thống, bạn có thể kiểm tra hoặc chỉnh sửa nếu cần.",
-            });
-            setIsChange(true);
-            setIsOpen(false);
-            setErrorMessage(null);
-            setContent("");
-            setDate(new Date());
-            setFile(undefined);
-            reset({
-              title: "",
-            });
-          },
-          onError: (error) => {
-            console.error("Lỗi khi tạo bài viết:", error);
-          },
-        });
-      },
-    });
   };
 
   const onError = (errors: any) => {

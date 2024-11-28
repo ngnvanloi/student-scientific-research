@@ -28,6 +28,7 @@ import { useGetArticleDetail } from "@/hooks-query/queries/use-get-article-detai
 import { ArticleWithContributors } from "@/types/ArticleWithContributor";
 import Tags from "../Tags/Tags";
 import DateTimePicker from "../DatePicker/DateTimePicker";
+import { DEFAULT_RICHTEXTEDITOR_LENGTH } from "@/lib/enum";
 
 interface IProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -122,6 +123,7 @@ const FormUpdateArticle = (props: IProps) => {
       disciplineId: String(article?.disciplineId),
     },
   });
+
   const uploadFile = (mutation: any, formData: any) => {
     return new Promise<string>((resolve, reject) => {
       mutation(formData, {
@@ -140,73 +142,81 @@ const FormUpdateArticle = (props: IProps) => {
 
   // HANDLE LOGIC
   const onSubmit = async (data: TFormUpdateArticle) => {
-    console.log("checking title: ", data.title);
-    console.log("checking disciplineId: ", data.disciplineId);
-    console.log("checking keywords previous: ", listKeywords);
-    console.log("checking keywords: ", keywords);
-    console.log("checking list Contributors: ", listContributors);
-
-    // GỌI API UPLOAD FILE
-    const formDataUploadFileArticle = new FormData();
-    if (fileArticle) {
-      formDataUploadFileArticle.append("File", fileArticle);
-      formDataUploadFileArticle.append(
-        "FolderName",
-        FolderNameUploadFirebase.ArticleFolder
+    // console.log("checking title: ", data.title);
+    // console.log("checking disciplineId: ", data.disciplineId);
+    // console.log("checking keywords previous: ", listKeywords);
+    // console.log("checking keywords: ", keywords);
+    // console.log("checking list Contributors: ", listContributors);
+    if (
+      description === "" ||
+      description.length <= DEFAULT_RICHTEXTEDITOR_LENGTH
+    ) {
+      setErrorMessage(
+        `Nội dung bài viết chưa đảm bảo độ dài cần thiết (tối thiểu ${DEFAULT_RICHTEXTEDITOR_LENGTH} chữ)`
       );
-    }
-    try {
-      // Khởi tạo các promise upload file nếu file tồn tại
-      const fileUploadPromises = [
-        fileArticle
-          ? uploadFile(fileArticleMutation, formDataUploadFileArticle)
-          : Promise.resolve(""),
-      ];
+    } else {
+      // GỌI API UPLOAD FILE
+      const formDataUploadFileArticle = new FormData();
+      if (fileArticle) {
+        formDataUploadFileArticle.append("File", fileArticle);
+        formDataUploadFileArticle.append(
+          "FolderName",
+          FolderNameUploadFirebase.ArticleFolder
+        );
+      }
+      try {
+        // Khởi tạo các promise upload file nếu file tồn tại
+        const fileUploadPromises = [
+          fileArticle
+            ? uploadFile(fileArticleMutation, formDataUploadFileArticle)
+            : Promise.resolve(""),
+        ];
 
-      // Thực hiện các promise upload file đồng thời và đợi tất cả hoàn tất
-      const [articleFilePath] = await Promise.all(fileUploadPromises);
-      console.log(
-        "=========== checking articleFilePath before: ",
-        articleFilePath
-      );
-      // Tạo request body từ kết quả mutation
-      const requestBody: ParamsUpdateArticle = {
-        title: data.title,
-        description: description,
-        keywords: keywords,
-        filePath: articleFilePath || article?.filePath || "",
-        dateUpload: date || "",
-        disciplineId: Number(data.disciplineId),
-        coAuthors: listContributors,
-      };
+        // Thực hiện các promise upload file đồng thời và đợi tất cả hoàn tất
+        const [articleFilePath] = await Promise.all(fileUploadPromises);
+        console.log(
+          "=========== checking articleFilePath before: ",
+          articleFilePath
+        );
+        // Tạo request body từ kết quả mutation
+        const requestBody: ParamsUpdateArticle = {
+          title: data.title,
+          description: description,
+          keywords: keywords,
+          filePath: articleFilePath || article?.filePath || "",
+          dateUpload: date || "",
+          disciplineId: Number(data.disciplineId),
+          coAuthors: listContributors,
+        };
 
-      // Gọi API
-      mutate(
-        { id: article?.id || 0, params: requestBody },
-        {
-          onSuccess: () => {
-            toast({
-              title: "Thành công",
-              variant: "default",
-              description: "Chúc mừng! Bạn đã cập nhật thành công bài báo",
-            });
-            // Reset các field input và file
-            reset({
-              title: "",
-              disciplineId: "",
-            });
-            setErrorMessage(null);
-            setFileArticle(undefined);
-            setListContributors([]);
-            setIsOpen(false);
-          },
-          onError: (error) => {
-            console.error("Lỗi khi cập nhật bài báo:", error);
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Lỗi khi upload file:", error);
+        // Gọi API
+        mutate(
+          { id: article?.id || 0, params: requestBody },
+          {
+            onSuccess: () => {
+              toast({
+                title: "Thành công",
+                variant: "default",
+                description: "Chúc mừng! Bạn đã cập nhật thành công bài báo",
+              });
+              // Reset các field input và file
+              reset({
+                title: "",
+                disciplineId: "",
+              });
+              setErrorMessage(null);
+              setFileArticle(undefined);
+              setListContributors([]);
+              setIsOpen(false);
+            },
+            onError: (error) => {
+              console.error("Lỗi khi cập nhật bài báo:", error);
+            },
+          }
+        );
+      } catch (error) {
+        console.error("Lỗi khi upload file:", error);
+      }
     }
   };
 

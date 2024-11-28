@@ -35,6 +35,7 @@ import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { useSession } from "next-auth/react";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import DateTimePicker from "../DatePicker/DateTimePicker";
+import { DEFAULT_RICHTEXTEDITOR_LENGTH } from "@/lib/enum";
 
 const SubmitArticleComponent = () => {
   const { data: session } = useSession();
@@ -89,83 +90,91 @@ const SubmitArticleComponent = () => {
 
   // HANDLE LOGIC
   const onSubmit = (data: TFormSubmitArticle) => {
-    console.log("checking title and discipline: ", JSON.stringify(data));
-    console.log("checking date: ", date);
-    console.log("checking description: ", description);
-    console.log("checking keywords: ", keywords);
-    console.log("checking file: ", file);
-    console.log("checking list Contributors: ", listContributors);
+    // console.log("checking title and discipline: ", JSON.stringify(data));
+    // console.log("checking date: ", date);
+    // console.log("checking description: ", description);
+    // console.log("checking keywords: ", keywords);
+    // console.log("checking file: ", file);
+    // console.log("checking list Contributors: ", listContributors);
     // GỌI API UPLOAD FILE
-    const formDataUploadFile = new FormData();
-    if (file) {
-      formDataUploadFile.append("File", file);
-      formDataUploadFile.append(
-        "FolderName",
-        FolderNameUploadFirebase.ArticleFolder
+    if (
+      description === "" ||
+      description.length <= DEFAULT_RICHTEXTEDITOR_LENGTH
+    ) {
+      setErrorMessage(
+        `Nội dung bài viết chưa đảm bảo độ dài cần thiết (tối thiểu ${DEFAULT_RICHTEXTEDITOR_LENGTH} chữ)`
       );
+    } else {
+      const formDataUploadFile = new FormData();
+      if (file) {
+        formDataUploadFile.append("File", file);
+        formDataUploadFile.append(
+          "FolderName",
+          FolderNameUploadFirebase.ArticleFolder
+        );
+      }
+      fileMutation(formDataUploadFile, {
+        onSuccess: (result) => {
+          // alert("Upload file successfully");
+          // TẠO REQUEST BODY
+          const requestBody: ParamsSubmitArticle = {
+            title: data.title ? data.title : "",
+            description: description,
+            keywords: keywords,
+            filePath: result.data,
+            dateUpload: date?.toISOString() ? date.toISOString() : "",
+            disciplineId: Number(data?.disciplineId),
+            coAuthors: listContributors,
+          };
+
+          // GỌI API upload bài báo
+          mutate(requestBody, {
+            onSuccess: () => {
+              toast({
+                title: "Thành công",
+                variant: "default",
+                description:
+                  "Chúc mừng! Bài báo của bạn đã được gửi đến quản trị viên, vui lòng chờ kết quả phê duyệt",
+              });
+              // reset input fields
+              reset({
+                title: "",
+                disciplineId: "",
+              });
+              setDescription("");
+              setFile(undefined);
+              setKeywords([]);
+              setListContributors([]);
+              setDate(new Date());
+              setErrorMessage(null);
+              // gửi thông báo cho super admin
+              const paramsNoti: ParamsCreateNotification = {
+                notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.article.author}`,
+                notificationDate: new Date().toISOString(),
+                // recevierId: articleDetail?.data.accountID || -1,
+                recevierId: 1,
+                notificationTypeId: 1,
+                targetId: -1,
+              };
+              notiMutation(paramsNoti, {
+                onSuccess: () => {
+                  console.log("Thông báo đã gửi");
+                },
+                onError: (error) => {
+                  console.error("Lỗi khi gửi thông báo:", error);
+                },
+              });
+            },
+            onError: (error) => {
+              console.error("Lỗi khi tạo bài báo:", error);
+            },
+          });
+        },
+        onError: (error) => {
+          console.error("Lỗi khi upload file:", error);
+        },
+      });
     }
-
-    fileMutation(formDataUploadFile, {
-      onSuccess: (result) => {
-        // alert("Upload file successfully");
-        // TẠO REQUEST BODY
-        const requestBody: ParamsSubmitArticle = {
-          title: data.title ? data.title : "",
-          description: description,
-          keywords: keywords,
-          filePath: result.data,
-          dateUpload: date?.toISOString() ? date.toISOString() : "",
-          disciplineId: Number(data?.disciplineId),
-          coAuthors: listContributors,
-        };
-
-        // GỌI API upload bài báo
-        mutate(requestBody, {
-          onSuccess: () => {
-            toast({
-              title: "Thành công",
-              variant: "default",
-              description:
-                "Chúc mừng! Bài báo của bạn đã được gửi đến quản trị viên, vui lòng chờ kết quả phê duyệt",
-            });
-            // reset input fields
-            reset({
-              title: "",
-              disciplineId: "",
-            });
-            setDescription("");
-            setFile(undefined);
-            setKeywords([]);
-            setListContributors([]);
-            setDate(new Date());
-            setErrorMessage(null);
-            // gửi thông báo cho super admin
-            const paramsNoti: ParamsCreateNotification = {
-              notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.article.author}`,
-              notificationDate: new Date().toISOString(),
-              // recevierId: articleDetail?.data.accountID || -1,
-              recevierId: 1,
-              notificationTypeId: 1,
-              targetId: -1,
-            };
-            notiMutation(paramsNoti, {
-              onSuccess: () => {
-                console.log("Thông báo đã gửi");
-              },
-              onError: (error) => {
-                console.error("Lỗi khi gửi thông báo:", error);
-              },
-            });
-          },
-          onError: (error) => {
-            console.error("Lỗi khi tạo bài báo:", error);
-          },
-        });
-      },
-      onError: (error) => {
-        console.error("Lỗi khi upload file:", error);
-      },
-    });
   };
 
   const onError = (errors: any) => {

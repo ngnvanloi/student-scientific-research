@@ -22,6 +22,7 @@ import { string } from "zod";
 import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-firebase";
 import { useUploadFileMutation } from "@/hooks-query/mutations/use-upload-file-mutation";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
+import { DEFAULT_RICHTEXTEDITOR_LENGTH } from "@/lib/enum";
 
 interface IProps {
   isOpen: boolean;
@@ -93,60 +94,66 @@ const ModalUpdatePost = (props: IProps) => {
   };
   // HANDLE LOGIC
   const onSubmit = async (data: TFormAddPost) => {
-    // GỌI API UPLOAD FILE
-    const formDataUploadFile = new FormData();
-    if (file) {
-      formDataUploadFile.append("File", file);
-      formDataUploadFile.append(
-        "FolderName",
-        FolderNameUploadFirebase.PostFolder
+    if (content === "" || content.length <= DEFAULT_RICHTEXTEDITOR_LENGTH) {
+      setErrorMessage(
+        `Nội dung bài viết chưa đảm bảo độ dài cần thiết (tối thiểu ${DEFAULT_RICHTEXTEDITOR_LENGTH} chữ)`
       );
-    }
-    try {
-      // Khởi tạo các promise upload file nếu file tồn tại
-      const fileUploadPromises = [
-        file
-          ? uploadFile(fileMutation, formDataUploadFile)
-          : Promise.resolve(""),
-      ];
+    } else {
+      // GỌI API UPLOAD FILE
+      const formDataUploadFile = new FormData();
+      if (file) {
+        formDataUploadFile.append("File", file);
+        formDataUploadFile.append(
+          "FolderName",
+          FolderNameUploadFirebase.PostFolder
+        );
+      }
+      try {
+        // Khởi tạo các promise upload file nếu file tồn tại
+        const fileUploadPromises = [
+          file
+            ? uploadFile(fileMutation, formDataUploadFile)
+            : Promise.resolve(""),
+        ];
 
-      // Thực hiện các promise upload file đồng thời và đợi tất cả hoàn tất
-      const [filePath] = await Promise.all(fileUploadPromises);
+        // Thực hiện các promise upload file đồng thời và đợi tất cả hoàn tất
+        const [filePath] = await Promise.all(fileUploadPromises);
 
-      // gọi API thêm Post
-      let params: ParamsUpdatePost = {
-        Title: data.title,
-        Content: content,
-        DateUpload: date,
-        FilePath: filePath || post.filePath || "",
-      };
-      mutate(
-        {
-          id: post.id,
-          data: params,
-        },
-        {
-          onSuccess: () => {
-            // alert("Update post successfully");
-            toast({
-              title: "Thông báo",
-              variant: "default",
-              description: "Chúc mừng! Bạn đã cập nhật bài viết thành công",
-            });
-            setIsChange(true);
-            setIsOpen(false);
-            setErrorMessage(null);
-            setContent("");
-            setDate(new Date());
-            setFile(undefined);
+        // gọi API thêm Post
+        let params: ParamsUpdatePost = {
+          Title: data.title,
+          Content: content,
+          DateUpload: date,
+          FilePath: filePath || post.filePath || "",
+        };
+        mutate(
+          {
+            id: post.id,
+            data: params,
           },
-          onError: (error) => {
-            console.error("Lỗi khi cập nhật bài viết:", error);
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Lỗi khi upload file:", error);
+          {
+            onSuccess: () => {
+              // alert("Update post successfully");
+              toast({
+                title: "Thông báo",
+                variant: "default",
+                description: "Chúc mừng! Bạn đã cập nhật bài viết thành công",
+              });
+              setIsChange(true);
+              setIsOpen(false);
+              setErrorMessage(null);
+              setContent("");
+              setDate(new Date());
+              setFile(undefined);
+            },
+            onError: (error) => {
+              console.error("Lỗi khi cập nhật bài viết:", error);
+            },
+          }
+        );
+      } catch (error) {
+        console.error("Lỗi khi upload file:", error);
+      }
     }
   };
 
