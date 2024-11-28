@@ -112,11 +112,11 @@ export default function AdminLayout({
         "/admin/track-ongoing-project-evaluations"
       ),
       getItem(
-        "Đề tài đã xuất bản",
+        "Nghiệm thu chờ phê duyệt",
         "9",
         <SafetyCertificateOutlined />,
         undefined,
-        "/admin"
+        "/admin/acceptance-pending-approval"
       ),
     ]),
     getItem("Tin nhắn", "10", <MailOutlined />, undefined, "/admin/inbox"),

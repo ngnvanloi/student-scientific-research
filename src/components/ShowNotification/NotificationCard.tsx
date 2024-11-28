@@ -177,7 +177,7 @@ const NotificationCard = (props: IProps) => {
         handleMarkAsRead();
       }
       if (session?.user?.roleName === "organizer") {
-        router.push("/admin/track-ongoing-project-evaluations");
+        router.push("/admin/acceptance-pending-approval");
         handleMarkAsRead();
       }
     }
@@ -204,7 +204,7 @@ const NotificationCard = (props: IProps) => {
         handleMarkAsRead();
       }
       if (session?.user?.roleName === "organizer") {
-        router.push("/admin/track-ongoing-project-evaluations");
+        router.push("/admin/acceptance-pending-approval");
         handleMarkAsRead();
       }
     }

@@ -151,6 +151,7 @@ export type TFormFilter = {
 
 export type TFormRequestAcceptanceDeadline = {
   month?: number;
+  message?: string;
 };
 
 export type TFormApprovedAcceptance = {

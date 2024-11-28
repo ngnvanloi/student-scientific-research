@@ -1,6 +1,6 @@
-import { TrackOngoingProjectEvaluations } from "@/components/TrackOngoingProjectEvaluations/TrackOngoingProjectEvaluations";
+import { TopicsAreBeingAccepted } from "@/components/TopicsAreBeingAccepted/TopicIsBeingAccepted";
 
 const TrackOngoingProjectEvaluationsPage = () => {
-  return <TrackOngoingProjectEvaluations />;
+  return <TopicsAreBeingAccepted />;
 };
 export default TrackOngoingProjectEvaluationsPage;

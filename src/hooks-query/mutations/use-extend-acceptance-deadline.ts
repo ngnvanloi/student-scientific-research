@@ -55,13 +55,13 @@ export async function updateResearchTopic(
 
   try {
     const response = await communityRequest<IResponseFromAPI>(
-      `api/Organizer/review-committee/date-end/${id}`,
+      `api/ResearchTopic/date-end/${id}`,
       {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`, // Truyền token vào header
         },
-        data, // FormData bao gồm file và nội dung bài viết
+        data,
       }
     );
     console.log("Response:", response);

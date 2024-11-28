@@ -14,6 +14,8 @@ import { ModalShowDetailAcceptanceOfResearchTopic } from "../Modal/ModalShowDeta
 import { Button } from "antd";
 import { ModalUpdateResearchTopicForAcceptance } from "../Modal/ModalUpdateResearchTopicForAcceptance";
 import { ModalCreateAcceptance } from "../Modal/ModalCreateAcceptance";
+import { ModalExtendTheAcceptanceDeadline } from "../Modal/ModalExtendTheAcceptanceDeadline";
+import { ModalRequestExtensionOfTheAcceptanceDeadline } from "../Modal/ModalRequestExtensionOfTheAcceptanceDeadline";
 
 interface IProps {
   researchTopic: ResearchTopicWithContributors | undefined;
@@ -61,6 +63,8 @@ const ResearchTopicCardForAuthorWithAcceptance = (props: IProps) => {
   const { researchTopic } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState<boolean>(false);
+  const [isModalExtendDeadlineOpen, setIsModalExtendDeadlineOpen] =
+    useState<boolean>(false);
   return (
     <div className="border rounded-md py-3 px-4 flex mb-3 gap-x-2">
       <div className="flex-1">
@@ -100,7 +104,7 @@ const ResearchTopicCardForAuthorWithAcceptance = (props: IProps) => {
         </Button>
         <Button
           className="hover:cursor-pointer hover:text-blue-500 gap-2 mt-1"
-          onClick={() => setIsOpen(true)}
+          onClick={() => setIsModalExtendDeadlineOpen(true)}
         >
           Gửi yêu cầu gia hạn
         </Button>
@@ -116,7 +120,62 @@ const ResearchTopicCardForAuthorWithAcceptance = (props: IProps) => {
         isOpen={isModalUpdateOpen}
         setIsOpen={setIsModalUpdateOpen}
       />
+      <ModalRequestExtensionOfTheAcceptanceDeadline
+        researchTopic={researchTopic}
+        isOpen={isModalExtendDeadlineOpen}
+        setIsOpen={setIsModalExtendDeadlineOpen}
+      />
     </div>
   );
 };
-export { ResearchTopicCardForAdmin, ResearchTopicCardForAuthorWithAcceptance };
+
+const ResearchTopicCardForOrganizerWithExtendDeadlineAction = (
+  props: IProps
+) => {
+  const { researchTopic } = props;
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  return (
+    <div className="border rounded-md py-3 px-4 flex mb-3 gap-x-2">
+      <div className="flex-1">
+        <p className="font-semibold text-lg text-blue-900">
+          {researchTopic?.nameTopic}
+        </p>
+        <p className="flex gap-2 mt-2">
+          <FolderOpenIcon width={16} />
+          {researchTopic?.disciplineName}
+        </p>
+        <p className="flex gap-2 mt-1">
+          <UserGroupIcon width={16} />
+          {researchTopic?.author_ResearchTopics
+            ?.map((author) => author.author.name)
+            .join(", ")}
+        </p>
+        <p className="flex gap-2 mt-1">
+          Nghiệm thu từ ngày:
+          <CalendarDateRangeIcon width={16} />
+          {formatDate(researchTopic?.dateStart || "") +
+            " ->" +
+            formatDate(researchTopic?.dateEnd || "")}
+        </p>
+      </div>
+      <div className="flex flex-col">
+        <Button
+          className="hover:cursor-pointer hover:text-blue-500 gap-2 mt-1"
+          onClick={() => setIsOpen(true)}
+        >
+          Gia hạn nghiệm thu
+        </Button>
+      </div>
+      <ModalExtendTheAcceptanceDeadline
+        researchTopic={researchTopic}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
+    </div>
+  );
+};
+export {
+  ResearchTopicCardForAdmin,
+  ResearchTopicCardForAuthorWithAcceptance,
+  ResearchTopicCardForOrganizerWithExtendDeadlineAction,
+};

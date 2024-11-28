@@ -58,7 +58,9 @@ const ModalRequestExtensionOfTheAcceptanceDeadline = (props: IProps) => {
       session?.user?.name +
       NotificationContentSample.NotificationType.extendAcceptanceDeadline
         .author +
-      `[FINAL-${researchTopic?.id}]-${String(researchTopic?.nameTopic).toUpperCase()}` +
+      `${researchTopic?.nameTopic}. ` +
+      "Nội dung nhắn gửi: " +
+      data.message +
       ". Thời gian yêu cầu là " +
       data.month +
       " tháng";
@@ -66,9 +68,9 @@ const ModalRequestExtensionOfTheAcceptanceDeadline = (props: IProps) => {
     const paramsNoti: ParamsCreateNotification = {
       notificationContent: contentNoti,
       notificationDate: new Date().toISOString(),
-      recevierId: competitionDetail?.data.accountId || -1,
+      recevierId: competitionDetail?.data.accountId || 0,
       notificationTypeId: 8,
-      targetId: -1,
+      targetId: 0,
     };
     notiMutation(paramsNoti, {
       onSuccess: () => {
@@ -100,8 +102,8 @@ const ModalRequestExtensionOfTheAcceptanceDeadline = (props: IProps) => {
           <div className="bg-white rounded-md shadow-lg ">
             <div className="flex items-center justify-between p-4 border-b">
               <Dialog.Title className="text-lg font-medium text-gray-800 ">
-                Phiếu xin gia hạn thời gian nghiệm thu cho{" "}
-                {`[FINAL-${researchTopic?.id}]-${String(researchTopic?.nameTopic).toUpperCase()}`}
+                Phiếu xin gia hạn thời gian nghiệm thu cho đề tài{" "}
+                {`${researchTopic?.nameTopic}`}
               </Dialog.Title>
               <Dialog.Close className="p-2 text-gray-400 rounded-md hover:bg-gray-100">
                 <CloseModalIcon />
@@ -119,6 +121,20 @@ const ModalRequestExtensionOfTheAcceptanceDeadline = (props: IProps) => {
                   register={register}
                   error={errors.month}
                   valueAsNumber={true}
+                  className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
+                />
+              </div>
+              <div className="mt-3">
+                <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
+                  Nội dung nhắn gửi
+                </label>
+                <FormField
+                  type="text"
+                  placeholder="Kính gửi ban tổ chức, vì lí do ..."
+                  name="message"
+                  register={register}
+                  error={errors.message}
+                  isTextArea={true}
                   className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
                 />
               </div>

@@ -250,6 +250,7 @@ export const FormFilterSchema: ZodType<TFormFilter> = z.object({
 export const FormRequestAcceptanceDeadlineSchema: ZodType<TFormRequestAcceptanceDeadline> =
   z.object({
     month: z.number().optional(),
+    message: z.string().optional(),
   });
 export const FormSendEmailSchema: ZodType<TFormSendEmail> = z.object({
   receiverEmail: z.string().email(),

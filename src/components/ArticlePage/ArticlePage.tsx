@@ -1,7 +1,7 @@
 "use client";
 import { ArticleCardForGuest } from "../ArticleCard/ArticleCard";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
-import { Pagination } from "antd";
+import { Input, Pagination } from "antd";
 import { useState } from "react";
 import {
   ParamsGetAllArticleForSystem,
@@ -11,12 +11,13 @@ import {
 const ArticlePageComponent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
+  const [nameSearch, setNameSearch] = useState<string>("");
 
   const params: ParamsGetAllArticleForSystem = {
     index: currentPage,
     pageSize,
     idSearch: "",
-    nameSearch: "",
+    nameSearch: nameSearch,
   };
 
   const {
@@ -33,8 +34,19 @@ const ArticlePageComponent = () => {
 
   return (
     <div>
-      <div className="">
-        {isPending ? <SpinnerLoading /> : null}
+      {isPending ? <SpinnerLoading /> : null}
+      <div>
+        <Input
+          type="text"
+          placeholder="Nhập bài báo cần tìm kiếm..."
+          value={nameSearch}
+          onChange={(e) => {
+            setNameSearch(e.target.value);
+            refetchListPublicArticle();
+          }}
+        />
+      </div>
+      <div className="mt-3">
         {listPublicArticle?.data.items.map((article) => (
           <ArticleCardForGuest articleItem={article} key={article.id} />
         ))}
