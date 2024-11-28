@@ -81,7 +81,13 @@ export default function AdminLayout({
         undefined,
         "/author/submit-research-project"
       ),
-      getItem("Đề tài đã công bố", "7", <TrophyOutlined />, undefined, "#"),
+      getItem(
+        "Đề tài đã công bố",
+        "7",
+        <TrophyOutlined />,
+        undefined,
+        "/author/my-research-project"
+      ),
       getItem(
         "Đề tài đang phản biện",
         "8",
