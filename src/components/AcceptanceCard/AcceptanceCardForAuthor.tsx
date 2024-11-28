@@ -10,15 +10,27 @@ import { useState } from "react";
 import { ModalUpdateAcceptance } from "../Modal/ModalUpdateAcceptance";
 import { ModalRequestExtensionOfTheAcceptanceDeadline } from "../Modal/ModalRequestExtensionOfTheAcceptanceDeadline";
 import { ModalShowDetailAcceptanceOfResearchTopic } from "../Modal/ModalShowDetailAcceptanceOfResearchTopic";
+import { useSession } from "next-auth/react";
 
 interface IProps {
   acceptance: Acceptance | undefined;
 }
 const AcceptanceCardForAuthor = (props: IProps) => {
+  const { data: session } = useSession();
   const { acceptance } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState<boolean>(false);
   const [isModalRequestOpen, setIsModalRequestOpen] = useState<boolean>(false);
+  console.log(
+    "=========== Checking acceptance: ",
+    JSON.stringify(acceptance, null, 2)
+  );
+  const isAuthorizedToOperate =
+    acceptance?.researchTopic.author_ResearchTopics.some(
+      (item) =>
+        item.author.accountId === session?.user?.accountId &&
+        item.roleName === "author"
+    );
   return (
     <div className="border rounded-md py-3 px-4 flex mb-3 gap-x-2 border-l-4 border-l-blue-900">
       <div className="flex-1">
@@ -81,9 +93,8 @@ const AcceptanceCardForAuthor = (props: IProps) => {
         >
           Xem chi tiết
         </Button>
-        {acceptance?.facultyAcceptedStatus === 1 ? (
-          ""
-        ) : (
+        {acceptance?.facultyAcceptedStatus === 0 &&
+        isAuthorizedToOperate === true ? (
           <>
             <Button
               className="hover:cursor-pointer hover:text-blue-500 gap-2 mt-1"
@@ -98,6 +109,8 @@ const AcceptanceCardForAuthor = (props: IProps) => {
               Gửi yêu cầu gia hạn
             </Button>
           </>
+        ) : (
+          ""
         )}
       </div>
       <ModalShowDetailAcceptanceOfResearchTopic

@@ -16,6 +16,7 @@ import { ModalUpdateResearchTopicForAcceptance } from "../Modal/ModalUpdateResea
 import { ModalCreateAcceptance } from "../Modal/ModalCreateAcceptance";
 import { ModalExtendTheAcceptanceDeadline } from "../Modal/ModalExtendTheAcceptanceDeadline";
 import { ModalRequestExtensionOfTheAcceptanceDeadline } from "../Modal/ModalRequestExtensionOfTheAcceptanceDeadline";
+import { useSession } from "next-auth/react";
 
 interface IProps {
   researchTopic: ResearchTopicWithContributors | undefined;
@@ -60,11 +61,19 @@ const ResearchTopicCardForAdmin = (props: IProps) => {
 };
 
 const ResearchTopicCardForAuthorWithAcceptance = (props: IProps) => {
+  const { data: session } = useSession();
   const { researchTopic } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState<boolean>(false);
   const [isModalExtendDeadlineOpen, setIsModalExtendDeadlineOpen] =
     useState<boolean>(false);
+
+  const isAuthorizedToOperate = researchTopic?.author_ResearchTopics.some(
+    (item) =>
+      item.author.accountId === session?.user?.accountId &&
+      item.roleName === "author"
+  );
+
   return (
     <div className="border rounded-md py-3 px-4 flex mb-3 gap-x-2">
       <div className="flex-1">
@@ -96,18 +105,24 @@ const ResearchTopicCardForAuthorWithAcceptance = (props: IProps) => {
         >
           Đề xuất nghiệm thu
         </Button>
-        <Button
-          className="hover:cursor-pointer hover:text-blue-500 gap-2 mt-1"
-          onClick={() => setIsModalUpdateOpen(true)}
-        >
-          Chỉnh sửa đề tài
-        </Button>
-        <Button
-          className="hover:cursor-pointer hover:text-blue-500 gap-2 mt-1"
-          onClick={() => setIsModalExtendDeadlineOpen(true)}
-        >
-          Gửi yêu cầu gia hạn
-        </Button>
+        {isAuthorizedToOperate ? (
+          <>
+            <Button
+              className="hover:cursor-pointer hover:text-blue-500 gap-2 mt-1"
+              onClick={() => setIsModalUpdateOpen(true)}
+            >
+              Chỉnh sửa đề tài
+            </Button>
+            <Button
+              className="hover:cursor-pointer hover:text-blue-500 gap-2 mt-1"
+              onClick={() => setIsModalExtendDeadlineOpen(true)}
+            >
+              Gửi yêu cầu gia hạn
+            </Button>
+          </>
+        ) : (
+          ""
+        )}
       </div>
       <ModalCreateAcceptance
         isOpen={isOpen}
