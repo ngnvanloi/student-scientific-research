@@ -61,6 +61,7 @@ const LoginForm = () => {
         case "author":
           redirectToProfileIfIncomplete("/author/my-profile");
           break;
+
         default:
           router.push("/");
       }

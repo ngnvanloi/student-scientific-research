@@ -34,6 +34,7 @@ const HomePage = () => {
         redirectToProfileIfIncomplete("/author/my-profile");
         break;
       default:
+        break;
         router.push("/");
     }
   } else {
