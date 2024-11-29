@@ -6,7 +6,7 @@ import { Competition } from "@/types/Competition";
 
 export const useGetCompetitionDetail = (id: number) => {
   return useQuery<IDataResponseFromAPI<Competition>, Error>({
-    queryKey: queryKeys.competitionDetail,
+    queryKey: queryKeys.competitionDetail(id),
     queryFn: () => GetCompetitionDetail(id),
   });
 };

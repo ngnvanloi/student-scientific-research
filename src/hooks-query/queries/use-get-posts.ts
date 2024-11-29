@@ -12,7 +12,7 @@ export type ParamsGetListPost = {
 // Hook để sử dụng useQuery cho việc lấy thông tin user profile
 export const useGetListPost = (params: ParamsGetListPost) => {
   return useQuery<IDataResponseFromAPI<IListDataResponseFromAPI<Post>>, Error>({
-    queryKey: queryKeys.listPost,
+    queryKey: queryKeys.listPost(params),
     queryFn: () => GetListPost(params), //queryFn yêu cầu một hàm, không phải kết quả của hàm đó.
   });
 };

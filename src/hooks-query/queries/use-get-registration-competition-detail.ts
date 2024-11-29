@@ -6,7 +6,7 @@ import { RegistrationForm } from "@/types/RegistrationForm";
 
 export const useGetRegistrationCompetitionDetail = (id: number) => {
   return useQuery<IDataResponseFromAPI<RegistrationForm>, Error>({
-    queryKey: queryKeys.postDetail,
+    queryKey: queryKeys.registrationCompetitionDetail(id),
     queryFn: () => GetRegistrationCompetitionDetail(id),
   });
 };

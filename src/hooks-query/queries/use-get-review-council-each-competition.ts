@@ -18,10 +18,8 @@ export const useGetListReviewCouncilForEachCompetition = (
     IDataResponseFromAPI<IListDataResponseFromAPI<ReviewCouncilWithMembers>>,
     Error
   >({
-    queryKey: [
-      queryKeys.listReviewCouncilForEachCompetition,
-      params.competitionId,
-    ],
+    queryKey: queryKeys.listReviewCouncilForEachCompetition(params),
+
     queryFn: () => GetListReviewCouncilForEachCompetition(params),
   });
 };

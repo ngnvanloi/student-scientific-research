@@ -17,7 +17,7 @@ export const useGetListCompetition = (params: ParamsGetListCompetition) => {
     IDataResponseFromAPI<IListDataResponseFromAPI<Competition>>,
     Error
   >({
-    queryKey: queryKeys.listCompetition,
+    queryKey: queryKeys.listCompetition(params),
     queryFn: () => GetListCompetition(params),
   });
 };

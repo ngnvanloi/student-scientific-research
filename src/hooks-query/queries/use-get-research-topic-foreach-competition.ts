@@ -24,13 +24,8 @@ export const useGetListResearchTopicForeachCompetition = (
     >,
     Error
   >({
-    queryKey: [
-      queryKeys.listResearchTopicForeachCompetition,
-      params.competitionId,
-      params.index,
-      params.pageSize,
-      params.ReviewAcceptanceStatus,
-    ],
+    queryKey: queryKeys.listResearchTopicForeachCompetition(params),
+
     queryFn: () => GetListResearchTopicForeachCompetition(params),
   });
 };

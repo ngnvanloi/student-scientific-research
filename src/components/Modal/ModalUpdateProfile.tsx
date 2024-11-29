@@ -133,7 +133,7 @@ const ModalUpdateProfile = (props: IProps) => {
           await queryClient.refetchQueries({ queryKey: queryKeys.userProfile });
         },
         onError: (error) => {
-          alert("Lỗi khi cập nhật profile: " + error);
+          console.log("Lỗi khi cập nhật profile: " + error);
         },
       }
     );

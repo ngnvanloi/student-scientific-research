@@ -6,7 +6,7 @@ import { ResearchProjectTopic } from "@/types/ResearchProjectTopic";
 
 export const useGetResearchProjectTopicDetail = (id: number) => {
   return useQuery<IDataResponseFromAPI<ResearchProjectTopic>, Error>({
-    queryKey: [queryKeys.researchTopicDetail, id],
+    queryKey: queryKeys.researchTopicDetail(id),
     queryFn: () => GetResearchProjectTopicDetail(id),
   });
 };

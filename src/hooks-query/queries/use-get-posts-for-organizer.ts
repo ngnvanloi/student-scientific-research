@@ -14,7 +14,7 @@ export const useGetListPostForOrganizer = (
   params: ParamsGetListPostForOrganizer
 ) => {
   return useQuery<IDataResponseFromAPI<IListDataResponseFromAPI<Post>>, Error>({
-    queryKey: queryKeys.listPost,
+    queryKey: queryKeys.listPost(params),
     queryFn: () => GetListPostForOrganizer(params), //queryFn yêu cầu một hàm, không phải kết quả của hàm đó.
   });
 };

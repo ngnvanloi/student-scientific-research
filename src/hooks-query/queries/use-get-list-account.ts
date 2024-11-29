@@ -15,7 +15,7 @@ export const useGetListAccount = (params: ParamsGetListAccount) => {
     IDataResponseFromAPI<IListDataResponseFromAPI<AccountManagement>>,
     Error
   >({
-    queryKey: queryKeys.listAccountManagement,
+    queryKey: queryKeys.listAccountManagement(params),
     queryFn: () => GetListAccount(params),
   });
 };

@@ -10,7 +10,7 @@ export const useGetVersionOfResearchProjectTopicDetail = (id: number) => {
     IDataRetrievedResponseFromAPI<VersionOfResearchProjectTopic>,
     Error
   >({
-    queryKey: [queryKeys.versionOfResearchTopic, id],
+    queryKey: queryKeys.versionOfResearchTopic(id),
     queryFn: () => GetVersionOfResearchProjectTopicDetail(id),
   });
 };

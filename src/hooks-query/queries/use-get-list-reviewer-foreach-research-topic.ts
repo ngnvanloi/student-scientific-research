@@ -19,12 +19,8 @@ export const useGetReviewCommitteeForEachResearchTopic = (
     IDataResponseFromAPI<IListDataResponseFromAPI<ReviewCouncilWithMembers>>,
     Error
   >({
-    queryKey: [
-      queryKeys.listReviewCommitteeForEachResearchTopic,
-      params.page,
-      params.pageSize,
-      params.researchTopicId,
-    ],
+    queryKey: queryKeys.listReviewCommitteeForEachResearchTopic(params),
+
     queryFn: () => GetReviewCommitteeForEachResearchTopic(params),
   });
 };

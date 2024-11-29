@@ -20,13 +20,8 @@ export const useGetListRegistrationForm = (
     IDataResponseFromAPI<IListDataResponseFromAPI<RegistrationForm>>,
     Error
   >({
-    queryKey: [
-      queryKeys.listRegistrationForm,
-      params.competitionId,
-      params.index,
-      params.pageSize,
-      params.isAccepted,
-    ],
+    queryKey: queryKeys.listRegistrationForm(params),
+
     queryFn: () => GetListRegistrationForm(params), //queryFn yêu cầu một hàm, không phải kết quả của hàm đó.
   });
 };

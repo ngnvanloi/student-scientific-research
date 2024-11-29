@@ -13,12 +13,7 @@ export const useGetStatisticForOrganizer = (
   params: ParamsGetStatisticForOrganizer
 ) => {
   return useQuery<IDataResponseFromAPI<Statistic>, Error>({
-    queryKey: [
-      queryKeys.statisticForOrganizer,
-      params.CompetitionId,
-      params.Year,
-      params.DisciplineId,
-    ],
+    queryKey: queryKeys.statisticForOrganizer(params),
     queryFn: () => GetStatisticForOrganizer(params),
   });
 };

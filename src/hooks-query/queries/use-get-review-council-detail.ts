@@ -6,7 +6,7 @@ import { ReviewCouncilWithMembers } from "@/types/ReviewCouncilWithMembers";
 
 export const useGetReviewCouncilDetail = (id: number) => {
   return useQuery<IDataResponseFromAPI<ReviewCouncilWithMembers>, Error>({
-    queryKey: queryKeys.competitionDetail,
+    queryKey: queryKeys.reviewCouncilDetail(id),
     queryFn: () => GetReviewCouncilDetail(id),
   });
 };

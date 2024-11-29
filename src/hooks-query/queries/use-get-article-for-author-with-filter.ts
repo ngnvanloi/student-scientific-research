@@ -20,7 +20,7 @@ export const useGetAllArticleForAuthorWithFilter = (
     IDataResponseFromAPI<IListDataResponseFromAPI<ArticleWithContributors>>,
     Error
   >({
-    queryKey: queryKeys.listForAdminArticle,
+    queryKey: queryKeys.listAuthorArticle(params),
     queryFn: () => GetAllArticleForAuthorWithFilter(params),
   });
 };

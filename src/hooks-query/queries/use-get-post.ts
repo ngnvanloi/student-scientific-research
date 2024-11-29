@@ -5,7 +5,7 @@ import { queryKeys } from "./query-keys";
 
 export const useGetPostDetail = (id: number) => {
   return useQuery<IDataResponseFromAPI<Post>, Error>({
-    queryKey: queryKeys.postDetail,
+    queryKey: queryKeys.postDetail(id),
     queryFn: () => GetPostDetail(id),
   });
 };

@@ -20,7 +20,7 @@ export const useGetPublicationArticleForAdminIncludeContributor = (
     IDataResponseFromAPI<IListDataResponseFromAPI<ArticleWithContributors>>,
     Error
   >({
-    queryKey: queryKeys.listForAdminArticle,
+    queryKey: queryKeys.listForAdminArticle(params),
     queryFn: () => GetPublicationArticleForAdminIncludeContributor(params),
   });
 };

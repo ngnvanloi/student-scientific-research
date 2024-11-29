@@ -6,7 +6,7 @@ import { ArticleWithContributors } from "@/types/ArticleWithContributor";
 
 export const useGetArticleDetail = (id: number) => {
   return useQuery<IDataResponseFromAPI<ArticleWithContributors>, Error>({
-    queryKey: [queryKeys.articleDetail, id],
+    queryKey: queryKeys.articleDetail(id),
     queryFn: () => GetArticleDetail(id),
   });
 };

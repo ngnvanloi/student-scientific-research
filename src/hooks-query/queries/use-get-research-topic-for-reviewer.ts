@@ -23,12 +23,8 @@ export const useGetListResearchTopicForReviewer = (
     >,
     Error
   >({
-    queryKey: [
-      queryKeys.listReviewerResearchTopic,
-      params.index,
-      params.pageSize,
-      params.isStatus,
-    ],
+    queryKey: queryKeys.listReviewerResearchTopic(params),
+
     queryFn: () => GetListResearchTopicForReviewer(params),
   });
 };

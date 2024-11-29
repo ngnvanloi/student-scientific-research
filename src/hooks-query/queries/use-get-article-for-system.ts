@@ -19,7 +19,7 @@ export const useGetAllArticleForSystem = (
     IDataResponseFromAPI<IListDataResponseFromAPI<ArticleWithContributors>>,
     Error
   >({
-    queryKey: queryKeys.listForAdminArticle,
+    queryKey: queryKeys.listArticleForSystem(params),
     queryFn: () => GetAllArticleForSystem(params),
   });
 };

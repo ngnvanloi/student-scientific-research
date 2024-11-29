@@ -23,11 +23,7 @@ export const useGetListResearchTopicForAuthorByRolename = (
     >,
     Error
   >({
-    queryKey: [
-      queryKeys.listAuthorResearchTopic,
-      params.index,
-      params.pageSize,
-    ],
+    queryKey: queryKeys.listAuthorResearchTopic(params),
     queryFn: () => GetListResearchTopicForAuthorByRolename(params),
   });
 };
