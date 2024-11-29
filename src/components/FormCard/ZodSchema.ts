@@ -1,4 +1,4 @@
-import { string, z, ZodType } from "zod";
+import { z, ZodType } from "zod";
 import {
   TFormAddCompetition,
   TFormAddContributor,
@@ -29,24 +29,46 @@ import {
   TFormUpdateOrganizer,
   TFormUpdateReviewer,
 } from "./FormInputsData";
-import { title } from "process";
+import { DEFAULT_TEXTAREA_LENGTH } from "@/lib/enum";
 
 export const FormLoginSchema: ZodType<TFormLoginData> = z.object({
   email: z.string().email(),
   password: z
     .string()
-    .min(8, { message: "Password is too short" })
-    .max(20, { message: "Password is too long" }),
+    .min(8, { message: "Mật khẩu chứa ít nhất 8 ký tự" })
+    .regex(/[A-Z]/, {
+      message: "Mật khẩu phải chứa ít nhất một chữ cái in hoa",
+    })
+    .regex(/[a-z]/, {
+      message: "Mật khẩu phải chứa ít nhất một chữ cái thường",
+    })
+    .regex(/[0-9]/, { message: "Mật khẩu phải chứa ít nhất một số" })
+    .regex(/[@$!%*?&]/, {
+      message:
+        "Mật khẩu phải chứa ít nhất một ký tự đặc biệt (@, $, !, %, *, ?, &)",
+    }),
 });
 
 export const FormRegisterSchema: ZodType<TFormRegisterData> = z.object({
   name: z.string(),
-  email: z.string().email(),
+  email: z.string().email({ message: "Email không hợp lệ" }),
   password: z
     .string()
-    .min(8, { message: "Password is too short" })
-    .max(20, { message: "Password is too long" }),
-  numberPhone: z.string(),
+    .min(8, { message: "Mật khẩu chứa ít nhất 8 ký tự" })
+    .regex(/[A-Z]/, {
+      message: "Mật khẩu phải chứa ít nhất một chữ cái in hoa",
+    })
+    .regex(/[a-z]/, {
+      message: "Mật khẩu phải chứa ít nhất một chữ cái thường",
+    })
+    .regex(/[0-9]/, { message: "Mật khẩu phải chứa ít nhất một số" })
+    .regex(/[@$!%*?&]/, {
+      message:
+        "Mật khẩu phải chứa ít nhất một ký tự đặc biệt (@, $, !, %, *, ?, &)",
+    }),
+  numberPhone: z
+    .string()
+    .regex(/^\+?[0-9]{10,15}$/, { message: "Số điện thoại không hợp lệ" }),
   roleName: z.string().optional(),
 });
 export const FormVerifyEmailSchema: ZodType<TFormEmail> = z.object({
@@ -57,21 +79,52 @@ export const FormResetPasswordSchema: ZodType<TFormResetPassword> = z
   .object({
     password: z
       .string()
-      .min(8, { message: "Password is too short" })
-      .max(20, { message: "Password is too long" }),
+      .min(8, { message: "Mật khẩu chứa ít nhất 8 ký tự" })
+      .regex(/[A-Z]/, {
+        message: "Mật khẩu phải chứa ít nhất một chữ cái in hoa",
+      })
+      .regex(/[a-z]/, {
+        message: "Mật khẩu phải chứa ít nhất một chữ cái thường",
+      })
+      .regex(/[0-9]/, { message: "Mật khẩu phải chứa ít nhất một số" })
+      .regex(/[@$!%*?&]/, {
+        message:
+          "Mật khẩu phải chứa ít nhất một ký tự đặc biệt (@, $, !, %, *, ?, &)",
+      }),
     newPassword: z
       .string()
-      .min(8, { message: "Password is too short" })
-      .max(20, { message: "Password is too long" }),
+      .min(8, { message: "Mật khẩu chứa ít nhất 8 ký tự" })
+      .regex(/[A-Z]/, {
+        message: "Mật khẩu phải chứa ít nhất một chữ cái in hoa",
+      })
+      .regex(/[a-z]/, {
+        message: "Mật khẩu phải chứa ít nhất một chữ cái thường",
+      })
+      .regex(/[0-9]/, { message: "Mật khẩu phải chứa ít nhất một số" })
+      .regex(/[@$!%*?&]/, {
+        message:
+          "Mật khẩu phải chứa ít nhất một ký tự đặc biệt (@, $, !, %, *, ?, &)",
+      }),
     confirmPassword: z
       .string()
-      .min(8, { message: "Password is too short" })
-      .max(20, { message: "Password is too long" }),
+      .min(8, { message: "Mật khẩu chứa ít nhất 8 ký tự" })
+      .regex(/[A-Z]/, {
+        message: "Mật khẩu phải chứa ít nhất một chữ cái in hoa",
+      })
+      .regex(/[a-z]/, {
+        message: "Mật khẩu phải chứa ít nhất một chữ cái thường",
+      })
+      .regex(/[0-9]/, { message: "Mật khẩu phải chứa ít nhất một số" })
+      .regex(/[@$!%*?&]/, {
+        message:
+          "Mật khẩu phải chứa ít nhất một ký tự đặc biệt (@, $, !, %, *, ?, &)",
+      }),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords do not match",
+    message: "Mật khẩu xác nhận không khớp với mật khẩu mới",
     path: ["confirmPassword"], // Đặt lỗi tại confirmPassword nếu không khớp
   });
+
 export const FormTabOverviewSchema: ZodType<TFormSubmitResearchProjectTabOveriew> =
   z.object({
     researchProject_ID: z.number(),
@@ -94,11 +147,49 @@ export const FormSubmitArticle: ZodType<TFormSubmitArticle> = z.object({
 export const FormSubmitResearchTopicc: ZodType<TFormSubmitResearchTopic> =
   z.object({
     nameTopic: z.string(),
-    description: z.string(),
-    target: z.string(),
-    achievedResults: z.string(),
-    budget: z.number(),
-    projectDuration: z.number(),
+    description: z
+      .string()
+      .refine(
+        (value) => value.trim().split(/\s+/).length >= DEFAULT_TEXTAREA_LENGTH,
+        {
+          message: `Mô tả phải chứa ít nhất ${DEFAULT_TEXTAREA_LENGTH} từ`,
+        }
+      ),
+    target: z
+      .string()
+      .refine(
+        (value) => value.trim().split(/\s+/).length >= DEFAULT_TEXTAREA_LENGTH,
+        {
+          message: `Mục tiêu phải chứa ít nhất ${DEFAULT_TEXTAREA_LENGTH} từ`,
+        }
+      ),
+    achievedResults: z
+      .string()
+      .refine(
+        (value) => value.trim().split(/\s+/).length >= DEFAULT_TEXTAREA_LENGTH,
+        {
+          message: `Kết quả đạt được phải chứa ít nhất ${DEFAULT_TEXTAREA_LENGTH} từ`,
+        }
+      ),
+    budget: z
+      .number()
+      .positive({ message: "Dự trù kinh phí phải là số dương" })
+      .max(1000000000, { message: "Dự trù kinh phí không được vượt quá 1 tỷ" })
+      .refine((value) => Number.isFinite(value), {
+        message: "Dự trù kinh phí phải là một số hợp lệ",
+      })
+      .refine((value) => /^\d+(\.\d{1,2})?$/.test(value.toString()), {
+        message: "Dự trù kinh phí chỉ được có tối đa 2 chữ số sau dấu phẩy",
+      }),
+    projectDuration: z
+      .number()
+      .int({ message: "Thời gian nghiệm thu đề tài án phải là số nguyên" })
+      .min(1, {
+        message: "Thời gian nghiệm thu đề tài án phải ít nhất là 1 tháng",
+      })
+      .max(12, {
+        message: "Thời gian nghiệm thu đề tài án không thể vượt quá 12 tháng",
+      }),
     supervisor: z.string(),
     summary: z.string().optional(),
     productFilePath: z.string().optional(),
@@ -111,11 +202,49 @@ export const FormSubmitResearchTopicc: ZodType<TFormSubmitResearchTopic> =
 export const FormUpdateResearchTopicc: ZodType<TFormSubmitResearchTopic> =
   z.object({
     nameTopic: z.string(),
-    description: z.string(),
-    target: z.string(),
-    achievedResults: z.string(),
-    budget: z.number(),
-    projectDuration: z.number(),
+    description: z
+      .string()
+      .refine(
+        (value) => value.trim().split(/\s+/).length >= DEFAULT_TEXTAREA_LENGTH,
+        {
+          message: `Mô tả phải chứa ít nhất ${DEFAULT_TEXTAREA_LENGTH} từ`,
+        }
+      ),
+    target: z
+      .string()
+      .refine(
+        (value) => value.trim().split(/\s+/).length >= DEFAULT_TEXTAREA_LENGTH,
+        {
+          message: `Mục tiêu phải chứa ít nhất ${DEFAULT_TEXTAREA_LENGTH} từ`,
+        }
+      ),
+    achievedResults: z
+      .string()
+      .refine(
+        (value) => value.trim().split(/\s+/).length >= DEFAULT_TEXTAREA_LENGTH,
+        {
+          message: `Kết quả đạt được phải chứa ít nhất ${DEFAULT_TEXTAREA_LENGTH} từ`,
+        }
+      ),
+    budget: z
+      .number()
+      .positive({ message: "Dự trù kinh phí phải là số dương" })
+      .max(1000000000, { message: "Dự trù kinh phí không được vượt quá 1 tỷ" })
+      .refine((value) => Number.isFinite(value), {
+        message: "Dự trù kinh phí phải là một số hợp lệ",
+      })
+      .refine((value) => /^\d+(\.\d{1,2})?$/.test(value.toString()), {
+        message: "Dự trù kinh phí chỉ được có tối đa 2 chữ số sau dấu phẩy",
+      }),
+    projectDuration: z
+      .number()
+      .int({ message: "Thời gian nghiệm thu đề tài án phải là số nguyên" })
+      .min(1, {
+        message: "Thời gian nghiệm thu đề tài án phải ít nhất là 1 tháng",
+      })
+      .max(12, {
+        message: "Thời gian nghiệm thu đề tài án không thể vượt quá 12 tháng",
+      }),
     supervisor: z.string(),
     summary: z.string().optional(),
     productFilePath: z.string().optional(),
@@ -155,14 +284,23 @@ export const FormAddPostSchema: ZodType<TFormAddPost> = z.object({
 
 export const FormAddCompetitonSchema: ZodType<TFormAddCompetition> = z.object({
   competitionName: z.string(),
-  description: z.string(),
+  description: z
+    .string()
+    .refine(
+      (value) => value.trim().split(/\s+/).length >= DEFAULT_TEXTAREA_LENGTH,
+      {
+        message: `Mô tả cuộc thi phải chứa ít nhất ${DEFAULT_TEXTAREA_LENGTH} từ`,
+      }
+    ),
   destination: z.string(),
 });
 
 export const FormAddContributorSchema: ZodType<TFormAddContributor> = z.object({
   name: z.string(),
-  email: z.string(),
-  numberPhone: z.string(),
+  email: z.string().email({ message: "Email không hợp lệ" }),
+  numberPhone: z
+    .string()
+    .regex(/^\+?[0-9]{10,15}$/, { message: "Số điện thoại không hợp lệ" }),
   // dateOfBirth: z.string(),
   sex: z.string(),
   // roleName: z.string(),
@@ -172,16 +310,20 @@ export const FormReviewAssignment: ZodType<TFormReviewAssignment> = z.object({
 });
 export const FormAddReviewerSchema: ZodType<TFormAddReviewer> = z.object({
   name: z.string(),
-  email: z.string(),
-  numberPhone: z.string(),
+  email: z.string().email({ message: "Email không hợp lệ" }),
+  numberPhone: z
+    .string()
+    .regex(/^\+?[0-9]{10,15}$/, { message: "Số điện thoại không hợp lệ" }),
   sex: z.string(),
   description: z.string(),
 });
 
 export const FormUpdateAuthorSchema: ZodType<TFormUpdateAuthor> = z.object({
   name: z.string(),
-  email: z.string(),
-  numberPhone: z.string(),
+  email: z.string().email({ message: "Email không hợp lệ" }),
+  numberPhone: z
+    .string()
+    .regex(/^\+?[0-9]{10,15}$/, { message: "Số điện thoại không hợp lệ" }),
   // dateOfBirth: z.string(),
   sex: z.string(),
   facultyId: z.string(),
@@ -189,8 +331,10 @@ export const FormUpdateAuthorSchema: ZodType<TFormUpdateAuthor> = z.object({
 
 export const FormUpdateReviewerSchema: ZodType<TFormUpdateReviewer> = z.object({
   name: z.string(),
-  email: z.string(),
-  numberPhone: z.string(),
+  email: z.string().email({ message: "Email không hợp lệ" }),
+  numberPhone: z
+    .string()
+    .regex(/^\+?[0-9]{10,15}$/, { message: "Số điện thoại không hợp lệ" }),
   // dateOfBirth: z.string(),
   sex: z.string(),
   facultyId: z.string(),
@@ -202,8 +346,10 @@ export const FormUpdateReviewerSchema: ZodType<TFormUpdateReviewer> = z.object({
 export const FormUpdateOrganizerSchema: ZodType<TFormUpdateOrganizer> =
   z.object({
     name: z.string(),
-    email: z.string(),
-    numberPhone: z.string(),
+    email: z.string().email({ message: "Email không hợp lệ" }),
+    numberPhone: z
+      .string()
+      .regex(/^\+?[0-9]{10,15}$/, { message: "Số điện thoại không hợp lệ" }),
     facultyId: z.string(),
     description: z.string(),
   });
@@ -254,7 +400,7 @@ export const FormRequestAcceptanceDeadlineSchema: ZodType<TFormRequestAcceptance
     message: z.string().optional(),
   });
 export const FormSendEmailSchema: ZodType<TFormSendEmail> = z.object({
-  receiverEmail: z.string().email(),
+  receiverEmail: z.string().email({ message: "Email không hợp lệ" }),
   receiverName: z.string().optional(),
   subject: z.string(),
   content: z.string(),
