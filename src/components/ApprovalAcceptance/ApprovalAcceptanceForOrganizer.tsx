@@ -132,7 +132,7 @@ const ApprovalAcceptanceForOrganizer = (props: IProps) => {
               " , vui lòng kiểm tra lại thông tin, phê duyệt và đăng tải công khai lên hệ thống",
             notificationDate: new Date().toISOString(),
             recevierId: 1,
-            notificationTypeId: 4,
+            notificationTypeId: 9,
             targetId: -1,
           };
           notiMutation(paramsNotii, {

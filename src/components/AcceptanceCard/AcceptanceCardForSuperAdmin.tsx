@@ -10,7 +10,6 @@ import { useState } from "react";
 import { ModalShowDetailAcceptanceOfResearchTopic } from "../Modal/ModalShowDetailAcceptanceOfResearchTopic";
 import { ModalApprovedAcceptanceForOrganizer } from "../Modal/ModalApprovedAcceptanceForOrganizer";
 import { ModalApprovedAcceptanceForSuperAdmin } from "../Modal/ModalApprovedAcceptanceForSuperAdmin";
-import { ModalConfirmApprovalAcceptanceForSuperAdmin } from "../Modal/ModalConfirmApprovalAcceptanceForSuperAdmin";
 
 interface IProps {
   acceptance: Acceptance | undefined;
@@ -100,11 +99,7 @@ const AcceptanceCardForSuperAdmin = (props: IProps) => {
         setIsOpen={setIsOpen}
         acceptance={acceptance}
       />
-      {/* <ModalConfirmApprovalAcceptanceForSuperAdmin
-        acceptance={acceptance}
-        isOpen={isModalApprovalOpen}
-        setIsOpen={setIsModalApprovalOpen}
-      /> */}
+
       <ModalApprovedAcceptanceForSuperAdmin
         acceptance={acceptance}
         isOpen={isModalApprovalOpen}
