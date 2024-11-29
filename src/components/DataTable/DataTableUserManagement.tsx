@@ -9,21 +9,53 @@ export const columns: ColumnDef<AccountManagement>[] = [
   },
   {
     accessorKey: "email",
-    header: "Username",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Username
+          <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "roleName",
-    header: "Vai trò",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Vai trò
+          <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "isSuspended",
-    header: "Vô hiệu hóa",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Vô hiệu hóa
+          <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
 ];
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
+  getSortedRowModel,
+  SortingState,
 } from "@tanstack/react-table";
 
 import {
@@ -34,16 +66,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BoltSlashIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowsUpDownIcon,
+  BoltSlashIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 import { AccountManagement } from "@/types/AccountManagement";
 import {
   ParamsDeactiveAccount,
   useDeactivateAccountMutation,
 } from "@/hooks-query/mutations/use-deactivate-account";
 import { useToast } from "@/hooks/use-toast";
-import { useDeleteAccountMutation } from "@/hooks-query/mutations/use-delete-account";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ModalDeleteAccount } from "../Modal/ModalDeleteAccount";
+import { Button } from "../ui/button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -56,11 +92,18 @@ export function DataTableUserManagement<TData, TValue>({
   data,
   setData,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   });
+
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [accountID, setAccountID] = useState<number>(0);

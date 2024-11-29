@@ -1,8 +1,9 @@
+import imgLogo from "../../assets/img/logo-huit-v.jpeg";
 const SignUpImageSidebar = () => {
   return (
     <div className="relative flex-1 hidden items-center justify-center h-screen bg-gray-900 lg:flex">
       <div className="relative z-10 w-full max-w-md">
-        <img src="https://floatui.com/logo-dark.svg" width={150} />
+        <img src={imgLogo.src} width={150} />
         <div className=" mt-16 space-y-3">
           <h3 className="text-white text-3xl font-bold">
             Bắt đầu những cống hiến của bạn
