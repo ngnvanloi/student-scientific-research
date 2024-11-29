@@ -88,6 +88,8 @@ const ModalUpdateReviewerProfile = (props: IProps) => {
       dateOfBirth: reviewer?.dateOfBirth,
       sex: reviewer?.sex || "Nam",
       facultyId: String(reviewer?.facultyId) || "0",
+      academicDegree: reviewer?.academicDegree || "Unknow",
+      academicRank: reviewer?.academicRank || "Unknow",
     },
   });
 

@@ -231,7 +231,9 @@ const CompetitionCardForAuthor = (props: IProps) => {
     setIsOpen(true);
   };
   function isCompetitionIdPresent(competitionId: number | undefined) {
-    return data?.data.some((item) => item.competitionId === competitionId);
+    if (data?.data) {
+      return data?.data.some((item) => item.competitionId === competitionId);
+    } else return false;
   }
 
   function isRegistrationApproved(competitionId: number | undefined) {

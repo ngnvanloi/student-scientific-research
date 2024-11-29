@@ -1,19 +1,17 @@
 "use client";
 import { ModalUpdateProfile } from "@/components/Modal/ModalUpdateProfile";
 import { ModalUpdateReviewerProfile } from "@/components/Modal/ModalUpdateReviewerProfile";
-import { formatDate } from "@/helper/extension-function";
+import { formatDate, isValid } from "@/helper/extension-function";
 import { useGetProfile } from "@/hooks-query/queries/use-get-user-profile";
 import { Author } from "@/types/Author";
 import { Reviewer } from "@/types/Reviewer";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import { Alert, Button } from "antd";
-import { isValid } from "date-fns";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 export default function MyProfile() {
   const { data: user } = useGetProfile();
-  const { data: session } = useSession();
   console.log("check user reviewer profile: ", user);
   let reviewer: Reviewer = {
     name: user?.data.name || "",
@@ -48,9 +46,11 @@ export default function MyProfile() {
         </div>
         {(() => {
           if (
-            !isValid(session?.user?.facultyName) ||
-            !isValid(session?.user?.facultyId) ||
-            !isValid(session?.user?.numberPhone)
+            !isValid(user?.data?.facultyName) ||
+            !isValid(user?.data.facultyId) ||
+            !isValid(user?.data.numberPhone) ||
+            !isValid(user?.data.academicDegree) ||
+            !isValid(user?.data.academicRank)
           ) {
             return (
               <Alert

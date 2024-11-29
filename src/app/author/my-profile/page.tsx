@@ -10,7 +10,6 @@ import { useState } from "react";
 
 export default function MyProfile() {
   const { data: user } = useGetProfile();
-  const { data: session } = useSession();
   console.log("check user author profile: ", user);
   let author: Author = {
     name: user?.data.name || "",
@@ -44,9 +43,9 @@ export default function MyProfile() {
         </div>
         {(() => {
           if (
-            !isValid(session?.user?.facultyName) ||
-            !isValid(session?.user?.facultyId) ||
-            !isValid(session?.user?.numberPhone)
+            !isValid(user?.data.facultyName) ||
+            !isValid(user?.data.facultyId) ||
+            !isValid(user?.data.numberPhone)
           ) {
             return (
               <Alert
