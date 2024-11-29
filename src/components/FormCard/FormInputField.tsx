@@ -43,7 +43,9 @@ const FormField = <T extends FieldValues>({
       />
     )}
 
-    {error && <span className="error-message">{error.message}</span>}
+    {error && (
+      <span className="error-message text-red-500">{error.message}</span>
+    )}
   </>
 );
 export default FormField;

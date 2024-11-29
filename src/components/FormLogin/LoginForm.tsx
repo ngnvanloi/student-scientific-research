@@ -9,6 +9,13 @@ import { GoogleSVG } from "@/assets/svg/google.icon";
 import { useRouter } from "next/navigation";
 import { getSession, useSession } from "next-auth/react";
 import { isValid } from "@/helper/extension-function";
+import {
+  LoginParams,
+  useLoginMutation,
+} from "@/hooks-query/queries/use-login-mutation";
+import { useState } from "react";
+import { Alert } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -16,7 +23,10 @@ const LoginForm = () => {
   if (sessionn) {
     router.push("/");
   }
-
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { mutate, isError, isSuccess, isPending } = useLoginMutation((msg) => {
+    setErrorMessage(msg);
+  });
   // REACT HOOK FORM
   const {
     register,
@@ -34,7 +44,19 @@ const LoginForm = () => {
       email: data.email,
       password: data.password,
     };
-
+    let params: LoginParams = {
+      email: data.email,
+      password: data.password,
+    };
+    // show message error when login failed
+    mutate(params, {
+      onSuccess: () => {},
+      onError: (error) => {
+        console.error("Login failed: ", error);
+        // setError("email", { message: "Email or password is incorrect" });
+        setErrorMessage(error.errorMessage);
+      },
+    });
     // thực hiện login
     await authenticate(formData);
 
@@ -103,7 +125,7 @@ const LoginForm = () => {
             />
           </div>
           <div>
-            <label className="font-medium">Password</label>
+            <label className="font-medium">Mật khẩu</label>
             <FormField
               type="password"
               placeholder="Password"
@@ -130,14 +152,29 @@ const LoginForm = () => {
               href=""
               className="text-center text-indigo-600 hover:text-indigo-500"
             >
-              Forgot password?
+              Quên mật khẩu
             </a>
           </div>
+          {errorMessage && (
+            <div className="mt-4">
+              <Alert
+                message="Oops! Đã có lỗi xảy ra"
+                description={errorMessage}
+                type="error"
+                closable={{
+                  "aria-label": "close",
+                  closeIcon: <CloseOutlined />,
+                }}
+                onClose={() => setErrorMessage(null)}
+                showIcon
+              />
+            </div>
+          )}
           <button
             className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
             type="submit"
           >
-            Sign in
+            Đăng nhập
           </button>
         </form>
         <button
@@ -145,15 +182,15 @@ const LoginForm = () => {
           onClick={() => handleLoginGoogle()}
         >
           <GoogleSVG />
-          Login with Google
+          Đăng nhập bằng Google
         </button>
         <p className="text-center">
-          Don't have an account?{" "}
+          Bạn chưa có tài khoản?{" "}
           <a
             href="/sign-up"
             className="font-medium text-indigo-600 hover:text-indigo-500"
           >
-            Sign up
+            Đăng kí
           </a>
         </p>
       </div>
