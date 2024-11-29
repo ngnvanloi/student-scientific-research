@@ -10,6 +10,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SendingMessage } from "./SendingMessage";
 import { MailOutlined, SendOutlined } from "@ant-design/icons";
+import { EnvelopeIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
 
 export function MailBoxContainer() {
   return (
@@ -20,14 +21,14 @@ export function MailBoxContainer() {
           value="mailbox"
           className="justify-start w-full h-10 items-center gap-1"
         >
-          <MailOutlined />
+          <EnvelopeIcon width={20} />
           Hộp thư của tôi
         </TabsTrigger>
         <TabsTrigger
           value="send"
           className="justify-start w-full h-10 items-center gap-1"
         >
-          <SendOutlined />
+          <PaperAirplaneIcon width={20} />
           Gửi email
         </TabsTrigger>
       </TabsList>
