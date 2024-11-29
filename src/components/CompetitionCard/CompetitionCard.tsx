@@ -43,6 +43,7 @@ import { getSession, useSession } from "next-auth/react";
 import { ReviewCouncilWithMembers } from "@/types/ReviewCouncilWithMembers";
 import { ModalUpdateReviewCouncil } from "../Modal/ModalUpdateReviewCouncil";
 import { ModalDeleteReviewCouncil } from "../Modal/ModalDeleteReviewCouncil";
+import { useRouter } from "next/navigation";
 interface IProps {
   competition: Competition | undefined;
 }
@@ -50,6 +51,8 @@ const prefixPath: string = "/competitions/";
 
 const CompetitionCard = (props: IProps) => {
   const { competition } = props;
+  const { data: session } = useSession();
+  const route = useRouter();
   // STATE
   const [competitionTarget, setCompetitionTarget] = useState<number>(-1);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -117,6 +120,24 @@ const CompetitionCard = (props: IProps) => {
                 </span>
                 {/* BUTTON ĐĂNG KÍ */}
                 {(() => {
+                  if (!session?.user) {
+                    return (
+                      <Button
+                        variant="filled"
+                        className=""
+                        onClick={() => {
+                          route.push("/login");
+                        }}
+                      >
+                        Đăng nhập để tham gia
+                      </Button>
+                    );
+                  } else if (
+                    session.user.roleName === "organizer" ||
+                    session.user.roleName === "superadmin"
+                  ) {
+                    return "";
+                  }
                   if (
                     !isCompetitionIdPresent(competition?.id) &&
                     isCurrentDateInRange(
