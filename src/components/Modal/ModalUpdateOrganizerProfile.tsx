@@ -109,7 +109,7 @@ const ModalUpdateOrganizerProfile = (props: IProps) => {
           setErrorMessage(null);
         },
         onError: (error) => {
-          alert("Lỗi khi cập nhật profile: " + error);
+          console.error("Lỗi khi cập nhật profile: " + error);
         },
       }
     );

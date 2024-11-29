@@ -38,7 +38,7 @@ const ModalDeleteAccount = (props: IProps) => {
         setIsOpen(false);
       },
       onError: (error) => {
-        alert("Lỗi khi xóa tài khoản:" + error);
+        console.error("Lỗi khi xóa tài khoản:" + error);
       },
     });
   };

@@ -32,7 +32,7 @@ const RestoreDatabase = () => {
         });
       },
       onError: (error) => {
-        console.log("Error: " + error);
+        console.error("Error: " + error);
       },
     });
   };

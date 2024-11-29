@@ -144,7 +144,7 @@ const ModalUpdateReviewerProfile = (props: IProps) => {
           setIsOpen(false);
         },
         onError: (error) => {
-          alert("Lỗi khi cập nhật profile: " + error);
+          console.error("Lỗi khi cập nhật profile: " + error);
         },
       }
     );
