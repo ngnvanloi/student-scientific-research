@@ -28,7 +28,7 @@ export type TFormSubmitResearchProjectTabOveriew = {
 };
 
 export type TFormSubmitArticle = {
-  title?: string;
+  title: string;
   description?: string;
   keywords?: string[];
   filePath?: string;

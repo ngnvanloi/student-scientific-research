@@ -185,7 +185,8 @@ const FormUpdateArticle = (props: IProps) => {
           keywords: keywords,
           filePath: articleFilePath || article?.filePath || "",
           dateUpload: date || "",
-          disciplineId: Number(data.disciplineId),
+          disciplineId:
+            Number(data.disciplineId) === -1 ? 0 : Number(data.disciplineId),
           coAuthors: listContributors,
         };
 

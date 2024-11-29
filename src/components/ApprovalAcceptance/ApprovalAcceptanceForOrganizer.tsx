@@ -69,93 +69,97 @@ const ApprovalAcceptanceForOrganizer = (props: IProps) => {
 
   // HANDLE LOGIC
   const onSubmit = async (data: TFormApprovedAcceptance) => {
-    let isAccept = false;
-    if (Number(data.isAccepted) === 1) {
-      isAccept = true;
-    }
-    try {
-      // Tạo request body từ kết quả mutation
-      const requestBody: ParamsApprovedAcceptanceForOrganizer = {
-        acceptanceId: acceptance?.id || 0,
-        description: data.description,
-        isAccepted: isAccept,
-      };
+    if (Number(data.isAccepted) === 0) {
+      setErrorMessage("Vui lòng chọn tình trạng phê duyệt");
+    } else {
+      let isAccept = false;
+      if (Number(data.isAccepted) === 1) {
+        isAccept = true;
+      }
+      try {
+        // Tạo request body từ kết quả mutation
+        const requestBody: ParamsApprovedAcceptanceForOrganizer = {
+          acceptanceId: acceptance?.id || 0,
+          description: data.description,
+          isAccepted: isAccept,
+        };
 
-      // Gọi API
-      mutate(requestBody, {
-        onSuccess: () => {
-          toast({
-            title: "Thành công",
-            variant: "default",
-            description:
-              "Bạn đã cập nhật thành công bản nghiệm thu, vui lòng chờ đợi ban tổ chức phê duyệt",
-          });
-          // gửi thông báo cho ban tổ chức
-          let contentNoti = "";
-          if (Number(data.isAccepted) === 1) {
-            contentNoti =
-              NotificationContentSample.NotificationType.approvedAcceptance
-                .organizer.accept + data.description;
-          } else {
-            contentNoti =
-              NotificationContentSample.NotificationType.approvedAcceptance
-                .organizer.reject +
-              data.description +
-              " . Vui lòng cập nhật lại sản phẩm nghiệm thu đúng tiến độ";
-          }
+        // Gọi API
+        mutate(requestBody, {
+          onSuccess: () => {
+            toast({
+              title: "Thành công",
+              variant: "default",
+              description:
+                "Bạn đã cập nhật thành công bản nghiệm thu, vui lòng chờ đợi ban tổ chức phê duyệt",
+            });
+            // gửi thông báo cho ban tổ chức
+            let contentNoti = "";
+            if (Number(data.isAccepted) === 1) {
+              contentNoti =
+                NotificationContentSample.NotificationType.approvedAcceptance
+                  .organizer.accept + data.description;
+            } else {
+              contentNoti =
+                NotificationContentSample.NotificationType.approvedAcceptance
+                  .organizer.reject +
+                data.description +
+                " . Vui lòng cập nhật lại sản phẩm nghiệm thu đúng tiến độ";
+            }
 
-          // gửi thông báo cho tác giả
-          const paramsNoti: ParamsCreateNotification = {
-            notificationContent: session?.user?.name + contentNoti,
-            notificationDate: new Date().toISOString(),
-            recevierId:
-              acceptance?.researchTopic.author_ResearchTopics.find(
-                (item) => item.roleName === "author"
-              )?.author.accountId || 0,
-            notificationTypeId: 9,
-            targetId: 0,
-          };
-          notiMutation(paramsNoti, {
-            onSuccess: () => {
-              console.log("Thông báo đã gửi");
-            },
-            onError: (error) => {
-              console.error("Lỗi khi gửi thông báo:", error);
-            },
-          });
-          // gửi thông báo cho super-admin
-          const paramsNotii: ParamsCreateNotification = {
-            notificationContent:
-              session?.user?.name +
-              " đã phê duyệt nghiệm thu " +
-              acceptance?.name +
-              " , vui lòng kiểm tra lại thông tin, phê duyệt và đăng tải công khai lên hệ thống",
-            notificationDate: new Date().toISOString(),
-            recevierId: 1,
-            notificationTypeId: 9,
-            targetId: 0,
-          };
-          notiMutation(paramsNotii, {
-            onSuccess: () => {
-              console.log("Thông báo đã gửi");
-            },
-            onError: (error) => {
-              console.error("Lỗi khi gửi thông báo:", error);
-            },
-          });
-          // Reset các field input và file
-          reset({
-            description: "",
-          });
-          setErrorMessage(null);
-          setIsOpen(false);
-        },
-        onError: (error) => {
-          console.error("Lỗi khi tạo phê duyệt nghiệm thu:", error);
-        },
-      });
-    } catch (error) {
-      console.error("Lỗi khi upload file:", error);
+            // gửi thông báo cho tác giả
+            const paramsNoti: ParamsCreateNotification = {
+              notificationContent: session?.user?.name + contentNoti,
+              notificationDate: new Date().toISOString(),
+              recevierId:
+                acceptance?.researchTopic.author_ResearchTopics.find(
+                  (item) => item.roleName === "author"
+                )?.author.accountId || 0,
+              notificationTypeId: 9,
+              targetId: 0,
+            };
+            notiMutation(paramsNoti, {
+              onSuccess: () => {
+                console.log("Thông báo đã gửi");
+              },
+              onError: (error) => {
+                console.error("Lỗi khi gửi thông báo:", error);
+              },
+            });
+            // gửi thông báo cho super-admin
+            const paramsNotii: ParamsCreateNotification = {
+              notificationContent:
+                session?.user?.name +
+                " đã phê duyệt nghiệm thu " +
+                acceptance?.name +
+                " , vui lòng kiểm tra lại thông tin, phê duyệt và đăng tải công khai lên hệ thống",
+              notificationDate: new Date().toISOString(),
+              recevierId: 1,
+              notificationTypeId: 9,
+              targetId: 0,
+            };
+            notiMutation(paramsNotii, {
+              onSuccess: () => {
+                console.log("Thông báo đã gửi");
+              },
+              onError: (error) => {
+                console.error("Lỗi khi gửi thông báo:", error);
+              },
+            });
+            // Reset các field input và file
+            reset({
+              description: "",
+            });
+            setErrorMessage(null);
+            setIsOpen(false);
+          },
+          onError: (error) => {
+            console.error("Lỗi khi tạo phê duyệt nghiệm thu:", error);
+          },
+        });
+      } catch (error) {
+        console.error("Lỗi khi upload file:", error);
+      }
     }
   };
 

@@ -73,95 +73,99 @@ const ApprovalAcceptanceForSuperAdmin = (props: IProps) => {
 
   // HANDLE LOGIC
   const onSubmit = async (data: TFormApprovedAcceptance) => {
-    try {
-      // Tạo request body từ kết quả mutation
-      const requestBody: ParamsApprovedAcceptanceForSuperAdmin = {
-        AcceptedForPublicationStatus: Number(data.isAccepted),
-      };
-      // Gọi API
-      mutate(
-        { id: Number(acceptance?.id), params: requestBody },
-        {
-          onSuccess: () => {
-            toast({
-              title: "Thành công",
-              variant: "default",
-              description:
-                "Bạn đã cập nhật thành công bản nghiệm thu, vui lòng chờ đợi ban tổ chức phê duyệt",
-            });
-            toast({
-              title: "Thông báo",
-              variant: "default",
-              description:
-                "Bạn đã phê duyệt nghiệm thu thành công. Tác giả và ban tổ chức sẽ nhận được thông báo sớm nhất",
-            });
-            // gửi noti cho ban tổ chức
-            const paramsNotii: ParamsCreateNotification = {
-              notificationContent:
-                `${
-                  Number(data.isAccepted) === 1
-                    ? NotificationContentSample.NotificationType
-                        .approvedAcceptance.admin.forOrganizer.accept
-                    : NotificationContentSample.NotificationType
-                        .approvedAcceptance.admin.forOrganizer.reject
-                }` +
-                ". Nội dung nhận xét: " +
-                data.description,
-              notificationDate: new Date().toISOString(),
-              recevierId: competitionDetails?.data.accountId || 0,
-              notificationTypeId: 9,
-              targetId: 0,
-            };
-            notiMutation(paramsNotii, {
-              onSuccess: () => {
-                console.log("Thông báo đã gửi");
-              },
-              onError: (error) => {
-                console.error("Lỗi khi gửi thông báo:", error);
-              },
-            });
-            // gửi thông báo cho tác giả
-            const paramsNoti: ParamsCreateNotification = {
-              notificationContent:
-                `${
-                  Number(data.isAccepted) === 1
-                    ? NotificationContentSample.NotificationType
-                        .approvedAcceptance.admin.forAuthor.accept
-                    : NotificationContentSample.NotificationType
-                        .approvedAcceptance.admin.forAuthor.reject
-                }` +
-                ". Nội dung nhận xét: " +
-                data.description,
-              notificationDate: new Date().toISOString(),
-              recevierId:
-                acceptance?.researchTopic.author_ResearchTopics.find(
-                  (item) => item.roleName === "author"
-                )?.author.accountId || 0,
-              notificationTypeId: 9,
-              targetId: 0,
-            };
-            notiMutation(paramsNoti, {
-              onSuccess: () => {
-                console.log("Thông báo đã gửi");
-              },
-              onError: (error) => {
-                console.error("Lỗi khi gửi thông báo:", error);
-              },
-            });
-            // Reset các field input và file
-            reset({
-              description: "",
-            });
-            setErrorMessage(null);
-            setIsOpen(false);
-          },
-          onError: (error) => {
-            console.error("Lỗi khi tạo phê duyệt nghiệm thu:", error);
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Lỗi khi upload file:", error);
+    if (Number(data.isAccepted) === 0) {
+      setErrorMessage("Bạn phải chọn tình trạng phê duyệt");
+    } else {
+      try {
+        // Tạo request body từ kết quả mutation
+        const requestBody: ParamsApprovedAcceptanceForSuperAdmin = {
+          AcceptedForPublicationStatus: Number(data.isAccepted),
+        };
+        // Gọi API
+        mutate(
+          { id: Number(acceptance?.id), params: requestBody },
+          {
+            onSuccess: () => {
+              toast({
+                title: "Thành công",
+                variant: "default",
+                description:
+                  "Bạn đã cập nhật thành công bản nghiệm thu, vui lòng chờ đợi ban tổ chức phê duyệt",
+              });
+              toast({
+                title: "Thông báo",
+                variant: "default",
+                description:
+                  "Bạn đã phê duyệt nghiệm thu thành công. Tác giả và ban tổ chức sẽ nhận được thông báo sớm nhất",
+              });
+              // gửi noti cho ban tổ chức
+              const paramsNotii: ParamsCreateNotification = {
+                notificationContent:
+                  `${
+                    Number(data.isAccepted) === 1
+                      ? NotificationContentSample.NotificationType
+                          .approvedAcceptance.admin.forOrganizer.accept
+                      : NotificationContentSample.NotificationType
+                          .approvedAcceptance.admin.forOrganizer.reject
+                  }` +
+                  ". Nội dung nhận xét: " +
+                  data.description,
+                notificationDate: new Date().toISOString(),
+                recevierId: competitionDetails?.data.accountId || 0,
+                notificationTypeId: 9,
+                targetId: 0,
+              };
+              notiMutation(paramsNotii, {
+                onSuccess: () => {
+                  console.log("Thông báo đã gửi");
+                },
+                onError: (error) => {
+                  console.error("Lỗi khi gửi thông báo:", error);
+                },
+              });
+              // gửi thông báo cho tác giả
+              const paramsNoti: ParamsCreateNotification = {
+                notificationContent:
+                  `${
+                    Number(data.isAccepted) === 1
+                      ? NotificationContentSample.NotificationType
+                          .approvedAcceptance.admin.forAuthor.accept
+                      : NotificationContentSample.NotificationType
+                          .approvedAcceptance.admin.forAuthor.reject
+                  }` +
+                  ". Nội dung nhận xét: " +
+                  data.description,
+                notificationDate: new Date().toISOString(),
+                recevierId:
+                  acceptance?.researchTopic.author_ResearchTopics.find(
+                    (item) => item.roleName === "author"
+                  )?.author.accountId || 0,
+                notificationTypeId: 9,
+                targetId: 0,
+              };
+              notiMutation(paramsNoti, {
+                onSuccess: () => {
+                  console.log("Thông báo đã gửi");
+                },
+                onError: (error) => {
+                  console.error("Lỗi khi gửi thông báo:", error);
+                },
+              });
+              // Reset các field input và file
+              reset({
+                description: "",
+              });
+              setErrorMessage(null);
+              setIsOpen(false);
+            },
+            onError: (error) => {
+              console.error("Lỗi khi tạo phê duyệt nghiệm thu:", error);
+            },
+          }
+        );
+      } catch (error) {
+        console.error("Lỗi khi upload file:", error);
+      }
     }
   };
 

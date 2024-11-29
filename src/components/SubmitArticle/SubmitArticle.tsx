@@ -64,6 +64,20 @@ const SubmitArticleComponent = () => {
     error: fileError,
     isPending: fileIsPending,
   } = useUploadFileMutation();
+  const uploadFile = (mutation: any, formData: any) => {
+    return new Promise<string>((resolve, reject) => {
+      mutation(formData, {
+        onSuccess: (result: any) => {
+          if (typeof result.data === "string") {
+            resolve(result.data);
+          } else {
+            reject(new Error("Invalid file URL"));
+          }
+        },
+        onError: (error: any) => reject(error),
+      });
+    });
+  };
   const {
     mutate: notiMutation,
     isSuccess: isNotiSuccess,
@@ -89,22 +103,22 @@ const SubmitArticleComponent = () => {
   });
 
   // HANDLE LOGIC
-  const onSubmit = (data: TFormSubmitArticle) => {
-    // console.log("checking title and discipline: ", JSON.stringify(data));
-    // console.log("checking date: ", date);
-    // console.log("checking description: ", description);
-    // console.log("checking keywords: ", keywords);
-    // console.log("checking file: ", file);
-    // console.log("checking list Contributors: ", listContributors);
-    // GỌI API UPLOAD FILE
-    if (
+  const onSubmit = async (data: TFormSubmitArticle) => {
+    if (data.title === "") {
+      setErrorMessage("Vui lòng nhập tiêu đề của bài báo");
+    } else if (
       description === "" ||
       description.length <= DEFAULT_RICHTEXTEDITOR_LENGTH
     ) {
       setErrorMessage(
         `Nội dung bài viết chưa đảm bảo độ dài cần thiết (tối thiểu ${DEFAULT_RICHTEXTEDITOR_LENGTH} chữ)`
       );
+    } else if (!file) {
+      setErrorMessage("Vui lòng upload file bài báo");
+    } else if (Number(data.disciplineId) === 0) {
+      setErrorMessage("Vui lòng chọn lĩnh vực");
     } else {
+      // GỌI API UPLOAD FILE
       const formDataUploadFile = new FormData();
       if (file) {
         formDataUploadFile.append("File", file);
@@ -113,66 +127,69 @@ const SubmitArticleComponent = () => {
           FolderNameUploadFirebase.ArticleFolder
         );
       }
-      fileMutation(formDataUploadFile, {
-        onSuccess: (result) => {
-          // alert("Upload file successfully");
-          // TẠO REQUEST BODY
-          const requestBody: ParamsSubmitArticle = {
-            title: data.title ? data.title : "",
-            description: description,
-            keywords: keywords,
-            filePath: result.data,
-            dateUpload: date?.toISOString() ? date.toISOString() : "",
-            disciplineId: Number(data?.disciplineId),
-            coAuthors: listContributors,
-          };
-
-          // GỌI API upload bài báo
-          mutate(requestBody, {
-            onSuccess: () => {
-              toast({
-                title: "Thành công",
-                variant: "default",
-                description:
-                  "Chúc mừng! Bài báo của bạn đã được gửi đến quản trị viên, vui lòng chờ kết quả phê duyệt",
-              });
-              // reset input fields
-              reset({
-                title: "",
-                disciplineId: "",
-              });
-              setDescription("");
-              setFile(undefined);
-              setKeywords([]);
-              setListContributors([]);
-              setDate(new Date());
-              setErrorMessage(null);
-              // gửi thông báo cho super admin
-              const paramsNoti: ParamsCreateNotification = {
-                notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.article.author}`,
-                notificationDate: new Date().toISOString(),
-                recevierId: 1,
-                notificationTypeId: 1,
-                targetId: 0,
-              };
-              notiMutation(paramsNoti, {
-                onSuccess: () => {
-                  console.log("Thông báo đã gửi");
-                },
-                onError: (error) => {
-                  console.error("Lỗi khi gửi thông báo:", error);
-                },
-              });
-            },
-            onError: (error) => {
-              console.error("Lỗi khi tạo bài báo:", error);
-            },
-          });
-        },
-        onError: (error) => {
-          console.error("Lỗi khi upload file:", error);
-        },
-      });
+      try {
+        // Khởi tạo các promise upload file nếu file tồn tại
+        const fileUploadPromises = [
+          file
+            ? uploadFile(fileMutation, formDataUploadFile)
+            : Promise.resolve(""),
+        ];
+        // Thực hiện các promise upload file đồng thời và đợi tất cả hoàn tất
+        const [artileFilePath] = await Promise.all(fileUploadPromises);
+        // TẠO REQUEST BODY
+        const requestBody: ParamsSubmitArticle = {
+          title: data.title ? data.title : "",
+          description: description,
+          keywords: keywords,
+          filePath: artileFilePath || "",
+          dateUpload: date?.toISOString() ? date.toISOString() : "",
+          disciplineId: Number(data?.disciplineId),
+          coAuthors: listContributors,
+        };
+        // GỌI API upload bài báo
+        mutate(requestBody, {
+          onSuccess: () => {
+            toast({
+              title: "Thành công",
+              variant: "default",
+              description:
+                "Chúc mừng! Bài báo của bạn đã được gửi đến quản trị viên, vui lòng chờ kết quả phê duyệt",
+            });
+            // reset input fields
+            reset({
+              title: "",
+              disciplineId: "",
+            });
+            setDescription("");
+            setFile(undefined);
+            setKeywords([]);
+            setListContributors([]);
+            setDate(new Date());
+            setErrorMessage(null);
+            // gửi thông báo cho super admin
+            const paramsNoti: ParamsCreateNotification = {
+              notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.article.author}`,
+              notificationDate: new Date().toISOString(),
+              recevierId: 1,
+              notificationTypeId: 1,
+              targetId: 0,
+            };
+            notiMutation(paramsNoti, {
+              onSuccess: () => {
+                console.log("Thông báo đã gửi");
+              },
+              onError: (error) => {
+                console.error("Lỗi khi gửi thông báo:", error);
+              },
+            });
+          },
+          onError: (error) => {
+            console.error("Lỗi khi tạo bài báo:", error);
+          },
+        });
+      } catch (error) {
+        console.error("Lỗi upload file", error);
+      }
     }
   };
 

@@ -45,39 +45,46 @@ const BackupDatabase = () => {
   });
 
   const onSubmit = async (data: TFormCreateBackup) => {
-    console.log("checking backupPath: ", data.backupPath);
-    console.log("checking backupType: ", formatDirectionPath(data.backupPath));
-    try {
-      // Tạo request body từ kết quả mutation
-      const requestBody: ParamsCreateBackupFile = {
-        backupType: Number(data.backupType),
-        backupPath: formatDirectionPath(data.backupPath),
-        description: "Sao lưu cơ sở dữ liệu",
-      };
+    if (Number(data.backupType) === 0) {
+      setErrorMessage("Vui lòng chọn kiểu sao lưu dữ liệu");
+    } else {
+      console.log("checking backupPath: ", data.backupPath);
+      console.log(
+        "checking backupType: ",
+        formatDirectionPath(data.backupPath)
+      );
+      try {
+        // Tạo request body từ kết quả mutation
+        const requestBody: ParamsCreateBackupFile = {
+          backupType: Number(data.backupType),
+          backupPath: formatDirectionPath(data.backupPath),
+          description: "Sao lưu cơ sở dữ liệu",
+        };
 
-      // Gọi API
-      mutate(requestBody, {
-        onSuccess: () => {
-          toast({
-            title: "Thành công",
-            variant: "default",
-            description:
-              "Bạn đã tạo file back up thành công, để thực hiện việc backup, truy cập vào đường dẫn " +
-              data.backupPath,
-          });
-          // Reset các field input và file
-          reset({
-            backupType: "1",
-            backupPath: BACKUP_DIRECTION,
-          });
-          setErrorMessage(null);
-        },
-        onError: (error) => {
-          console.error("Lỗi khi tạo file backup:", error);
-        },
-      });
-    } catch (error) {
-      console.error("Lỗi:", error);
+        // Gọi API
+        mutate(requestBody, {
+          onSuccess: () => {
+            toast({
+              title: "Thành công",
+              variant: "default",
+              description:
+                "Bạn đã tạo file back up thành công, để thực hiện việc backup, truy cập vào đường dẫn " +
+                data.backupPath,
+            });
+            // Reset các field input và file
+            reset({
+              backupType: "1",
+              backupPath: BACKUP_DIRECTION,
+            });
+            setErrorMessage(null);
+          },
+          onError: (error) => {
+            console.error("Lỗi khi tạo file backup:", error);
+          },
+        });
+      } catch (error) {
+        console.error("Lỗi:", error);
+      }
     }
   };
 

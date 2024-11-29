@@ -109,67 +109,71 @@ const ModalShowDetailReviewProcessing = (props: IProps) => {
 
   // HANDLE REVIEW ACCEPTANCE
   const onSubmit = (data: TFormApprovalRegistration) => {
-    console.log("checking approval status: ", data.approvalStatus);
-    console.log(
-      "checking typeof approval status: ",
-      typeof data.approvalStatus
-    );
-    // tạo content cho noti
-    let contentNoti = "";
-    if (data.approvalStatus === "1") {
-      contentNoti =
-        session?.user?.name +
-        " " +
-        NotificationContentSample.NotificationType.reviewAcceptance.organizer
-          .accept;
-    } else if (data.approvalStatus === "2") {
-      contentNoti =
-        session?.user?.name +
-        " " +
-        NotificationContentSample.NotificationType.reviewAcceptance.organizer
-          .reject;
-    }
+    if (Number(data.approvalStatus) === 0) {
+      setErrorMessage("Vui lòng chọn tình trạng phê duyệt");
+    } else {
+      console.log("checking approval status: ", data.approvalStatus);
+      console.log(
+        "checking typeof approval status: ",
+        typeof data.approvalStatus
+      );
+      // tạo content cho noti
+      let contentNoti = "";
+      if (data.approvalStatus === "1") {
+        contentNoti =
+          session?.user?.name +
+          " " +
+          NotificationContentSample.NotificationType.reviewAcceptance.organizer
+            .accept;
+      } else if (data.approvalStatus === "2") {
+        contentNoti =
+          session?.user?.name +
+          " " +
+          NotificationContentSample.NotificationType.reviewAcceptance.organizer
+            .reject;
+      }
 
-    // gửi request đến API phê duyệt đăng kí
-    const bodyRequest: ParamsApprovalReviewAcceptance = {
-      researchTopicId: researchTopic?.id || 0,
-      reviewAcceptanceStatus: Number(data.approvalStatus),
-    };
-    approvalRegisMutation(bodyRequest, {
-      onSuccess: () => {
-        // alert("Phê duyệt thành công");
-        toast({
-          title: "Xác nhận",
-          variant: "default",
-          description: "Bạn đã phê duyệt đề tài thành công",
-        });
-        // gửi thông báo cho người đăng kí
-        const paramsNoti: ParamsCreateNotification = {
-          notificationContent: contentNoti,
-          notificationDate: new Date().toISOString(),
-          recevierId:
-            researchTopic?.author_ResearchTopics.find((item) => {
-              return (item.roleName = "author");
-            })?.author.accountId || 0,
-          notificationTypeId: 6,
-          targetId: 0,
-        };
-        notiMutation(paramsNoti, {
-          onSuccess: () => {
-            console.log("Thông báo đã gửi");
-          },
-          onError: (error) => {
-            console.error("Lỗi khi gửi thông báo:", error);
-          },
-        });
-        setErrorMessage(null);
-        setIsOpen(false);
-      },
-      onError: (error) => {
-        console.error("Lỗi khi phê duyệt:", error);
-      },
-    });
-    console.log(JSON.stringify(data));
+      // gửi request đến API phê duyệt đăng kí
+      const bodyRequest: ParamsApprovalReviewAcceptance = {
+        researchTopicId: researchTopic?.id || 0,
+        reviewAcceptanceStatus: Number(data.approvalStatus),
+      };
+      approvalRegisMutation(bodyRequest, {
+        onSuccess: () => {
+          // alert("Phê duyệt thành công");
+          toast({
+            title: "Xác nhận",
+            variant: "default",
+            description: "Bạn đã phê duyệt đề tài thành công",
+          });
+          // gửi thông báo cho người đăng kí
+          const paramsNoti: ParamsCreateNotification = {
+            notificationContent: contentNoti,
+            notificationDate: new Date().toISOString(),
+            recevierId:
+              researchTopic?.author_ResearchTopics.find((item) => {
+                return (item.roleName = "author");
+              })?.author.accountId || 0,
+            notificationTypeId: 6,
+            targetId: 0,
+          };
+          notiMutation(paramsNoti, {
+            onSuccess: () => {
+              console.log("Thông báo đã gửi");
+            },
+            onError: (error) => {
+              console.error("Lỗi khi gửi thông báo:", error);
+            },
+          });
+          setErrorMessage(null);
+          setIsOpen(false);
+        },
+        onError: (error) => {
+          console.error("Lỗi khi phê duyệt:", error);
+        },
+      });
+      console.log(JSON.stringify(data));
+    }
   };
 
   const onError = (errors: any) => {
@@ -222,7 +226,7 @@ const ModalShowDetailReviewProcessing = (props: IProps) => {
                     />
                     <div>
                       {errorMessage && (
-                        <div className="m-4">
+                        <div className="mt-4">
                           <Alert
                             message="Oops! Đã có lỗi xảy ra"
                             description={errorMessage}

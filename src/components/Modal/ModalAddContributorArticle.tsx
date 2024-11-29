@@ -41,6 +41,9 @@ const ModalAddContributor = (props: IProps) => {
     reset,
   } = useForm<TFormAddContributor>({
     resolver: zodResolver(FormAddContributorSchema),
+    defaultValues: {
+      sex: "Khác",
+    },
   });
 
   // HANDLE LOGIC
@@ -57,7 +60,7 @@ const ModalAddContributor = (props: IProps) => {
       email: data.email,
       numberPhone: data.numberPhone,
       dateOfBirth: dateOfBirth?.toISOString() || "",
-      sex: data.sex || "Nam",
+      sex: data.sex || "Khác",
       roleName: "co-author",
     };
     setListContributors((prev: CoAuthor[]) => {
@@ -67,7 +70,7 @@ const ModalAddContributor = (props: IProps) => {
       name: "",
       email: "",
       numberPhone: "",
-      sex: "Nam", // nếu cần giá trị mặc định là Nam
+      sex: "Khác", // nếu cần giá trị mặc định là Nam
     });
     setIsOpen(false);
     setDateOfBirth(new Date());

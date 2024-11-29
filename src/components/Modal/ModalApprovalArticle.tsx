@@ -64,71 +64,75 @@ const ModalApprovalArticle = (props: IProps) => {
 
   // HANDLE LOGIC
   const onSubmit = (data: TFormApprovalRegistration) => {
-    console.log("checking approval status: ", data.approvalStatus);
-    console.log(
-      "checking typeof approval status: ",
-      typeof data.approvalStatus
-    );
-    // tạo content cho noti
-    let contentNoti = "";
-    if (data.approvalStatus === "1") {
-      contentNoti =
-        NotificationContentSample.NotificationType.article.admin.accept;
-    } else if (data.approvalStatus === "2") {
-      contentNoti =
-        NotificationContentSample.NotificationType.article.admin.reject;
-    }
-
-    // gửi request đến API phê duyệt đăng kí
-    let approvl = 0;
-    if (data.approvalStatus === "1") {
-      approvl = 1;
-    }
-    if (data.approvalStatus === "2") {
-      approvl = 2;
-    }
-    const bodyRequest: ParamsUpdateArticleForPublic = {
-      AcceptedForPublicationStatus: approvl,
-    };
-    approvalArticleMutation.mutate(
-      { id: articleID, requestbody: bodyRequest },
-      {
-        onSuccess: () => {
-          // alert("Phê duyệt thành công");
-          toast({
-            title: "Xác nhận",
-            variant: "default",
-            description:
-              "Bài báo đã được phê duyệt thành công! Tác giả sẽ được thông báo sớm nhất có thể",
-          });
-          // gửi thông báo cho người đăng kí
-          const paramsNoti: ParamsCreateNotification = {
-            notificationContent: "Nhà trường " + contentNoti,
-            notificationDate: new Date().toISOString(),
-            recevierId:
-              articleDetail?.data?.author_Articles?.find(
-                (author) => author.roleName === "author"
-              )?.author.accountId || 0,
-            notificationTypeId: 1,
-            targetId: 0,
-          };
-          notiMutation(paramsNoti, {
-            onSuccess: () => {
-              console.log("Thông báo đã gửi");
-            },
-            onError: (error) => {
-              console.error("Lỗi khi gửi thông báo:", error);
-            },
-          });
-          setErrorMessage(null);
-          setIsOpen(false);
-        },
-        onError: (error) => {
-          console.error("Lỗi khi phê duyệt:", error);
-        },
+    if (Number(data.approvalStatus) === 0) {
+      setErrorMessage("Vui lòng chọn tình trạng phê duyệt");
+    } else {
+      console.log("checking approval status: ", data.approvalStatus);
+      console.log(
+        "checking typeof approval status: ",
+        typeof data.approvalStatus
+      );
+      // tạo content cho noti
+      let contentNoti = "";
+      if (data.approvalStatus === "1") {
+        contentNoti =
+          NotificationContentSample.NotificationType.article.admin.accept;
+      } else if (data.approvalStatus === "2") {
+        contentNoti =
+          NotificationContentSample.NotificationType.article.admin.reject;
       }
-    );
-    console.log(JSON.stringify(data));
+
+      // gửi request đến API phê duyệt đăng kí
+      let approvl = 0;
+      if (data.approvalStatus === "1") {
+        approvl = 1;
+      }
+      if (data.approvalStatus === "2") {
+        approvl = 2;
+      }
+      const bodyRequest: ParamsUpdateArticleForPublic = {
+        AcceptedForPublicationStatus: approvl,
+      };
+      approvalArticleMutation.mutate(
+        { id: articleID, requestbody: bodyRequest },
+        {
+          onSuccess: () => {
+            // alert("Phê duyệt thành công");
+            toast({
+              title: "Xác nhận",
+              variant: "default",
+              description:
+                "Bài báo đã được phê duyệt thành công! Tác giả sẽ được thông báo sớm nhất có thể",
+            });
+            // gửi thông báo cho người đăng kí
+            const paramsNoti: ParamsCreateNotification = {
+              notificationContent: "Nhà trường " + contentNoti,
+              notificationDate: new Date().toISOString(),
+              recevierId:
+                articleDetail?.data?.author_Articles?.find(
+                  (author) => author.roleName === "author"
+                )?.author.accountId || 0,
+              notificationTypeId: 1,
+              targetId: 0,
+            };
+            notiMutation(paramsNoti, {
+              onSuccess: () => {
+                console.log("Thông báo đã gửi");
+              },
+              onError: (error) => {
+                console.error("Lỗi khi gửi thông báo:", error);
+              },
+            });
+            setErrorMessage(null);
+            setIsOpen(false);
+          },
+          onError: (error) => {
+            console.error("Lỗi khi phê duyệt:", error);
+          },
+        }
+      );
+      console.log(JSON.stringify(data));
+    }
   };
 
   const onError = (errors: any) => {
@@ -179,7 +183,7 @@ const ModalApprovalArticle = (props: IProps) => {
               />
 
               {errorMessage && (
-                <div className="m-4">
+                <div className="mt-4">
                   <Alert
                     message="Oops! Đã có lỗi xảy ra"
                     description={errorMessage}

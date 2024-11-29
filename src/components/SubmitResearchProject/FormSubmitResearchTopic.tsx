@@ -208,8 +208,9 @@ const FormSubmitResearchTopic = (props: IProps) => {
         productFilePath: productFilePath || "",
         budgetFilePath: budgetFilePath || "",
         reportFilePath: reportFilePath || "",
-        articleId: Number(data?.articleId) || 0,
-        disciplineId: Number(data.disciplineId) || 0,
+        articleId: Number(data.articleId) === -1 ? 0 : Number(data.articleId),
+        disciplineId:
+          Number(data.disciplineId) === -1 ? 0 : Number(data.disciplineId),
         competitionId: competition?.id || 0,
         coAuthors: listContributors,
       };

@@ -115,47 +115,51 @@ const ModalReviewAssignment = (props: IProps) => {
   }, [fetchedListReviewer, selectedCommitteeId]);
 
   const onSubmit = (data: TFormReviewAssignment) => {
-    let params: ParamsReviewAssignment = {
-      review_CommitteeId: Number(data.review_CommitteeId),
-    };
+    if (Number(data.review_CommitteeId) === 0) {
+      setErrorMessage("Vui lòng chọn hội đồng phản biện để phân công");
+    } else {
+      let params: ParamsReviewAssignment = {
+        review_CommitteeId: Number(data.review_CommitteeId),
+      };
+      mutate(
+        { researchTopicId: researchTopic.id, params: params },
+        {
+          onSuccess: () => {
+            console.log(
+              "==============> checking list reviewer: ",
+              JSON.stringify(listReviewer, null, 2)
+            );
+            toast({
+              title: "Thông báo",
+              variant: "default",
+              description: "Phân công phản biện thành công",
+            });
+            // Gửi thông báo
+            const notiContent = `${session?.user?.name} ${
+              NotificationContentSample.NotificationType.reviewAssignment
+                .reviewer
+            }: "${researchTopic.nameTopic}". Vui lòng truy cập hệ thống để xem chi tiết và thực hiện phản biện đúng tiến độ`;
 
-    mutate(
-      { researchTopicId: researchTopic.id, params: params },
-      {
-        onSuccess: () => {
-          console.log(
-            "-==============> checking list reviewer: ",
-            JSON.stringify(listReviewer, null, 2)
-          );
-          toast({
-            title: "Thông báo",
-            variant: "default",
-            description: "Phân công phản biện thành công",
-          });
-          // Gửi thông báo
-          const notiContent = `${session?.user?.name} ${
-            NotificationContentSample.NotificationType.reviewAssignment.reviewer
-          }: "${researchTopic.nameTopic}". Vui lòng truy cập hệ thống để xem chi tiết và thực hiện phản biện đúng tiến độ`;
-
-          listReviewer?.reviewBoardMembers.forEach((item) => {
-            const paramsNoti: ParamsCreateNotification = {
-              notificationContent: notiContent,
-              notificationDate: new Date().toISOString(),
-              recevierId: item.accountId || 0,
-              notificationTypeId: 5,
-              targetId: researchTopic.id,
-            };
-            notiMutation(paramsNoti);
-          });
-          setErrorMessage(null);
-          setIsOpen(false);
-          reset();
-        },
-        onError: (error) => {
-          alert("Lỗi khi phân công phản biện: " + error);
-        },
-      }
-    );
+            listReviewer?.reviewBoardMembers.forEach((item) => {
+              const paramsNoti: ParamsCreateNotification = {
+                notificationContent: notiContent,
+                notificationDate: new Date().toISOString(),
+                recevierId: item.accountId || 0,
+                notificationTypeId: 5,
+                targetId: researchTopic.id,
+              };
+              notiMutation(paramsNoti);
+            });
+            setErrorMessage(null);
+            setIsOpen(false);
+            reset();
+          },
+          onError: (error) => {
+            alert("Lỗi khi phân công phản biện: " + error);
+          },
+        }
+      );
+    }
   };
 
   const onError = (errors: any) => {
@@ -220,7 +224,7 @@ const ModalReviewAssignment = (props: IProps) => {
               </div>
             </Dialog.Description>
             {errorMessage && (
-              <div className="m-4">
+              <div className="mx-4 mb-4">
                 <Alert
                   message="Oops! Đã có lỗi xảy ra"
                   description={errorMessage}

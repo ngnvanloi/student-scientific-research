@@ -137,7 +137,7 @@ export const FormTabOverviewSchema: ZodType<TFormSubmitResearchProjectTabOveriew
   });
 
 export const FormSubmitArticle: ZodType<TFormSubmitArticle> = z.object({
-  title: z.string(),
+  title: z.string({ message: "Vui lòng điền tiêu đề bài báo" }),
   // description: z.string(),
   // dateUpload: z.string().date(),
   // keywords: z.array(string()),

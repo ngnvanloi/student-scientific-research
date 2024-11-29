@@ -86,47 +86,51 @@ const FormReviewTopic = (props: IProps) => {
 
   // HANDLE LOGIC
   const onSubmit = (data: TFormReviewTopic) => {
-    console.log("Check content: ", data.content);
-    console.log("Check concludeID: ", data.concludeId);
+    if (Number(data.concludeId) === 0) {
+      setErrorMessage("Vui lòng chọn kết luận để hoàn tất việc phản biện");
+    } else {
+      console.log("Check content: ", data.content);
+      console.log("Check concludeID: ", data.concludeId);
 
-    // GỌI API PHẢN BIỆN
-    let params: ParamsSubmitReviewForm = {
-      content: data.content,
-      history_Update_ResearchTopicId: version.id,
-      concludeId: Number(data.concludeId),
-    };
-    mutate(params, {
-      onSuccess: () => {
-        let notiContent = `${session?.user?.name} ${NotificationContentSample.NotificationType.reviewProcess.reviewer}. Nội dung phản biện: ${data.content}`;
-        // gửi thông báo cho người đăng kí
-        const paramsNoti: ParamsCreateNotification = {
-          notificationContent: notiContent,
-          notificationDate: new Date().toISOString(),
-          recevierId: accountID,
-          notificationTypeId: 3,
-          targetId: researchTopicID,
-        };
-        notiMutation(paramsNoti, {
-          onSuccess: () => {
-            toast({
-              title: "Thành công",
-              variant: "default",
-              description: `Bạn đã gửi thông báo thành công, vui lòng cập nhật hệ thống liên tục khi có phản hồi mới nhất từ tác giả`,
-            });
-          },
-          onError: (error) => {
-            console.error("Lỗi khi gửi thông báo:", error);
-          },
-        });
-        setErrorMessage(null);
-      },
-      onError: (error) => {
-        console.error("Lỗi khi gửi thông báo:", error);
-      },
-    });
-    console.log(params);
-    // RESET FORM UPDATE
-    reset({});
+      // GỌI API PHẢN BIỆN
+      let params: ParamsSubmitReviewForm = {
+        content: data.content,
+        history_Update_ResearchTopicId: version.id,
+        concludeId: Number(data.concludeId),
+      };
+      mutate(params, {
+        onSuccess: () => {
+          let notiContent = `${session?.user?.name} ${NotificationContentSample.NotificationType.reviewProcess.reviewer}. Nội dung phản biện: ${data.content}`;
+          // gửi thông báo cho người đăng kí
+          const paramsNoti: ParamsCreateNotification = {
+            notificationContent: notiContent,
+            notificationDate: new Date().toISOString(),
+            recevierId: accountID,
+            notificationTypeId: 3,
+            targetId: researchTopicID,
+          };
+          notiMutation(paramsNoti, {
+            onSuccess: () => {
+              toast({
+                title: "Thành công",
+                variant: "default",
+                description: `Bạn đã gửi thông báo thành công, vui lòng cập nhật hệ thống liên tục khi có phản hồi mới nhất từ tác giả`,
+              });
+            },
+            onError: (error) => {
+              console.error("Lỗi khi gửi thông báo:", error);
+            },
+          });
+          setErrorMessage(null);
+        },
+        onError: (error) => {
+          console.error("Lỗi khi gửi thông báo:", error);
+        },
+      });
+      console.log(params);
+      // RESET FORM UPDATE
+      reset({});
+    }
   };
 
   const onError = (errors: any) => {

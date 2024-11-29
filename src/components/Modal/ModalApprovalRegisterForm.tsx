@@ -67,67 +67,71 @@ const ModalApprovalRegisterForm = (props: IProps) => {
 
   // HANDLE LOGIC
   const onSubmit = (data: TFormApprovalRegistration) => {
-    console.log("checking approval status: ", data.approvalStatus);
+    console.log("checking approval status: ", Number(data.approvalStatus));
     console.log(
       "checking typeof approval status: ",
       typeof data.approvalStatus
     );
-    // tạo content cho noti
-    let contentNoti = "";
-    if (data.approvalStatus === "1") {
-      contentNoti =
-        session?.user?.name +
-        " " +
-        NotificationContentSample.NotificationType.registration.organizer
-          .accept;
-    } else if (data.approvalStatus === "2") {
-      contentNoti =
-        session?.user?.name +
-        " " +
-        NotificationContentSample.NotificationType.registration.organizer
-          .reject;
-    }
-
-    // gửi request đến API phê duyệt đăng kí
-    const bodyRequest: ParamsUpdateRegistrationForm = {
-      isAccepted: data.approvalStatus,
-    };
-    approvalRegisMutation.mutate(
-      { id: registrationFormID, requestbody: bodyRequest },
-      {
-        onSuccess: () => {
-          // alert("Phê duyệt thành công");
-          toast({
-            title: "Xác nhận",
-            variant: "default",
-            description:
-              "Phiếu đăng ký đã được phê duyệt thành công! Người dùng sẽ nhận được thông báo về tình trạng đăng ký của họ.",
-          });
-          // gửi thông báo cho người đăng kí
-          const paramsNoti: ParamsCreateNotification = {
-            notificationContent: contentNoti,
-            notificationDate: new Date().toISOString(),
-            recevierId: registationDetail?.data.accountId || 0,
-            notificationTypeId: 4,
-            targetId: 0,
-          };
-          notiMutation(paramsNoti, {
-            onSuccess: () => {
-              console.log("Thông báo đã gửi");
-            },
-            onError: (error) => {
-              console.error("Lỗi khi gửi thông báo:", error);
-            },
-          });
-          setErrorMessage(null);
-          setIsOpen(false);
-        },
-        onError: (error) => {
-          console.error("Lỗi khi phê duyệt:", error);
-        },
+    if (Number(data.approvalStatus) === 0) {
+      setErrorMessage("Vui lòng chọn tình trạng phê duyệt");
+    } else {
+      // tạo content cho noti
+      let contentNoti = "";
+      if (data.approvalStatus === "1") {
+        contentNoti =
+          session?.user?.name +
+          " " +
+          NotificationContentSample.NotificationType.registration.organizer
+            .accept;
+      } else if (data.approvalStatus === "2") {
+        contentNoti =
+          session?.user?.name +
+          " " +
+          NotificationContentSample.NotificationType.registration.organizer
+            .reject;
       }
-    );
-    console.log(JSON.stringify(data));
+
+      // gửi request đến API phê duyệt đăng kí
+      const bodyRequest: ParamsUpdateRegistrationForm = {
+        isAccepted: data.approvalStatus,
+      };
+      approvalRegisMutation.mutate(
+        { id: registrationFormID, requestbody: bodyRequest },
+        {
+          onSuccess: () => {
+            // alert("Phê duyệt thành công");
+            toast({
+              title: "Xác nhận",
+              variant: "default",
+              description:
+                "Phiếu đăng ký đã được phê duyệt thành công! Người dùng sẽ nhận được thông báo về tình trạng đăng ký của họ.",
+            });
+            // gửi thông báo cho người đăng kí
+            const paramsNoti: ParamsCreateNotification = {
+              notificationContent: contentNoti,
+              notificationDate: new Date().toISOString(),
+              recevierId: registationDetail?.data.accountId || 0,
+              notificationTypeId: 4,
+              targetId: 0,
+            };
+            notiMutation(paramsNoti, {
+              onSuccess: () => {
+                console.log("Thông báo đã gửi");
+              },
+              onError: (error) => {
+                console.error("Lỗi khi gửi thông báo:", error);
+              },
+            });
+            setErrorMessage(null);
+            setIsOpen(false);
+          },
+          onError: (error) => {
+            console.error("Lỗi khi phê duyệt:", error);
+          },
+        }
+      );
+      console.log(JSON.stringify(data));
+    }
   };
 
   const onError = (errors: any) => {
@@ -178,7 +182,7 @@ const ModalApprovalRegisterForm = (props: IProps) => {
                 className="relative z-20 w-full appearance-none rounded-lg border border-stroke dark:border-dark-3 bg-transparent py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2"
               />
               {errorMessage && (
-                <div className="m-4">
+                <div className="mt-4">
                   <Alert
                     message="Oops! Đã có lỗi xảy ra"
                     description={errorMessage}

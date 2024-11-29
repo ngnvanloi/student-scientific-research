@@ -48,6 +48,9 @@ const ModalAddReviewerForCouncil = (props: IProps) => {
     reset,
   } = useForm<TFormAddReviewer>({
     resolver: zodResolver(FormAddReviewerSchema),
+    defaultValues: {
+      sex: "Nam",
+    },
   });
 
   // HANDLE LOGIC
@@ -65,7 +68,7 @@ const ModalAddReviewerForCouncil = (props: IProps) => {
       email: data.email,
       numberPhone: data.numberPhone,
       dateOfBirth: dateOfBirth?.toISOString() || "",
-      sex: data.sex || "Nam",
+      sex: data.sex || "Khác",
       description: data.description || "",
     };
     setListReviewer((prev: ReviewBoardMembers[]) => {
@@ -75,7 +78,7 @@ const ModalAddReviewerForCouncil = (props: IProps) => {
       name: "",
       email: "",
       numberPhone: "",
-      sex: "Nam",
+      sex: "Khác",
       description: "",
     });
     setIsOpen(false);
