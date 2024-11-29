@@ -150,9 +150,9 @@ const ModalShowDetailReviewProcessing = (props: IProps) => {
           recevierId:
             researchTopic?.author_ResearchTopics.find((item) => {
               return (item.roleName = "author");
-            })?.author.accountId || -1,
+            })?.author.accountId || 0,
           notificationTypeId: 6,
-          targetId: -1,
+          targetId: 0,
         };
         notiMutation(paramsNoti, {
           onSuccess: () => {

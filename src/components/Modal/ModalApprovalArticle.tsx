@@ -105,13 +105,12 @@ const ModalApprovalArticle = (props: IProps) => {
           const paramsNoti: ParamsCreateNotification = {
             notificationContent: "Nhà trường " + contentNoti,
             notificationDate: new Date().toISOString(),
-            // recevierId: articleDetail?.data.accountID || -1,
             recevierId:
               articleDetail?.data?.author_Articles?.find(
                 (author) => author.roleName === "author"
-              )?.author.accountId || -1,
+              )?.author.accountId || 0,
             notificationTypeId: 1,
-            targetId: -1,
+            targetId: 0,
           };
           notiMutation(paramsNoti, {
             onSuccess: () => {

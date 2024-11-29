@@ -24,6 +24,8 @@ import {
 } from "@/hooks-query/mutations/use-establish-review-council";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import DateTimePicker from "../DatePicker/DateTimePicker";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/hooks-query/queries/query-keys";
 
 interface IProps {
   isOpen: boolean;
@@ -32,6 +34,7 @@ interface IProps {
 }
 const ModalEstablishReviewCouncil = (props: IProps) => {
   const { isOpen, setIsOpen, competition } = props;
+  const queryClient = useQueryClient();
   // MUTATION
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate, isPending, isSuccess, isError } =
@@ -74,7 +77,7 @@ const ModalEstablishReviewCouncil = (props: IProps) => {
       reviewBoardMembers: listReviewer,
     };
     mutate(requestBody, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast({
           title: "Thành công",
           variant: "default",
@@ -93,6 +96,14 @@ const ModalEstablishReviewCouncil = (props: IProps) => {
           return today;
         });
         setIsOpen(false);
+
+        // refetch dữ liệu
+        await queryClient.refetchQueries({
+          queryKey: [
+            queryKeys.listReviewCouncilForEachCompetition,
+            competition?.id,
+          ],
+        }); // Refetch bảng A
       },
       onError: (error) => {
         console.error("Lỗi khi tạo bài báo:", error);

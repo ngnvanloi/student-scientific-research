@@ -151,10 +151,9 @@ const SubmitArticleComponent = () => {
               const paramsNoti: ParamsCreateNotification = {
                 notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.article.author}`,
                 notificationDate: new Date().toISOString(),
-                // recevierId: articleDetail?.data.accountID || -1,
                 recevierId: 1,
                 notificationTypeId: 1,
-                targetId: -1,
+                targetId: 0,
               };
               notiMutation(paramsNoti, {
                 onSuccess: () => {

@@ -250,7 +250,7 @@ const FormUpdateResearchTopicForAcceptance = (props: IProps) => {
           productFilePath || researchTopic?.productFilePath || "",
         budgetFilePath: budgetFilePath || researchTopic?.budgetFilePath || "",
         reportFilePath: reportFilePath || researchTopic?.reportFilePath || "",
-        articleId: Number(data.articleId) || 0,
+        articleId: Number(data.articleId) === -1 ? 0 : Number(data.articleId),
         disciplineId: Number(data.disciplineId) || 0,
         competitionId: competitionId || 0,
         coAuthors: listContributors,

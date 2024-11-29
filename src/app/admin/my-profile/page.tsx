@@ -14,7 +14,7 @@ export default function MyProfile() {
     name: user?.data.name || "",
     email: user?.data.email || "",
     numberPhone: user?.data.numberPhone || "",
-    facultyId: user?.data.facultyId || -1,
+    facultyId: user?.data.facultyId || 0,
     facultyName: user?.data.facultyName || "",
     description: user?.data.description || "",
   };

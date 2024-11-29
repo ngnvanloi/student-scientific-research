@@ -141,7 +141,7 @@ const ModalReviewAssignment = (props: IProps) => {
             const paramsNoti: ParamsCreateNotification = {
               notificationContent: notiContent,
               notificationDate: new Date().toISOString(),
-              recevierId: item.accountId || -1,
+              recevierId: item.accountId || 0,
               notificationTypeId: 5,
               targetId: researchTopic.id,
             };

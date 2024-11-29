@@ -22,6 +22,8 @@ import { string } from "zod";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import DateTimePicker from "../DatePicker/DateTimePicker";
 import { CloseOutlined } from "@ant-design/icons";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/hooks-query/queries/query-keys";
 
 const gender: SelectItem[] = [
   { id: "Nam", name: "Nam" },
@@ -35,6 +37,7 @@ interface IProps {
   author: Author | null;
 }
 const ModalUpdateProfile = (props: IProps) => {
+  const queryClient = useQueryClient();
   const { isOpen, setIsOpen, author, setIsChange } = props;
   console.log("checking author update: ", author);
   //   const { data: disciplines } = useQuery("disciplines", () =>
@@ -115,7 +118,7 @@ const ModalUpdateProfile = (props: IProps) => {
     mutate(
       { data: requestBody },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           // alert("Update post successfully");
           toast({
             title: "Thông báo",
@@ -125,6 +128,9 @@ const ModalUpdateProfile = (props: IProps) => {
           setErrorMessage(null);
           setIsChange(true);
           setIsOpen(false);
+
+          // refetch data
+          await queryClient.refetchQueries({ queryKey: queryKeys.userProfile });
         },
         onError: (error) => {
           alert("Lỗi khi cập nhật profile: " + error);

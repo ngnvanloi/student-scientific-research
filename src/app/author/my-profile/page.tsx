@@ -18,7 +18,7 @@ export default function MyProfile() {
     internalCode: user?.data.internalCode || "",
     dateOfBirth: user?.data.dateOfBirth || "",
     sex: user?.data.sex || "",
-    facultyId: user?.data.facultyId || -1,
+    facultyId: user?.data.facultyId || 0,
   };
 
   const [isOpen, setIsOpen] = useState<boolean>(false);

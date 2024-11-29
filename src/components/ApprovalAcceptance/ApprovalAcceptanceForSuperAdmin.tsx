@@ -110,7 +110,7 @@ const ApprovalAcceptanceForSuperAdmin = (props: IProps) => {
               notificationDate: new Date().toISOString(),
               recevierId: competitionDetails?.data.accountId || 0,
               notificationTypeId: 9,
-              targetId: -1,
+              targetId: 0,
             };
             notiMutation(paramsNotii, {
               onSuccess: () => {
@@ -138,7 +138,7 @@ const ApprovalAcceptanceForSuperAdmin = (props: IProps) => {
                   (item) => item.roleName === "author"
                 )?.author.accountId || 0,
               notificationTypeId: 9,
-              targetId: -1,
+              targetId: 0,
             };
             notiMutation(paramsNoti, {
               onSuccess: () => {

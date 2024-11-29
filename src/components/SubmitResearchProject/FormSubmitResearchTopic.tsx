@@ -248,9 +248,9 @@ const FormSubmitResearchTopic = (props: IProps) => {
           const paramsNoti: ParamsCreateNotification = {
             notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.researchTopic.author}`,
             notificationDate: new Date().toISOString(),
-            recevierId: competition?.accountId || -1,
+            recevierId: competition?.accountId || 0,
             notificationTypeId: 2,
-            targetId: -1,
+            targetId: 0,
           };
           notiMutation(paramsNoti, {
             onSuccess: () => {

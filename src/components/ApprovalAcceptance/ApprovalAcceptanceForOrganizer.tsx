@@ -113,7 +113,7 @@ const ApprovalAcceptanceForOrganizer = (props: IProps) => {
                 (item) => item.roleName === "author"
               )?.author.accountId || 0,
             notificationTypeId: 9,
-            targetId: -1,
+            targetId: 0,
           };
           notiMutation(paramsNoti, {
             onSuccess: () => {
@@ -133,7 +133,7 @@ const ApprovalAcceptanceForOrganizer = (props: IProps) => {
             notificationDate: new Date().toISOString(),
             recevierId: 1,
             notificationTypeId: 9,
-            targetId: -1,
+            targetId: 0,
           };
           notiMutation(paramsNotii, {
             onSuccess: () => {

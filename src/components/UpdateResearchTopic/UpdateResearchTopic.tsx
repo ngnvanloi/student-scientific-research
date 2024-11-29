@@ -284,23 +284,6 @@ const FormUpdateResearchTopic = (props: IProps) => {
             setFileReport(undefined);
             setListContributors([]);
             setIsOpen(false);
-
-            // // Gửi thông báo cho ban tổ chức
-            // const paramsNoti: ParamsCreateNotification = {
-            //   notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.researchTopic.author}`,
-            //   notificationDate: new Date().toISOString(),
-            //   recevierId: competition?.accountId || -1,
-            //   notificationTypeId: 2,
-            //   targetId: -1,
-            // };
-            // notiMutation(paramsNoti, {
-            //   onSuccess: () => {
-            //     console.log("Thông báo đã gửi");
-            //   },
-            //   onError: (error) => {
-            //     console.error("Lỗi khi gửi thông báo:", error);
-            //   },
-            // });
           },
           onError: (error) => {
             console.error("Lỗi khi tạo bài báo:", error);

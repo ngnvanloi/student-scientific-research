@@ -103,9 +103,9 @@ const ModalCompetitionRegistration = (props: IProps) => {
             const paramsNoti: ParamsCreateNotification = {
               notificationContent: `${session?.user?.name} ${NotificationContentSample.NotificationType.registration.author} ${competition?.data.competitionName}, vui lòng kiểm tra thông tin`,
               notificationDate: new Date().toISOString(),
-              recevierId: competition?.data.accountId || -1,
+              recevierId: competition?.data.accountId || 0,
               notificationTypeId: 4,
-              targetId: -1,
+              targetId: 0,
             };
             notiMutation(paramsNoti, {
               onSuccess: () => {

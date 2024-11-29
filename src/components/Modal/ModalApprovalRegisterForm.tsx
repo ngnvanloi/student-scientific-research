@@ -107,9 +107,9 @@ const ModalApprovalRegisterForm = (props: IProps) => {
           const paramsNoti: ParamsCreateNotification = {
             notificationContent: contentNoti,
             notificationDate: new Date().toISOString(),
-            recevierId: registationDetail?.data.accountId || -1,
+            recevierId: registationDetail?.data.accountId || 0,
             notificationTypeId: 4,
-            targetId: -1,
+            targetId: 0,
           };
           notiMutation(paramsNoti, {
             onSuccess: () => {

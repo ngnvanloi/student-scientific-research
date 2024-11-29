@@ -86,9 +86,9 @@ const ModalExtendTheAcceptanceDeadline = (props: IProps) => {
             recevierId:
               researchTopic?.author_ResearchTopics.find(
                 (item) => item.roleName === "author"
-              )?.author.accountId || -1,
+              )?.author.accountId || 0,
             notificationTypeId: 8,
-            targetId: -1,
+            targetId: 0,
           };
           notiMutation(paramsNoti, {
             onSuccess: () => {
