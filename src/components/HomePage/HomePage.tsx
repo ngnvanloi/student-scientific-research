@@ -8,38 +8,50 @@ import { HomepageQuestionAndAnswer } from "./Q&A";
 import { getSession, useSession } from "next-auth/react";
 import { isValid } from "@/helper/extension-function";
 import { useRouter } from "next/navigation";
+import { useGetProfile } from "@/hooks-query/queries/use-get-user-profile";
+import { useEffect } from "react";
 
 const HomePage = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const { data: userProfile } = useGetProfile();
+  console.log("checking user profile: ", JSON.stringify(userProfile, null, 2));
+  console.log("checking session: ", JSON.stringify(session?.user));
   // chuyển hướng
-  const redirectToProfileIfIncomplete = (rolePath: string) => {
-    if (
-      !isValid(session?.user?.numberPhone) ||
-      !isValid(session?.user?.facultyId) ||
-      !isValid(session?.user?.facultyName)
-    ) {
-      router.push(rolePath);
+  useEffect(() => {
+    if (userProfile?.data && session?.user?.roleName) {
+      const redirectToProfileIfIncomplete = (rolePath: string) => {
+        if (
+          !isValid(userProfile?.data.numberPhone) ||
+          !isValid(userProfile?.data.facultyId) ||
+          !isValid(userProfile?.data.facultyName)
+        ) {
+          router.push(rolePath);
+        }
+        console.log("checking numberPhone: ", userProfile?.data.numberPhone); // "0889942612"
+        console.log("checking facultyId: ", userProfile?.data.facultyId); // 1
+        console.log("checking facultyName: ", userProfile?.data.facultyName); // "khoa cntt"
+      };
+      if (session?.user?.roleName) {
+        switch (session.user.roleName) {
+          case "reviewer":
+            redirectToProfileIfIncomplete("/reviewer/my-profile");
+            break;
+          case "organizer":
+            redirectToProfileIfIncomplete("/admin/my-profile");
+            break;
+          case "author":
+            redirectToProfileIfIncomplete("/author/my-profile");
+            break;
+          default:
+            break;
+            router.push("/");
+        }
+      } else {
+        console.log("Something went wrong in HomePage.tsx");
+      }
     }
-  };
-  if (session?.user?.roleName) {
-    switch (session.user.roleName) {
-      case "reviewer":
-        redirectToProfileIfIncomplete("/reviewer/my-profile");
-        break;
-      case "organizer":
-        redirectToProfileIfIncomplete("/admin/my-profile");
-        break;
-      case "author":
-        redirectToProfileIfIncomplete("/author/my-profile");
-        break;
-      default:
-        break;
-        router.push("/");
-    }
-  } else {
-    console.log("Something went wrong in HomePage.tsx");
-  }
+  }, [userProfile?.data, session?.user?.roleName]);
   return (
     <div className="flex gap-1">
       <div className="basis-2/3 gap-1 flex flex-col">
