@@ -121,7 +121,6 @@ const ModalUpdateOrganizerProfile = (props: IProps) => {
       facultyId: "",
       description: "",
     });
-    setIsOpen(false);
   };
 
   const onError = (errors: any) => {

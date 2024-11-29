@@ -142,6 +142,7 @@ const ModalUpdateReviewerProfile = (props: IProps) => {
           setErrorMessage(null);
           setIsChange(true);
           setIsOpen(false);
+          setDateOfBirth(new Date());
         },
         onError: (error) => {
           console.error("Lỗi khi cập nhật profile: " + error);
@@ -157,8 +158,6 @@ const ModalUpdateReviewerProfile = (props: IProps) => {
       facultyId: "",
       dateOfBirth: "",
     });
-    setIsOpen(false);
-    setDateOfBirth(new Date());
   };
 
   const onError = (errors: any) => {

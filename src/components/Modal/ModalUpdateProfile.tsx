@@ -128,7 +128,7 @@ const ModalUpdateProfile = (props: IProps) => {
           setErrorMessage(null);
           setIsChange(true);
           setIsOpen(false);
-
+          setDateOfBirth(new Date());
           // refetch data
           await queryClient.refetchQueries({ queryKey: queryKeys.userProfile });
         },
@@ -146,8 +146,6 @@ const ModalUpdateProfile = (props: IProps) => {
       facultyId: "",
       dateOfBirth: "",
     });
-    setIsOpen(false);
-    setDateOfBirth(new Date());
   };
 
   const onError = (errors: any) => {
