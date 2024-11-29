@@ -113,7 +113,7 @@ const ModalUpdateProfile = (props: IProps) => {
       dateOfBirth: dateOfBirth?.toISOString() || "",
       sex: data.sex || "Nam",
       internalCode: "unknown",
-      facultyId: data.facultyId ? Number(data.facultyId) : 0,
+      facultyId: Number(data.facultyId) === -1 ? 0 : Number(data.facultyId),
     };
     mutate(
       { data: requestBody },

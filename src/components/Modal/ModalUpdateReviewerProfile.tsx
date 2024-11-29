@@ -126,7 +126,7 @@ const ModalUpdateReviewerProfile = (props: IProps) => {
       numberPhone: data.numberPhone,
       dateOfBirth: dateOfBirth?.toISOString() || "",
       sex: data.sex || "Nam",
-      facultyId: data.facultyId ? Number(data.facultyId) : 0,
+      facultyId: Number(data.facultyId) === -1 ? 0 : Number(data.facultyId),
       academicDegree: data.academicDegree || "Unknow",
       academicRank: data.academicRank || "Unknow",
     };

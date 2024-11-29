@@ -92,7 +92,7 @@ const ModalUpdateOrganizerProfile = (props: IProps) => {
       email: data.email,
       numberPhone: data.numberPhone,
       description: data.description,
-      facultyId: Number(data.facultyId),
+      facultyId: Number(data.facultyId) === -1 ? 0 : Number(data.facultyId),
     };
     mutate(
       { data: bodyRequest },
