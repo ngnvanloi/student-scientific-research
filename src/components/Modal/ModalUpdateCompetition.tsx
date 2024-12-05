@@ -19,6 +19,9 @@ import { CloseOutlined } from "@ant-design/icons";
 import { Competition } from "@/types/Competition";
 import { useUpdateCompetitionMutation } from "@/hooks-query/mutations/use-update-competition-mutation";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
+import { ParamsGetListCompetition } from "@/hooks-query/queries/use-get-competitions";
+import { queryKeys } from "@/hooks-query/queries/query-keys";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface IProps {
   isOpen: boolean;
@@ -36,6 +39,7 @@ const ModalUpdateCompetition = (props: IProps) => {
     new Date()
   );
 
+  const queryClient = useQueryClient();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate, isSuccess, isError, error, isPending } =
     useUpdateCompetitionMutation((msg) => {
@@ -88,13 +92,20 @@ const ModalUpdateCompetition = (props: IProps) => {
     mutate(
       { id: competition.id, data: dataSender },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast({
             title: "Thành công",
             variant: "default",
             description: "Bạn đã cập nhật thành công cuộc thi",
           });
-          setIsChange(true);
+          // setIsChange(true);
+          let params: ParamsGetListCompetition = {
+            index: 1,
+            pageSize: 100,
+          };
+          await queryClient.refetchQueries({
+            queryKey: queryKeys.listCompetition(params),
+          });
           setIsOpen(false);
           setErrorMessage(null);
           setContent("");

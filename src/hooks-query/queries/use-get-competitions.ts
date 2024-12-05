@@ -61,7 +61,7 @@ export const useGetListCompetitionAdmin = (
     IDataResponseFromAPI<IListDataResponseFromAPI<Competition>>,
     Error
   >({
-    queryKey: queryKeys.listCompetitionAdmin,
+    queryKey: queryKeys.listCompetition(params),
     queryFn: () => GetListCompetitionaAdmin(params),
   });
 };

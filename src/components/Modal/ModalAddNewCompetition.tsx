@@ -17,6 +17,9 @@ import { useToast } from "@/hooks/use-toast";
 import DateTimePicker from "../DatePicker/DateTimePicker";
 import { CloseOutlined, CloseSquareFilled } from "@ant-design/icons";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
+import { useQueryClient } from "@tanstack/react-query";
+import { ParamsGetListCompetition } from "@/hooks-query/queries/use-get-competitions";
+import { queryKeys } from "@/hooks-query/queries/query-keys";
 
 const ModalAddNewCompetition = () => {
   // STATE
@@ -28,6 +31,8 @@ const ModalAddNewCompetition = () => {
   const [dateEndSubmit, setDateEndSubmit] = useState<Date | undefined>(
     new Date()
   );
+
+  const queryClient = useQueryClient();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate, isSuccess, isError, error, isPending } =
@@ -65,14 +70,22 @@ const ModalAddNewCompetition = () => {
     };
 
     mutate(dataSender, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast({
           title: "Thành công",
           variant: "default",
           description:
             "Chúc mừng! Cuộc thi đã được thiết lập, đừng quên triển khai đến sinh viên và quản lý tiến độ.",
         });
-        setIsChange(true);
+        // setIsChange(true);
+        let params: ParamsGetListCompetition = {
+          index: 1,
+          pageSize: 100,
+        };
+        await queryClient.refetchQueries({
+          queryKey: queryKeys.listCompetition(params),
+        });
+
         setIsOpen(false);
         setErrorMessage(null);
         setContent("");

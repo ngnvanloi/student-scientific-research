@@ -57,7 +57,7 @@ const CompetitionList = () => {
 const CompetitionListForAdmin = () => {
   let params: ParamsGetListCompetition = {
     index: 1,
-    pageSize: 8,
+    pageSize: 100,
   };
   // USE PROVIDER CONTEXT
   const { isChange, setIsChange } = useCompetitionManagementContext();

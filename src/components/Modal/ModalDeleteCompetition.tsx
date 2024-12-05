@@ -7,6 +7,9 @@ import { useDeleteCompetitionMutation } from "@/hooks-query/mutations/use-delete
 import { useToast } from "@/hooks/use-toast";
 import { Alert } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
+import { useQueryClient } from "@tanstack/react-query";
+import { ParamsGetListCompetition } from "@/hooks-query/queries/use-get-competitions";
+import { queryKeys } from "@/hooks-query/queries/query-keys";
 
 interface IProps {
   isOpen: boolean;
@@ -20,6 +23,7 @@ const ModalDeleteCompetition = (props: IProps) => {
   // USE PROVIDER CONTEXT
   const { setIsChange } = useCompetitionManagementContext();
 
+  const queryClient = useQueryClient();
   // POST DETAILS
   console.log("check delete compe id: ", competitionID);
   let { data: competition, refetch: refetchData } =
@@ -44,15 +48,22 @@ const ModalDeleteCompetition = (props: IProps) => {
 
   const handleOnDelete = () => {
     deletePostMutation.mutate(competitionID, {
-      onSuccess: () => {
-        alert("Delete competition thành công");
+      onSuccess: async () => {
+        // alert("Delete competition thành công");
         toast({
           title: "Thông báo",
           variant: "default",
           description: "Bạn đã xóa cuộc thi thành công",
         });
+        let params: ParamsGetListCompetition = {
+          index: 1,
+          pageSize: 100,
+        };
+        await queryClient.refetchQueries({
+          queryKey: queryKeys.listCompetition(params),
+        });
         setIsOpen(false);
-        setIsChange(true);
+        // setIsChange(true);
       },
       onError: (error) => {
         console.error("Lỗi khi xóa bài viết:", error);
