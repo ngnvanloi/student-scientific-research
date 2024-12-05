@@ -24,6 +24,9 @@ import {
 } from "@/hooks-query/mutations/use-update-review-council";
 import { ReviewCouncilWithMembers } from "@/types/ReviewCouncilWithMembers";
 import DateTimePicker from "../DatePicker/DateTimePicker";
+import { useQueryClient } from "@tanstack/react-query";
+import { ParamsGetListReviewCouncilForEachCompetition } from "@/hooks-query/queries/use-get-review-council-each-competition";
+import { queryKeys } from "@/hooks-query/queries/query-keys";
 
 interface IProps {
   isOpen: boolean;
@@ -32,6 +35,7 @@ interface IProps {
 }
 const ModalUpdateReviewCouncil = (props: IProps) => {
   const { isOpen, setIsOpen, reviewCouncil } = props;
+  const queryClient = useQueryClient();
   console.log("==== checking reviewCouncil update: ", reviewCouncil);
   // MUTATION
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -120,7 +124,7 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
     mutate(
       { id: reviewCouncil?.id || 0, params: requestBody },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast({
             title: "Thành công",
             variant: "default",
@@ -129,6 +133,15 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
           // reset input fields
           reset({
             name: "",
+          });
+          // refetch dữ liệu
+          let params: ParamsGetListReviewCouncilForEachCompetition = {
+            competitionId: reviewCouncil?.competitionId || 0,
+            page: 1,
+            pageSize: 10,
+          };
+          await queryClient.refetchQueries({
+            queryKey: [queryKeys.listReviewCouncilForEachCompetition, params],
           });
           setErrorMessage(null);
           setListReviewer([]);

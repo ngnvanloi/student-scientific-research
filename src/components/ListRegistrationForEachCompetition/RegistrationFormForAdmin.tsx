@@ -22,7 +22,7 @@ const RegistrationFormForAdmin = (props: IProps) => {
         <li className="py-5 flex items-start justify-between outline-1 outline outline-blue-500">
           <div className="flex gap-3">
             <div>
-              <span className="block text-sm text-gray-700 font-semibold">
+              <span className="block text-sm text-blue-900 font-semibold">
                 {registerForm.competitionName}
               </span>
               <span className="flex gap-2 text-sm text-gray-600 mt-2">

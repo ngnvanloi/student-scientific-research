@@ -26,6 +26,7 @@ import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import DateTimePicker from "../DatePicker/DateTimePicker";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/hooks-query/queries/query-keys";
+import { ParamsGetListReviewCouncilForEachCompetition } from "@/hooks-query/queries/use-get-review-council-each-competition";
 
 interface IProps {
   isOpen: boolean;
@@ -95,18 +96,19 @@ const ModalEstablishReviewCouncil = (props: IProps) => {
           today.setDate(today.getDate() + 7);
           return today;
         });
-        setIsOpen(false);
-
         // refetch dữ liệu
+        let params: ParamsGetListReviewCouncilForEachCompetition = {
+          competitionId: competition?.id || 0,
+          page: 1,
+          pageSize: 10,
+        };
         await queryClient.refetchQueries({
-          queryKey: [
-            queryKeys.listReviewCouncilForEachCompetition,
-            competition?.id,
-          ],
-        }); // Refetch bảng A
+          queryKey: [queryKeys.listReviewCouncilForEachCompetition, params],
+        });
+        setIsOpen(false);
       },
       onError: (error) => {
-        console.error("Lỗi khi tạo bài báo:", error);
+        console.error("Lỗi khi thành lập hội đồng phản biện:", error);
       },
     });
   };

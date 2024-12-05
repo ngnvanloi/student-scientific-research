@@ -6,6 +6,9 @@ import { useDeleteReviewCouncilMutation } from "@/hooks-query/mutations/use-dele
 import { useGetReviewCouncilDetail } from "@/hooks-query/queries/use-get-review-council-detail";
 import { Alert } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
+import { useQueryClient } from "@tanstack/react-query";
+import { ParamsGetListReviewCouncilForEachCompetition } from "@/hooks-query/queries/use-get-review-council-each-competition";
+import { queryKeys } from "@/hooks-query/queries/query-keys";
 
 interface IProps {
   isOpen: boolean;
@@ -16,7 +19,7 @@ const ModalDeleteReviewCouncil = (props: IProps) => {
   // STATE
   const { isOpen, setIsOpen, reviewCouncilID } = props;
   const { toast } = useToast();
-
+  const queryClient = useQueryClient();
   // DETAILS
   let { data: reviewCouncil, refetch: refetchData } =
     useGetReviewCouncilDetail(reviewCouncilID);
@@ -40,13 +43,22 @@ const ModalDeleteReviewCouncil = (props: IProps) => {
 
   const handleOnDelete = () => {
     deletePostMutation.mutate(reviewCouncilID, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast({
           title: "Thông báo",
           variant: "default",
           description: "Bạn đã xóa hội đồng phản biện thành công",
         });
         setIsOpen(false);
+        // refetch dữ liệu
+        let params: ParamsGetListReviewCouncilForEachCompetition = {
+          competitionId: reviewCouncil?.data.competitionId || 0,
+          page: 1,
+          pageSize: 10,
+        };
+        await queryClient.refetchQueries({
+          queryKey: [queryKeys.listReviewCouncilForEachCompetition, params],
+        });
       },
       onError: (error) => {
         console.error("Lỗi khi xóa hội đồng phản biện:", error);
@@ -91,7 +103,7 @@ const ModalDeleteReviewCouncil = (props: IProps) => {
                 </p>
               </Dialog.Description>
               {errorMessage && (
-                <div className="m-4">
+                <div className="mt-4">
                   <Alert
                     message="Oops! Đã có lỗi xảy ra"
                     description={errorMessage}
