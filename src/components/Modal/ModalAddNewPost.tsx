@@ -25,6 +25,9 @@ import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import DateTimePicker from "../DatePicker/DateTimePicker";
 import { CloseOutlined } from "@ant-design/icons";
 import { DEFAULT_RICHTEXTEDITOR_LENGTH } from "@/lib/enum";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/hooks-query/queries/query-keys";
+import { ParamsGetListPostForOrganizer } from "@/hooks-query/queries/use-get-posts-for-organizer";
 
 const ModalAddNewPost = () => {
   // STATE
@@ -33,6 +36,8 @@ const ModalAddNewPost = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const { toast } = useToast();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+
   const { mutate, isSuccess, isError, error, isPending } =
     useCreatePostMutation((msg) => {
       setErrorMessage(msg);
@@ -86,7 +91,7 @@ const ModalAddNewPost = () => {
             filePath: result.data,
           };
           mutate(bodyRequest, {
-            onSuccess: () => {
+            onSuccess: async () => {
               toast({
                 title: "Thành công",
                 variant: "default",
@@ -95,6 +100,13 @@ const ModalAddNewPost = () => {
               });
               // setIsChange(!isChange);
               setIsOpen(false);
+              let params: ParamsGetListPostForOrganizer = {
+                index: 1,
+                pageSize: 100,
+              };
+              await queryClient.refetchQueries({
+                queryKey: queryKeys.listPost(params),
+              });
 
               setContent("");
               setDate(new Date());
@@ -105,7 +117,7 @@ const ModalAddNewPost = () => {
               });
             },
             onError: (error) => {
-              console.error("Lỗi khi xóa bài viết:", error);
+              console.error("Lỗi khi tạo bài viết:", error);
             },
           });
         },
@@ -120,14 +132,21 @@ const ModalAddNewPost = () => {
             // filePath: "",
           };
           mutate(bodyRequest, {
-            onSuccess: () => {
+            onSuccess: async () => {
               toast({
                 title: "Thành công",
                 variant: "default",
                 description:
                   "Chúc mừng! Bài viết đã được tạo thành công và đăng tải trên hệ thống, bạn có thể kiểm tra hoặc chỉnh sửa nếu cần.",
               });
-              setIsChange(true);
+              // setIsChange(true);
+              let params: ParamsGetListPostForOrganizer = {
+                index: 1,
+                pageSize: 100,
+              };
+              await queryClient.refetchQueries({
+                queryKey: queryKeys.listPost(params),
+              });
               setIsOpen(false);
               setErrorMessage(null);
               setContent("");

@@ -34,7 +34,7 @@ export default function PostContextMenu({
   // STATE
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
-  const [postTarget, setPostTarget] = useState(-1);
+  const [postTarget, setPostTarget] = useState(post.id);
 
   // HANDLE LOGIC
   const handleOnUpdate = () => {

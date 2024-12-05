@@ -7,6 +7,9 @@ import { usePostManagementContext } from "../UseContextProvider/PostManagementCo
 import { useToast } from "@/hooks/use-toast";
 import { Alert } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
+import { useQueryClient } from "@tanstack/react-query";
+import { ParamsGetListPostForOrganizer } from "@/hooks-query/queries/use-get-posts-for-organizer";
+import { queryKeys } from "@/hooks-query/queries/query-keys";
 
 interface IProps {
   isOpen: boolean;
@@ -21,6 +24,8 @@ const ModalDeletePost = (props: IProps) => {
   const { setIsChange } = usePostManagementContext();
 
   // POST DETAILS
+  const queryClient = useQueryClient();
+
   let { data: post, refetch: refetchData } = useGetPostDetail(postID);
   //   console.log("checking post details: ", JSON.stringify(post, null, 2));
 
@@ -38,7 +43,7 @@ const ModalDeletePost = (props: IProps) => {
   });
   const handleOnDelete = () => {
     deletePostMutation.mutate(postID, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast({
           title: "Thông báo",
           variant: "default",
@@ -46,6 +51,13 @@ const ModalDeletePost = (props: IProps) => {
         });
         setIsOpen(false);
         setIsChange(true);
+        let params: ParamsGetListPostForOrganizer = {
+          index: 1,
+          pageSize: 100,
+        };
+        await queryClient.refetchQueries({
+          queryKey: queryKeys.listPost(params),
+        });
       },
       onError: (error) => {
         console.error("Lỗi khi xóa bài viết:", error);

@@ -23,6 +23,9 @@ import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-fireb
 import { useUploadFileMutation } from "@/hooks-query/mutations/use-upload-file-mutation";
 import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import { DEFAULT_RICHTEXTEDITOR_LENGTH } from "@/lib/enum";
+import { useQueryClient } from "@tanstack/react-query";
+import { ParamsGetListPostForOrganizer } from "@/hooks-query/queries/use-get-posts-for-organizer";
+import { queryKeys } from "@/hooks-query/queries/query-keys";
 
 interface IProps {
   isOpen: boolean;
@@ -50,6 +53,7 @@ const ModalUpdatePost = (props: IProps) => {
   } = useUploadFileMutation();
   // USE PROVIDER CONTEXT
   const { setIsChange } = usePostManagementContext();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (post) {
@@ -132,14 +136,22 @@ const ModalUpdatePost = (props: IProps) => {
             data: params,
           },
           {
-            onSuccess: () => {
+            onSuccess: async () => {
               // alert("Update post successfully");
               toast({
                 title: "Thông báo",
                 variant: "default",
                 description: "Chúc mừng! Bạn đã cập nhật bài viết thành công",
               });
-              setIsChange(true);
+              // setIsChange(true);
+              let params: ParamsGetListPostForOrganizer = {
+                index: 1,
+                pageSize: 100,
+              };
+              await queryClient.refetchQueries({
+                queryKey: queryKeys.listPost(params),
+              });
+
               setIsOpen(false);
               setErrorMessage(null);
               setContent("");
