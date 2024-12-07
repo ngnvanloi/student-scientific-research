@@ -27,6 +27,11 @@ export const useGetListResearchTopicForeachCompetition = (
     queryKey: queryKeys.listResearchTopicForeachCompetition(params),
 
     queryFn: () => GetListResearchTopicForeachCompetition(params),
+
+    staleTime: 0,
+    notifyOnChangeProps: "all",
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 };
 

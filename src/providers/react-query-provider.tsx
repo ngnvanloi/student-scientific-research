@@ -14,6 +14,8 @@ function makeQueryClient() {
         // With SSR, we usually want to set some default staleTime
         // above 0 to avoid refetching immediately on the client
         staleTime: 60 * 1000,
+        refetchOnWindowFocus: true, // Refetch dữ liệu khi chuyển trạng thái foreground
+        refetchOnReconnect: true, // Refetch khi kết nối internet được khôi phục
       },
     },
   });
@@ -43,7 +45,7 @@ export function ReactQueryProvider({
   // const [mounted, setMounted] = useState(false);
   // const queryClient = getQueryClient();
 
-  const queryClient = new QueryClient();
+  const queryClient = getQueryClient();
   return (
     <QueryClientProvider client={queryClient}>
       {children}

@@ -17,7 +17,7 @@ const ResearchTopicComponentForAdmin = (props: IProps) => {
 
   return (
     <div className="flex gap-3 border p-3 mb-2 justify-between">
-      <div>
+      <div className="flex-1">
         <span className="block text-sm font-bold text-blue-900">
           {researchTopic.nameTopic}
         </span>
@@ -32,7 +32,7 @@ const ResearchTopicComponentForAdmin = (props: IProps) => {
           <FolderOpenIcon width={20} /> {researchTopic.disciplineName}
         </p>
       </div>
-      <div>
+      <div className="">
         {reviewCommitteeId === 1 ? (
           <div className="flex flex-col gap-2">
             <p>
@@ -53,6 +53,7 @@ const ResearchTopicComponentForAdmin = (props: IProps) => {
           setIsOpen={setToggleModalAssignment}
           competitionId={researchTopic.competitionId || 0}
           researchTopic={researchTopic}
+          reviewCommitteeId={reviewCommitteeId}
         />
       </div>
     </div>

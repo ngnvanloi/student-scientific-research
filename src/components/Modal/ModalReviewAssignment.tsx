@@ -43,18 +43,24 @@ import {
   ReviewCouncilWithMembers,
 } from "@/types/ReviewCouncilWithMembers";
 import { CloseOutlined } from "@ant-design/icons";
+import { ParamsGetListResearchTopicForeachCompetition } from "@/hooks-query/queries/use-get-research-topic-foreach-competition";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/hooks-query/queries/query-keys";
+import { getQueryClient } from "@/providers/react-query-provider";
 
 interface IProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   competitionId: number | undefined;
   researchTopic: ResearchTopicWithContributors;
+  reviewCommitteeId: number;
 }
 const ModalReviewAssignment = (props: IProps) => {
-  const { isOpen, setIsOpen, competitionId, researchTopic } = props;
+  const { isOpen, setIsOpen, competitionId, researchTopic, reviewCommitteeId } =
+    props;
   const { data: session } = useSession();
   const { toast } = useToast();
-
+  const queryClient = useQueryClient();
   // REACT QUERY
   let params: ParamsGetListReviewCouncilForEachCompetition = {
     competitionId: competitionId || 0,
@@ -124,11 +130,7 @@ const ModalReviewAssignment = (props: IProps) => {
       mutate(
         { researchTopicId: researchTopic.id, params: params },
         {
-          onSuccess: () => {
-            console.log(
-              "==============> checking list reviewer: ",
-              JSON.stringify(listReviewer, null, 2)
-            );
+          onSuccess: async () => {
             toast({
               title: "Thông báo",
               variant: "default",
@@ -150,6 +152,22 @@ const ModalReviewAssignment = (props: IProps) => {
               };
               notiMutation(paramsNoti);
             });
+
+            // refetch lại dữ liệu
+            let params: ParamsGetListResearchTopicForeachCompetition = {
+              competitionId: competitionId || 0,
+              reviewCommitteeId: reviewCommitteeId,
+              index: 1,
+              pageSize: 100,
+            };
+            await queryClient.refetchQueries({
+              queryKey: queryKeys.listResearchTopicForeachCompetition(params),
+              exact: true,
+            });
+            // queryClient.invalidateQueries({
+            //   queryKey: queryKeys.listResearchTopicForeachCompetition(params),
+            // });
+
             setErrorMessage(null);
             setIsOpen(false);
             reset();
