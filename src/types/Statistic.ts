@@ -46,6 +46,7 @@ export type Statistic = {
     totalPendingPublishedTopics: number;
     totalRejectedPublishedTopics: number;
     publishedTopicsRate: number;
+    totalBudgets: number;
   };
 };
 export type CompetitionStatistics = {

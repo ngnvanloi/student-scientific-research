@@ -61,3 +61,18 @@ export function isValid(value: any): boolean {
 export function formatDirectionPath(inputPath: string): string {
   return inputPath.replace(/\\/g, "\\\\");
 }
+
+export function formatToVND(amount: string | number): string {
+  // Chuyển đổi chuỗi hoặc số sang kiểu số
+  const numberAmount = typeof amount === "string" ? parseFloat(amount) : amount;
+
+  // Kiểm tra nếu không phải là số hợp lệ
+  // if (isNaN(numberAmount)) {
+  //   throw new Error("Invalid number format");
+  // }
+
+  // Định dạng số với dấu phân cách hàng nghìn và thêm "vnd"
+  return numberAmount
+    .toLocaleString("vi-VN", { style: "currency", currency: "VND" })
+    .replace("₫", "vnd");
+}

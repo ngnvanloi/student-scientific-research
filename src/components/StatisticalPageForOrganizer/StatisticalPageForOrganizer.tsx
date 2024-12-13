@@ -36,6 +36,7 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import { RecentArticle } from "./ComponentRelated/recent-article";
+import { formatToVND } from "@/helper/extension-function";
 
 const StatisticalPageForOrganizer = () => {
   // lấy dữ liệu theo combobox cuộc thi
@@ -169,21 +170,21 @@ const StatisticalPageForOrganizer = () => {
                           .totalCompetition
                       }
                     </div>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[13px] text-muted-foreground">
                       Đang diễn ra:{" "}
                       {
                         statisticForOrganizer?.data.competitionStatistics
                           .ongoingCompetition
                       }
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[13px] text-muted-foreground">
                       Sắp diễn ra:{" "}
                       {
                         statisticForOrganizer?.data.competitionStatistics
                           .upcomingCompetition
                       }
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[13px] text-muted-foreground">
                       Kết thúc:{" "}
                       {
                         statisticForOrganizer?.data.competitionStatistics
@@ -208,33 +209,40 @@ const StatisticalPageForOrganizer = () => {
                           .totalResearchTopic
                       }
                     </div>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[13px] text-muted-foreground">
                       Đề tài chờ phê duyệt:{" "}
                       {
                         statisticForOrganizer?.data.researchFieldStatistics
                           .totalFacultyPendingReviewTopics
                       }
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[13px] text-muted-foreground">
                       Đề tài đã phê duyệt:{" "}
                       {
                         statisticForOrganizer?.data.researchFieldStatistics
                           .totalFacultyApprovedTopics
                       }
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[13px] text-muted-foreground">
                       Đề tài đã công khai:{" "}
                       {
                         statisticForOrganizer?.data.researchFieldStatistics
                           .totalPublishedTopics
                       }
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[13px] text-muted-foreground">
                       Bài báo đính kèm:{" "}
                       {
                         statisticForOrganizer?.data.articleStatistics
                           .totalArticle
                       }
+                    </p>
+                    <p className="text-[13px] text-muted-foreground">
+                      Tổng kinh phí:{" "}
+                      {formatToVND(
+                        statisticForOrganizer?.data.researchFieldStatistics
+                          .totalBudgets || ""
+                      )}
                     </p>
                   </CardContent>
                 </Card>
@@ -254,10 +262,10 @@ const StatisticalPageForOrganizer = () => {
                           .totalReviewCommittee
                       }
                     </div>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[13px] text-muted-foreground">
                       {`Tổng số thành viên: ${statisticForOrganizer?.data.reviewCommitteeStatistics.totalReviewer}`}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[13px] text-muted-foreground">
                       {`Tỉ lệ tham gia phản biện: ${Math.round(statisticForOrganizer?.data.reviewCommitteeStatistics.reviewerParticipationRate || 0)}%`}
                     </p>
                   </CardContent>
@@ -278,7 +286,7 @@ const StatisticalPageForOrganizer = () => {
                           .totalRegistrationForm
                       }
                     </div>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[13px] text-muted-foreground">
                       {`Đăng kí thành công: ${
                         statisticForOrganizer?.data.registrationFormStatistics
                           .approvedRegistrationForm
@@ -288,7 +296,7 @@ const StatisticalPageForOrganizer = () => {
                             .totalRegistrationForm
                         } (${Math.round(statisticForOrganizer?.data.registrationFormStatistics.successfulRegistrationRate || 0)}%)`}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[13px] text-muted-foreground">
                       {`Chờ phê duyệt: ${
                         statisticForOrganizer?.data.registrationFormStatistics
                           .pendingRegistrationForm

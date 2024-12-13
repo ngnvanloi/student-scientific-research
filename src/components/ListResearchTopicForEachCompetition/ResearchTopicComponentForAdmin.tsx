@@ -1,5 +1,4 @@
 "use client";
-
 import { ResearchTopicWithContributors } from "@/types/ResearchTopicWithContributors";
 import { FolderOpenIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import { Button } from "antd";
@@ -10,11 +9,11 @@ interface IProps {
   researchTopic: ResearchTopicWithContributors;
   reviewCommitteeId: number;
 }
+
 const ResearchTopicComponentForAdmin = (props: IProps) => {
   const { researchTopic, reviewCommitteeId } = props;
   const [toggleModalAssignment, setToggleModalAssignment] =
     useState<boolean>(false);
-
   return (
     <div className="flex gap-3 border p-3 mb-2 justify-between">
       <div className="flex-1">
