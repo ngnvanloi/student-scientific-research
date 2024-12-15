@@ -6,12 +6,13 @@ import { Acceptance } from "@/types/Acceptance";
 import { AccordionCustom } from "../Accordion/Accordion";
 interface IProps {
   acceptance: Acceptance | undefined;
+  isShowReview: boolean;
 }
 const AcceptanceOverview = (props: IProps) => {
-  const { acceptance } = props;
+  const { acceptance, isShowReview } = props;
   return (
     <div>
-      <div className="">
+      {isShowReview === true ? (
         <div className="border mb-3 py-2 px-3">
           <AccordionCustom
             childrenTrigger={
@@ -59,7 +60,9 @@ const AcceptanceOverview = (props: IProps) => {
             }
           />
         </div>
-      </div>
+      ) : (
+        ""
+      )}
       <div className="flex flex-col gap-4 text-justify">
         <div className="">
           <div className="text-xl font-semibold uppercase text-center my-4">

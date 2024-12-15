@@ -56,7 +56,10 @@ const ModalShowDetailAcceptanceOfResearchTopic = (props: IProps) => {
             </div>
             <Dialog.Description className="space-y-2 p-4 text-[15.5px] leading-relaxed text-gray-500 h-full">
               <div className="pb-5">
-                <AcceptanceOverview acceptance={acceptance} />
+                <AcceptanceOverview
+                  acceptance={acceptance}
+                  isShowReview={true}
+                />
               </div>
             </Dialog.Description>
           </div>

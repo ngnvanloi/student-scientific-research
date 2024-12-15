@@ -12,6 +12,6 @@ const ResearchTopicDetailContainer = (props: IProps) => {
   useEffect(() => {
     document.title = `${data?.data.name}`;
   }, [data]);
-  return <AcceptanceOverview acceptance={data?.data} />;
+  return <AcceptanceOverview acceptance={data?.data} isShowReview={false} />;
 };
 export { ResearchTopicDetailContainer };
