@@ -1,5 +1,16 @@
 import { PendingApprovalTopicPageComponent } from "@/components/ListRegistrationForEachCompetition/PendingApprovalResearchTopicPage";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { auth } from "@/auth";
+import { Metadata } from "next";
+export async function generateMetadata(): Promise<Metadata> {
+  const session = await auth();
+  const userName = session?.user?.name || "Quản Trị Viên";
+
+  return {
+    title: `${userName} - Trang Phê Duyệt Đề Tài`,
+    description: "Ban tổ chức cuộc thi nghiên cứu khoa học của nhà trường.",
+  };
+}
 const PendingApprovalTopicPage = () => {
   return (
     <div>

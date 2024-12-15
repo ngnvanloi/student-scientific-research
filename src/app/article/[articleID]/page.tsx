@@ -1,5 +1,4 @@
 import { ArticleDetailContainer } from "@/components/ArticleDetailContainer/ArticleDetailContainer";
-
 const ArticleDetailPage = ({
   params,
 }: {

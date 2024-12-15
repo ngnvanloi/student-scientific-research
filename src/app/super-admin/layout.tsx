@@ -1,27 +1,18 @@
 "use client";
 import React, { useState } from "react";
 import {
-  AppstoreAddOutlined,
   AuditOutlined,
-  BulbOutlined,
-  CarryOutOutlined,
   CloudServerOutlined,
-  FileTextOutlined,
-  FireOutlined,
   MailOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
-  ReconciliationOutlined,
   SafetyCertificateOutlined,
   SignatureOutlined,
-  SolutionOutlined,
-  TeamOutlined,
-  TrophyOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, MenuProps, theme } from "antd";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useRouter } from "next/navigation";
 
 const { Header, Sider, Content } = Layout;
 

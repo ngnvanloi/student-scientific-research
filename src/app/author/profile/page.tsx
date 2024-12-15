@@ -1,4 +1,4 @@
 const AuthorProfile = () => {
-  return <div>AuthorProfile</div>;
+  return <div>AuthorProfilee</div>;
 };
 export default AuthorProfile;

@@ -14,7 +14,7 @@ import {
   AccordionTrigger,
 } from "@radix-ui/react-accordion";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ResearchTopicAwaitingReviewPageDetailsPage = ({
   params,
@@ -26,7 +26,9 @@ const ResearchTopicAwaitingReviewPageDetailsPage = ({
   const { data: researchTopicDetail } =
     useGetResearchProjectTopicDetail(idResearchTopic);
   // console.log("file path: ", researchTopicDetail?.data.reportFilePath);
-
+  useEffect(() => {
+    document.title = `Phản Biện Đề Tài: ${researchTopicDetail?.data.nameTopic}`;
+  }, [researchTopicDetail]);
   const authorAccountId = researchTopicDetail?.data.author_ResearchTopics.find(
     (item) => item.roleName === "author"
   )?.author.accountId;

@@ -5,6 +5,7 @@ import { SubmitNewResearchTopicVersion } from "@/components/TopicAwaitingReviewP
 import { useGetResearchProjectTopicDetail } from "@/hooks-query/queries/use-get-research-topic-detail";
 import { ArrowTurnDownLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const TopicAwaitingReviewPageDetail = ({
   params,
@@ -15,7 +16,9 @@ const TopicAwaitingReviewPageDetail = ({
   const route = useRouter();
   const { data: researchTopicDetail } =
     useGetResearchProjectTopicDetail(idResearchTopic);
-
+  useEffect(() => {
+    document.title = `Cập Nhật Đề Tài Theo Phản Biện: ${researchTopicDetail?.data.nameTopic}`;
+  }, [researchTopicDetail]);
   return (
     <div>
       <div

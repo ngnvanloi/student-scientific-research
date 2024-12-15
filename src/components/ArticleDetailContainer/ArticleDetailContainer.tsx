@@ -8,6 +8,7 @@ import { Avatar, List, Tag } from "antd";
 import avatarMale from "../../assets/icon/icons8-writer-male-48.png";
 import avatarFemale from "../../assets/icon/icons8-writer-female-48.png";
 import { BookOutlined, CalendarOutlined, TagOutlined } from "@ant-design/icons";
+import { useEffect } from "react";
 interface IProps {
   articleID: number;
 }
@@ -16,6 +17,9 @@ const ArticleDetailContainer = (props: IProps) => {
   const { articleID } = props;
   let { data: article, refetch: refetchData } = useGetArticleDetail(articleID);
   console.log("checking article details slug: ", article);
+  useEffect(() => {
+    document.title = `${article?.data.title}`;
+  }, [article]);
   return (
     <div className="flex border-b border-[#ccc] h-screen pb-3">
       <div className="basis-1/3 h-full">

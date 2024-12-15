@@ -10,10 +10,14 @@ import avatar from "../../../assets/icon/icons8-boss-64.png";
 import "../../../assets/styles/post.page.css";
 import PreviewPDF from "@/components/PreviewPDF/PreviewPDF";
 import PreviewPDFBookmark from "@/components/PreviewPDF/PreviewPDFBookmark";
+import { useEffect } from "react";
 const BlogDetailPage = ({ params }: { params: { id: number } }) => {
   const { id } = params;
   let { data: post, refetch: refetchData } = useGetPostDetail(id);
   console.log("checking post details: ", JSON.stringify(post, null, 2));
+  useEffect(() => {
+    document.title = `${post?.data.title}`;
+  }, [post]);
   return (
     <>
       <Link
