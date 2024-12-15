@@ -168,8 +168,8 @@ const ModalUpdateReviewerProfile = (props: IProps) => {
       {isPending ? <SpinnerLoading /> : ""}
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 w-full h-full bg-black opacity-40 " />
-        <Dialog.Content className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full max-w-4xl mx-auto px-4 ">
-          <div className="bg-white rounded-md shadow-lg ">
+        <Dialog.Content className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full max-w-4xl mx-auto px-4 h-[620px] overflow-x-auto">
+          <div className="bg-white rounded-md shadow-lg h-full  overflow-x-auto">
             <div className="flex items-center justify-between p-4 border-b">
               <Dialog.Title className="text-lg font-medium text-gray-800 ">
                 <strong>Cập nhật thông tin cá nhân</strong>
@@ -236,31 +236,33 @@ const ModalUpdateReviewerProfile = (props: IProps) => {
                   className="w-full appearance-none rounded-lg border border-stroke dark:border-dark-3 bg-transparent py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2"
                 />
               </div>
-              <div className="mt-5">
-                <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-                  Email
-                </label>
-                <FormField
-                  type="text"
-                  placeholder="Nhập email ..."
-                  name="email"
-                  register={register}
-                  error={errors.email}
-                  className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
-                />
-              </div>
-              <div>
-                <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-                  Số điện thoại
-                </label>
-                <FormField
-                  type="text"
-                  placeholder="Nhập số điện thoại ..."
-                  name="numberPhone"
-                  register={register}
-                  error={errors.numberPhone}
-                  className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
-                />
+              <div className="mt-5 flex gap-2 justify-between">
+                <div className="basis-1/2">
+                  <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
+                    Email
+                  </label>
+                  <FormField
+                    type="text"
+                    placeholder="Nhập email ..."
+                    name="email"
+                    register={register}
+                    error={errors.email}
+                    className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
+                  />
+                </div>
+                <div className="basis-1/2">
+                  <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
+                    Số điện thoại
+                  </label>
+                  <FormField
+                    type="text"
+                    placeholder="Nhập số điện thoại ..."
+                    name="numberPhone"
+                    register={register}
+                    error={errors.numberPhone}
+                    className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
+                  />
+                </div>
               </div>
             </Dialog.Description>
             {errorMessage && (

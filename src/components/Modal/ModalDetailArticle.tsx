@@ -1,26 +1,8 @@
 "use client";
 import { CloseModalIcon } from "@/assets/svg/close.modal";
-import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
-import { useForm } from "react-hook-form";
-import { TFormAddPost } from "../FormCard/FormInputsData";
-import { FormAddPostSchema } from "../FormCard/ZodSchema";
-import FormField from "../FormCard/FormInputField";
 import { Button } from "antd";
-import RichTextEditor from "../RichTextEditor/RichTextEditor";
 import React, { useState } from "react";
-import ClickFileUpload from "../UploadFile/ClickFileUpload";
-import { DatePicker } from "../DatePicker/DatePicker";
-import {
-  ParamsCreatePost,
-  useCreatePostMutation,
-} from "@/hooks-query/mutations/use-create-post-mutation";
-import DragFileUpload from "../UploadFile/DragFileUpload";
-import { usePostManagementContext } from "../UseContextProvider/PostManagementContext";
-import { useUploadFileMutation } from "@/hooks-query/mutations/use-upload-file-mutation";
-import { FolderNameUploadFirebase } from "@/web-configs/folder-name-upload-firebase";
-import { ParamsRegisterCompetiton } from "@/hooks-query/mutations/use-register-competition";
-import { useToast } from "@/hooks/use-toast";
 import { ArticleDetailContainer } from "../ArticleDetailContainer/ArticleDetailContainer";
 
 interface IProps {

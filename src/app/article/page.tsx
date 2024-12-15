@@ -1,7 +1,7 @@
 import { ArticlePageComponent } from "@/components/ArticlePage/ArticlePage";
 import { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "HUIT SEMINAR- Bài Báo Khoa Học",
+  title: "HUIT SEMINAR - Bài Báo Khoa Học",
   description:
     "Khám phá và quản lý các hoạt động nghiên cứu khoa học tại Đại học Công Thương.",
 };

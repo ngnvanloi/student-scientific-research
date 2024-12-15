@@ -4,7 +4,7 @@ import { authenticate } from "@/lib/actions";
 import { setAuthToken } from "@/web-configs/community-api";
 import { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "HUIT SEMINAR- Trang Đăng Nhập",
+  title: "HUIT SEMINAR - Trang Đăng Nhập",
   description:
     "Khám phá và quản lý các hoạt động nghiên cứu khoa học tại Đại học Công Thương.",
 };
