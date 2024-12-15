@@ -5,9 +5,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import carousel1 from "../../assets/img/37130.jpg";
-import carousel2 from "../../assets/img/8038.jpg";
-import carousel3 from "../../assets/img/SEA_BACKGROUND.jpg";
+import carousel1 from "../../assets/img/carousel-1.jpg";
+import carousel2 from "../../assets/img/carousel-2.jpg";
+import carousel3 from "../../assets/img/carousel-3.jpg";
 const HomepageCarousel = () => {
   return (
     <Carousel className="h-full">
