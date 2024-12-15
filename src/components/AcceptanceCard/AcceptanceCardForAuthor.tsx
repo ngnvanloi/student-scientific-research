@@ -93,7 +93,8 @@ const AcceptanceCardForAuthor = (props: IProps) => {
         >
           Xem chi tiết
         </Button>
-        {acceptance?.facultyAcceptedStatus === 0 &&
+        {(acceptance?.facultyAcceptedStatus === 0 ||
+          acceptance?.facultyAcceptedStatus === 2) &&
         isAuthorizedToOperate === true ? (
           <>
             <Button

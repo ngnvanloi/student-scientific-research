@@ -58,4 +58,5 @@ export type ReviewAcceptance = {
     email: string;
   };
   deletedAt: any | null;
+  createdAt: any | null;
 };
