@@ -68,6 +68,14 @@ const FormSubmitResearchTopic = (props: IProps) => {
     useSubmitResearchTopicMutation((msg) => {
       setErrorMessage(msg);
     });
+  useEffect(() => {
+    if (fileBudget !== undefined) {
+      setErrorMessage(null);
+    }
+    if (fileReport !== undefined) {
+      setErrorMessage(null);
+    }
+  }, [fileReport, fileBudget]);
   const {
     mutate: fileReportMutation,
     isSuccess: fileIsSuccess,
@@ -137,6 +145,14 @@ const FormSubmitResearchTopic = (props: IProps) => {
 
   // HANDLE LOGIC
   const onSubmit = async (data: TFormSubmitResearchTopic) => {
+    if (fileReport === undefined) {
+      setErrorMessage("File thuyết minh không được để trống");
+      return;
+    }
+    if (fileBudget === undefined) {
+      setErrorMessage("File dự trù kinh phí không được để trống");
+      return;
+    }
     console.log("checking name topic: ", data.nameTopic);
     console.log("checking description: ", data.description);
     console.log("checking target: ", data.target);
@@ -322,7 +338,7 @@ const FormSubmitResearchTopic = (props: IProps) => {
           />
         </div>
         <div className="flex gap-2 mt-3">
-          <div className="">
+          <div className="w-60">
             <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
               Kinh phí
             </label>
@@ -336,7 +352,7 @@ const FormSubmitResearchTopic = (props: IProps) => {
               className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
             />
           </div>
-          <div className="">
+          <div className="w-60">
             <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
               Thời gian nghiệm thu
             </label>
@@ -350,7 +366,7 @@ const FormSubmitResearchTopic = (props: IProps) => {
               className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
             />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 shrink-0">
             <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
               Giáo viên hướng dẫn
             </label>

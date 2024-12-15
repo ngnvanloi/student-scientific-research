@@ -107,20 +107,20 @@ const ModalUpdateOrganizerProfile = (props: IProps) => {
           setIsChange(true);
           setIsOpen(false);
           setErrorMessage(null);
+          // RESET FORM UPDATE
+          reset({
+            name: "",
+            email: "",
+            numberPhone: "",
+            facultyId: "",
+            description: "",
+          });
         },
         onError: (error) => {
           console.error("Lỗi khi cập nhật profile: " + error);
         },
       }
     );
-    // RESET FORM UPDATE
-    reset({
-      name: "",
-      email: "",
-      numberPhone: "",
-      facultyId: "",
-      description: "",
-    });
   };
 
   const onError = (errors: any) => {

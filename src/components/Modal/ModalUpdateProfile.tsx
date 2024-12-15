@@ -131,21 +131,21 @@ const ModalUpdateProfile = (props: IProps) => {
           setDateOfBirth(new Date());
           // refetch data
           await queryClient.refetchQueries({ queryKey: queryKeys.userProfile });
+          // RESET FORM UPDATE
+          reset({
+            name: "",
+            email: "",
+            numberPhone: "",
+            sex: "",
+            facultyId: "",
+            dateOfBirth: "",
+          });
         },
         onError: (error) => {
           console.log("Lỗi khi cập nhật profile: " + error);
         },
       }
     );
-    // RESET FORM UPDATE
-    reset({
-      name: "",
-      email: "",
-      numberPhone: "",
-      sex: "",
-      facultyId: "",
-      dateOfBirth: "",
-    });
   };
 
   const onError = (errors: any) => {

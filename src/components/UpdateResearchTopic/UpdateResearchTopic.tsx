@@ -508,7 +508,7 @@ const FormUpdateResearchTopic = (props: IProps) => {
           </label>
           <ClickFileUpload limit={1} multiple={false} setFile={setFileReport} />
         </div>
-        <div>
+        {/* <div>
           <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
             Cập nhật file sản phẩm (nếu cần)
           </label>
@@ -517,7 +517,7 @@ const FormUpdateResearchTopic = (props: IProps) => {
             multiple={false}
             setFile={setFileProduct}
           />
-        </div>
+        </div> */}
         <div>
           <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
             Cập nhật file dự trù kinh phí (nếu cần)

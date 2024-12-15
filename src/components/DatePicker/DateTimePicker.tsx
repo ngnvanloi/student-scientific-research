@@ -2,13 +2,15 @@ import React from "react";
 import { DatePicker, Space } from "antd";
 import type { DatePickerProps } from "antd";
 import dayjs from "dayjs";
+import { truncate } from "fs";
 
 interface IProps {
   date: Date | undefined;
   setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  disabled?: boolean;
 }
 
-const DateTimePicker: React.FC<IProps> = ({ date, setDate }) => {
+const DateTimePicker: React.FC<IProps> = ({ date, setDate, disabled }) => {
   const onChange: DatePickerProps["onChange"] = (value, dateString) => {
     console.log("Selected Time:", value);
     console.log("Formatted Selected Time:", dateString);
@@ -28,6 +30,7 @@ const DateTimePicker: React.FC<IProps> = ({ date, setDate }) => {
         showTime={{ format: "HH:mm:ss" }}
         format="DD-MM-YYYY HH:mm"
         onChange={onChange}
+        disabled={disabled}
         onOk={(value) => {
           console.log("onOk:", value);
         }}
