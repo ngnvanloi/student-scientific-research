@@ -7,7 +7,7 @@ import { TFormAddCompetition, TFormAddPost } from "../FormCard/FormInputsData";
 import { FormAddCompetitonSchema } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
 import { Alert, Button } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCompetitionManagementContext } from "../UseContextProvider/CompetitionManagementContext";
 import {
   ParamsCreateCompetition,
@@ -20,6 +20,7 @@ import { SpinnerLoading } from "../SpinnerLoading/SpinnerLoading";
 import { useQueryClient } from "@tanstack/react-query";
 import { ParamsGetListCompetition } from "@/hooks-query/queries/use-get-competitions";
 import { queryKeys } from "@/hooks-query/queries/query-keys";
+import { isDateGreaterThan, isPastDate } from "@/helper/extension-function";
 
 const ModalAddNewCompetition = () => {
   // STATE
@@ -54,11 +55,62 @@ const ModalAddNewCompetition = () => {
     resolver: zodResolver(FormAddCompetitonSchema),
   });
 
+  // VALIDATION DATE
+  const [errorDateStartMessage, setErrorDateStartMessage] = useState<
+    string | null
+  >(null);
+  const [errorDateEndMessage, setErrorDateEndMessage] = useState<string | null>(
+    null
+  );
+  const [errorDateEndSubmitMessage, setErrorDateEndSubmitMessage] = useState<
+    string | null
+  >(null);
+  useEffect(() => {
+    // kiểm tra ngày bắt đầu
+    if (isPastDate(dateStart?.toISOString() || "")) {
+      setErrorDateStartMessage("Ngày bắt đầu không thể nhỏ hơn ngày hiện tại");
+    } else {
+      setErrorDateStartMessage(null);
+    }
+    // kiểm tra ngày kết thúc
+    if (isPastDate(dateEnd?.toISOString() || "")) {
+      setErrorDateEndMessage("Ngày kết thúc không thể hơn hơn ngày hiện tại");
+    } else if (isDateGreaterThan(dateStart || "", dateEnd || "")) {
+      setErrorDateEndMessage("Ngày kết thúc không thể hơn hơn ngày bắt đầu");
+    } else {
+      setErrorDateEndMessage(null);
+    }
+    // kiểm tra hạn chốt nộp bài
+    if (isPastDate(dateEndSubmit?.toISOString() || "")) {
+      setErrorDateEndSubmitMessage(
+        "Ngày hạn chốt nộp đề tài không thể nhỏ hơn ngày hiện tại"
+      );
+    } else if (
+      isDateGreaterThan(dateEndSubmit || "", dateEnd || "") ||
+      isDateGreaterThan(dateStart || "", dateEndSubmit || "")
+    ) {
+      setErrorDateEndSubmitMessage(
+        "Hạn chốt nộp bài phải nằm trong khoảng thời gian bắt đầu và kết thúc cuộc thi"
+      );
+    } else {
+      setErrorDateEndSubmitMessage(null);
+    }
+  }, [dateStart, dateEnd, dateEndSubmit]);
+
   // HANDLE LOGIC
   const onSubmit = (data: TFormAddCompetition) => {
     console.log("Check date start: ", typeof dateStart?.toISOString());
     console.log("Check date end: ", typeof dateEnd?.toISOString());
-
+    if (
+      isPastDate(dateStart?.toISOString() || "") ||
+      isPastDate(dateEnd?.toISOString() || "") ||
+      isPastDate(dateEndSubmit?.toISOString() || "") ||
+      isDateGreaterThan(dateStart || "", dateEnd || "") ||
+      isDateGreaterThan(dateEndSubmit || "", dateEnd || "") ||
+      isDateGreaterThan(dateStart || "", dateEndSubmit || "")
+    ) {
+      return;
+    }
     // gọi API thêm Post
     let dataSender: ParamsCreateCompetition = {
       competitionName: data.competitionName,
@@ -129,12 +181,22 @@ const ModalAddNewCompetition = () => {
                     Ngày bắt đầu
                   </label>
                   <DateTimePicker date={dateStart} setDate={setDateStart} />
+                  {errorDateStartMessage && (
+                    <p className="text-red-500 error-message">
+                      {errorDateStartMessage}
+                    </p>
+                  )}
                 </div>
                 <div className="basis-1/3">
                   <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                     Ngày kết thúc
                   </label>
                   <DateTimePicker date={dateEnd} setDate={setDateEnd} />
+                  {errorDateEndMessage && (
+                    <p className="text-red-500 error-message">
+                      {errorDateEndMessage}
+                    </p>
+                  )}
                 </div>
                 <div className="basis-1/3">
                   <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
@@ -144,6 +206,11 @@ const ModalAddNewCompetition = () => {
                     date={dateEndSubmit}
                     setDate={setDateEndSubmit}
                   />
+                  {errorDateEndSubmitMessage && (
+                    <p className="text-red-500 error-message">
+                      {errorDateEndSubmitMessage}
+                    </p>
+                  )}
                 </div>
               </div>
               <div>
@@ -209,12 +276,12 @@ const ModalAddNewCompetition = () => {
                   onClick={handleSubmit(onSubmit, onError)}
                   className="px-6 py-2 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "
                 >
-                  Create
+                  Tạo
                 </Button>
               </Dialog.Close>
               <Dialog.Close asChild>
                 <Button className="px-6 py-2 text-gray-800 border rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 ">
-                  Cancel
+                  Hủy
                 </Button>
               </Dialog.Close>
             </div>

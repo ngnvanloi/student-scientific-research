@@ -27,6 +27,7 @@ import DateTimePicker from "../DatePicker/DateTimePicker";
 import { useQueryClient } from "@tanstack/react-query";
 import { ParamsGetListReviewCouncilForEachCompetition } from "@/hooks-query/queries/use-get-review-council-each-competition";
 import { queryKeys } from "@/hooks-query/queries/query-keys";
+import { isDateGreaterThan, isPastDate } from "@/helper/extension-function";
 
 interface IProps {
   isOpen: boolean;
@@ -107,13 +108,47 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
       name: reviewCouncil?.reviewCommitteeName || "",
     },
   });
-
+  // VALIDATION DATE
+  const [errorDateStartMessage, setErrorDateStartMessage] = useState<
+    string | null
+  >(null);
+  const [errorDateEndMessage, setErrorDateEndMessage] = useState<string | null>(
+    null
+  );
+  useEffect(() => {
+    // kiểm tra ngày bắt đầu
+    if (isPastDate(dateStart?.toISOString() || "")) {
+      setErrorDateStartMessage(
+        "Ngày bắt đầu phản biện không thể nhỏ hơn ngày hiện tại"
+      );
+    } else {
+      setErrorDateStartMessage(null);
+    }
+    // kiểm tra ngày kết thúc
+    if (isPastDate(dateEnd?.toISOString() || "")) {
+      setErrorDateEndMessage(
+        "Ngày kết thúc phản biện không thể hơn hơn ngày hiện tại"
+      );
+    } else if (isDateGreaterThan(dateStart || "", dateEnd || "")) {
+      setErrorDateEndMessage(
+        "Ngày kết thúc phản biện không thể hơn hơn ngày bắt đầu phản biện"
+      );
+    } else {
+      setErrorDateEndMessage(null);
+    }
+  }, [dateStart, dateEnd]);
   // HANDLE LOGIC
   const onSubmit = (data: TFormEstablishReviewCouncil) => {
     console.log("Check name review council: ", data.name);
     console.log("Check list reviewzers: ", listReviewer);
     console.log("Check reviewCouncilID: ", reviewCouncil?.id);
-
+    if (
+      isPastDate(dateStart?.toISOString() || "") ||
+      isPastDate(dateEnd?.toISOString() || "") ||
+      isDateGreaterThan(dateStart || "", dateEnd || "")
+    ) {
+      return;
+    }
     // GỌI API THÀNH LẬP HỘI ĐỒNG PHẢN BIỆN
     let requestBody: ParamsUpdateReviewCouncil = {
       reviewCommitteeName: data.name,
@@ -204,12 +239,22 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
                       Ngày bắt đầu phản biện
                     </label>
                     <DateTimePicker date={dateStart} setDate={setDateStart} />
+                    {errorDateStartMessage && (
+                      <p className="text-red-500 error-message">
+                        {errorDateStartMessage}
+                      </p>
+                    )}
                   </div>
                   <div className="basis-1/2">
                     <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                       Ngày kết thúc phản biện
                     </label>
                     <DateTimePicker date={dateEnd} setDate={setDateEnd} />
+                    {errorDateEndMessage && (
+                      <p className="text-red-500 error-message">
+                        {errorDateEndMessage}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex justify-between items-center justify-items-center mb-3 mt-3">
@@ -263,7 +308,7 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
                 </Dialog.Close>
                 <Dialog.Close asChild>
                   <Button className="px-6 py-2 text-gray-800 border rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 ">
-                    Cancel
+                    Hủy
                   </Button>
                 </Dialog.Close>
               </div>

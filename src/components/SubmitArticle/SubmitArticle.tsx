@@ -209,7 +209,7 @@ const SubmitArticleComponent = () => {
               <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
                 Ngày đăng tải
               </label>
-              <DateTimePicker date={date} setDate={setDate} />
+              <DateTimePicker date={date} setDate={setDate} disabled={true} />
             </div>
 
             <div className="mt-4">

@@ -25,6 +25,7 @@ import {
   FormUpdateAuthorSchema,
   FormUpdateReviewerSchema,
 } from "../FormCard/ZodSchema";
+import { isValidBirthDate } from "@/helper/extension-function";
 
 const gender: SelectItem[] = [
   { id: "Nam", name: "Nam" },
@@ -64,6 +65,17 @@ const ModalUpdateReviewerProfile = (props: IProps) => {
   );
   // STATE
   const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(new Date());
+  // SHOW ERROR DATE
+  const [errorDateMessage, setErrorDateMessage] = useState<string | null>(null);
+  useEffect(() => {
+    if (!isValidBirthDate(dateOfBirth?.toISOString() || "")) {
+      setErrorDateMessage(
+        "Vui lòng nhập ngày sinh hợp lệ (Người truy cập hệ thống phải đủ 18 tuổi)"
+      );
+    } else {
+      setErrorDateMessage(null);
+    }
+  }, [dateOfBirth]);
 
   // MUTATION
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -118,6 +130,9 @@ const ModalUpdateReviewerProfile = (props: IProps) => {
     console.log("Check gender: ", data.sex);
     console.log("check phone: ", data.numberPhone);
     console.log("check faculty: ", data.facultyId);
+    if (!isValidBirthDate(dateOfBirth?.toISOString() || "")) {
+      return;
+    }
 
     // tham số cập nhật reviewer
     let requestBody: ParamsUpdateReviewerProfile = {
@@ -198,6 +213,11 @@ const ModalUpdateReviewerProfile = (props: IProps) => {
                     Ngày sinh
                   </label>
                   <DateTimePicker date={dateOfBirth} setDate={setDateOfBirth} />
+                  {errorDateMessage && (
+                    <p className="text-red-500 error-message">
+                      {errorDateMessage}
+                    </p>
+                  )}
                 </div>
                 <FormSelect
                   name="sex"

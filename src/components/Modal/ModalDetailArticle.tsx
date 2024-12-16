@@ -33,7 +33,7 @@ const ModalShowArticleDetails = (props: IProps) => {
             <div className="flex items-center gap-3 p-4 border-t">
               <Dialog.Close asChild>
                 <Button className="px-6 py-2 text-gray-800 border rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 ">
-                  Cancel
+                  Hủy
                 </Button>
               </Dialog.Close>
             </div>

@@ -322,7 +322,7 @@ const ArticleCardForAdmin = (props: IProps) => {
       </div>
       <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
         <Button variant="filled" onClick={() => handleShowModalApproval()}>
-          Approval
+          Phê duyệt
           <ModalApprovalArticle
             isOpen={isAppOpen}
             setIsOpen={setIsAppOpen}

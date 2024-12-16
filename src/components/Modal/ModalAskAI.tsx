@@ -147,7 +147,7 @@ const ModalAskAI = () => {
               "AI trả lời"
             ) : (
               <div className="flex items-center justify-center bg-gray-100 gap-2">
-                AI đang suy nghĩ, chờ một lát nhé <ChatbotTypingIndicator />
+                Chờ một lát nhé <ChatbotTypingIndicator />
               </div>
             )}
           </p>

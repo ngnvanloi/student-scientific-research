@@ -13,13 +13,17 @@ import {
 } from "../FormCard/ZodSchema";
 import FormField from "../FormCard/FormInputField";
 import { Button } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DatePicker } from "../DatePicker/DatePicker";
 import { useToast } from "@/hooks/use-toast";
 import FormSelect, { SelectItem } from "../FormCard/FormSelectField";
 import { CoAuthor } from "@/types/CoAuthor";
 import { ReviewBoardMembers } from "@/types/ReviewBoardMembers";
 import DateTimePicker from "../DatePicker/DateTimePicker";
+import {
+  getDefaultDateOfBirth,
+  isValidBirthDate,
+} from "@/helper/extension-function";
 
 const gender: SelectItem[] = [
   { id: "Nam", name: "Nam" },
@@ -36,7 +40,20 @@ const ModalAddReviewerForCouncil = (props: IProps) => {
   const { isOpen, setIsOpen, setListReviewer } = props;
 
   // STATE
-  const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(new Date());
+  const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(
+    getDefaultDateOfBirth()
+  );
+  // SHOW ERROR DATE
+  const [errorDateMessage, setErrorDateMessage] = useState<string | null>(null);
+  useEffect(() => {
+    if (!isValidBirthDate(dateOfBirth?.toISOString() || "")) {
+      setErrorDateMessage(
+        "Vui lòng nhập ngày sinh hợp lệ (Người truy cập hệ thống phải đủ 18 tuổi)"
+      );
+    } else {
+      setErrorDateMessage(null);
+    }
+  }, [dateOfBirth]);
 
   const { toast } = useToast();
   // REACT HOOK FORM
@@ -61,6 +78,9 @@ const ModalAddReviewerForCouncil = (props: IProps) => {
     console.log("Check gender: ", data.sex);
     console.log("check phone: ", data.numberPhone);
     console.log("check description: ", data.description);
+    if (!isValidBirthDate(dateOfBirth?.toISOString() || "")) {
+      return;
+    }
 
     // thêm đồng tác giả và danh sách
     let contributor: ReviewBoardMembers = {
@@ -124,6 +144,11 @@ const ModalAddReviewerForCouncil = (props: IProps) => {
                     Ngày sinh
                   </label>
                   <DateTimePicker date={dateOfBirth} setDate={setDateOfBirth} />
+                  {errorDateMessage && (
+                    <p className="text-red-500 error-message">
+                      {errorDateMessage}
+                    </p>
+                  )}
                 </div>
                 <FormSelect
                   name="sex"
@@ -183,12 +208,12 @@ const ModalAddReviewerForCouncil = (props: IProps) => {
                   onClick={handleSubmit(onSubmit, onError)}
                   className="px-6 py-2 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "
                 >
-                  Create
+                  Thêm
                 </Button>
               </Dialog.Close>
               <Dialog.Close asChild>
                 <Button className="px-6 py-2 text-gray-800 border rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 ">
-                  Cancel
+                  Hủy
                 </Button>
               </Dialog.Close>
             </div>

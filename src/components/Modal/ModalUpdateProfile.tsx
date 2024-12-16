@@ -24,6 +24,10 @@ import DateTimePicker from "../DatePicker/DateTimePicker";
 import { CloseOutlined } from "@ant-design/icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/hooks-query/queries/query-keys";
+import {
+  getDefaultDateOfBirth,
+  isValidBirthDate,
+} from "@/helper/extension-function";
 
 const gender: SelectItem[] = [
   { id: "Nam", name: "Nam" },
@@ -51,7 +55,20 @@ const ModalUpdateProfile = (props: IProps) => {
     })
   );
   // STATE
-  const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(new Date());
+  const [dateOfBirth, setDateOfBirth] = useState<Date | undefined>(
+    getDefaultDateOfBirth()
+  );
+  // SHOW ERROR DATE
+  const [errorDateMessage, setErrorDateMessage] = useState<string | null>(null);
+  useEffect(() => {
+    if (!isValidBirthDate(dateOfBirth?.toISOString() || "")) {
+      setErrorDateMessage(
+        "Vui lòng nhập ngày sinh hợp lệ (Người truy cập hệ thống phải đủ 18 tuổi)"
+      );
+    } else {
+      setErrorDateMessage(null);
+    }
+  }, [dateOfBirth]);
 
   // MUTATION
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -104,6 +121,9 @@ const ModalUpdateProfile = (props: IProps) => {
     console.log("Check gender: ", data.sex);
     console.log("check phone: ", data.numberPhone);
     console.log("check faculty: ", data.facultyId);
+    if (!isValidBirthDate(dateOfBirth?.toISOString() || "")) {
+      return;
+    }
 
     // thêm đồng tác giả và danh sách
     let requestBody: ParamsUpdateAuthorProfile = {
@@ -186,6 +206,11 @@ const ModalUpdateProfile = (props: IProps) => {
                     Ngày sinh
                   </label>
                   <DateTimePicker date={dateOfBirth} setDate={setDateOfBirth} />
+                  {errorDateMessage && (
+                    <p className="text-red-500 error-message">
+                      {errorDateMessage}
+                    </p>
+                  )}
                 </div>
                 <FormSelect
                   name="sex"

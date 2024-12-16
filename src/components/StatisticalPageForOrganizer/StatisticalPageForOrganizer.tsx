@@ -135,7 +135,7 @@ const StatisticalPageForOrganizer = () => {
       <div className="hidden flex-col md:flex">
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+            <h2 className="text-3xl font-bold tracking-tight">Thống kê</h2>
             <div className="flex items-center space-x-2 max-w-[500px]">
               <FormSelect
                 name="competitionId"
@@ -308,7 +308,7 @@ const StatisticalPageForOrganizer = () => {
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                 <Card className="col-span-4">
                   <CardHeader>
-                    <CardTitle>Overview</CardTitle>
+                    <CardTitle>Tổng quan</CardTitle>
                   </CardHeader>
                   <CardContent className="pl-2">
                     <Overview data={dataStatistic} />
@@ -332,10 +332,10 @@ const StatisticalPageForOrganizer = () => {
               </div>
             </TabsContent>
             <TabsContent value="analytics" className="space-y-4">
-              <p>Analytics page</p>
+              <p>Tranh phân tích</p>
             </TabsContent>
             <TabsContent value="reports" className="space-y-4">
-              <p>Reports page</p>
+              <p>Trang báo cáo thống kê</p>
             </TabsContent>
           </Tabs>
         </div>

@@ -212,7 +212,7 @@ const ModalApprovalArticle = (props: IProps) => {
                     className="w-full mt-2 p-2.5 flex-1 text-gray-800 rounded-md border ring-offset-2 ring-indigo-600 focus:ring-2"
                     onClick={() => setIsOpen(false)}
                   >
-                    Cancel
+                    Hủy
                   </button>
                 </div>
               </div>
