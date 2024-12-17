@@ -139,11 +139,12 @@ const CompetitionCard = (props: IProps) => {
                     return "";
                   }
                   if (
-                    !isCompetitionIdPresent(competition?.id) &&
-                    isCurrentDateInRange(
-                      competition?.dateStart,
-                      competition?.dateEndSubmit
-                    )
+                    !isCompetitionIdPresent(competition?.id)
+                    // &&
+                    // isCurrentDateInRange(
+                    //   competition?.dateStart,
+                    //   competition?.dateEndSubmit
+                    // )
                   ) {
                     return (
                       <Button
