@@ -116,20 +116,21 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
     null
   );
   useEffect(() => {
-    // kiểm tra ngày bắt đầu
-    if (isPastDate(dateStart?.toISOString() || "")) {
-      setErrorDateStartMessage(
-        "Ngày bắt đầu phản biện không thể nhỏ hơn ngày hiện tại"
-      );
-    } else {
-      setErrorDateStartMessage(null);
-    }
-    // kiểm tra ngày kết thúc
-    if (isPastDate(dateEnd?.toISOString() || "")) {
-      setErrorDateEndMessage(
-        "Ngày kết thúc phản biện không thể hơn hơn ngày hiện tại"
-      );
-    } else if (isDateGreaterThan(dateStart || "", dateEnd || "")) {
+    // // kiểm tra ngày bắt đầu
+    // if (isPastDate(dateStart?.toISOString() || "")) {
+    //   setErrorDateStartMessage(
+    //     "Ngày bắt đầu phản biện không thể nhỏ hơn ngày hiện tại"
+    //   );
+    // } else {
+    //   setErrorDateStartMessage(null);
+    // }
+    // // kiểm tra ngày kết thúc
+    // if (isPastDate(dateEnd?.toISOString() || "")) {
+    //   setErrorDateEndMessage(
+    //     "Ngày kết thúc phản biện không thể hơn hơn ngày hiện tại"
+    //   );
+    // } else
+    if (isDateGreaterThan(dateStart || "", dateEnd || "")) {
       setErrorDateEndMessage(
         "Ngày kết thúc phản biện không thể hơn hơn ngày bắt đầu phản biện"
       );
@@ -143,8 +144,8 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
     console.log("Check list reviewzers: ", listReviewer);
     console.log("Check reviewCouncilID: ", reviewCouncil?.id);
     if (
-      isPastDate(dateStart?.toISOString() || "") ||
-      isPastDate(dateEnd?.toISOString() || "") ||
+      // isPastDate(dateStart?.toISOString() || "") ||
+      // isPastDate(dateEnd?.toISOString() || "") ||
       isDateGreaterThan(dateStart || "", dateEnd || "")
     ) {
       return;

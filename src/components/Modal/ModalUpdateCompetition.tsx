@@ -50,26 +50,28 @@ const ModalUpdateCompetition = (props: IProps) => {
     string | null
   >(null);
   useEffect(() => {
-    // kiểm tra ngày bắt đầu
-    if (isPastDate(dateStart?.toISOString() || "")) {
-      setErrorDateStartMessage("Ngày bắt đầu không thể nhỏ hơn ngày hiện tại");
-    } else {
-      setErrorDateStartMessage(null);
-    }
+    // // kiểm tra ngày bắt đầu
+    // if (isPastDate(dateStart?.toISOString() || "")) {
+    //   setErrorDateStartMessage("Ngày bắt đầu không thể nhỏ hơn ngày hiện tại");
+    // } else {
+    //   setErrorDateStartMessage(null);
+    // }
     // kiểm tra ngày kết thúc
-    if (isPastDate(dateEnd?.toISOString() || "")) {
-      setErrorDateEndMessage("Ngày kết thúc không thể hơn hơn ngày hiện tại");
-    } else if (isDateGreaterThan(dateStart || "", dateEnd || "")) {
+    // if (isPastDate(dateEnd?.toISOString() || "")) {
+    //   setErrorDateEndMessage("Ngày kết thúc không thể hơn hơn ngày hiện tại");
+    // } else
+    if (isDateGreaterThan(dateStart || "", dateEnd || "")) {
       setErrorDateEndMessage("Ngày kết thúc không thể hơn hơn ngày bắt đầu");
     } else {
       setErrorDateEndMessage(null);
     }
     // kiểm tra hạn chốt nộp bài
-    if (isPastDate(dateEndSubmit?.toISOString() || "")) {
-      setErrorDateEndSubmitMessage(
-        "Ngày hạn chốt nộp đề tài không thể nhỏ hơn ngày hiện tại"
-      );
-    } else if (
+    // if (isPastDate(dateEndSubmit?.toISOString() || "")) {
+    //   setErrorDateEndSubmitMessage(
+    //     "Ngày hạn chốt nộp đề tài không thể nhỏ hơn ngày hiện tại"
+    //   );
+    // } else
+    if (
       isDateGreaterThan(dateEndSubmit || "", dateEnd || "") ||
       isDateGreaterThan(dateStart || "", dateEndSubmit || "")
     ) {
@@ -120,9 +122,9 @@ const ModalUpdateCompetition = (props: IProps) => {
     console.log("Check date start: ", typeof dateStart?.toISOString());
     console.log("Check date end: ", typeof dateEnd?.toISOString());
     if (
-      isPastDate(dateStart?.toISOString() || "") ||
-      isPastDate(dateEnd?.toISOString() || "") ||
-      isPastDate(dateEndSubmit?.toISOString() || "") ||
+      // isPastDate(dateStart?.toISOString() || "") ||
+      // isPastDate(dateEnd?.toISOString() || "") ||
+      // isPastDate(dateEndSubmit?.toISOString() || "") ||
       isDateGreaterThan(dateStart || "", dateEnd || "") ||
       isDateGreaterThan(dateEndSubmit || "", dateEnd || "") ||
       isDateGreaterThan(dateStart || "", dateEndSubmit || "")
