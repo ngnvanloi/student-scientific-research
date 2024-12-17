@@ -67,11 +67,11 @@ const ModalAddNewCompetition = () => {
   >(null);
   useEffect(() => {
     // kiểm tra ngày bắt đầu
-    if (isPastDate(dateStart?.toISOString() || "")) {
-      setErrorDateStartMessage("Ngày bắt đầu không thể nhỏ hơn ngày hiện tại");
-    } else {
-      setErrorDateStartMessage(null);
-    }
+    // if (isPastDate(dateStart?.toISOString() || "")) {
+    //   setErrorDateStartMessage("Ngày bắt đầu không thể nhỏ hơn ngày hiện tại");
+    // } else {
+    //   setErrorDateStartMessage(null);
+    // }
     // kiểm tra ngày kết thúc
     if (isPastDate(dateEnd?.toISOString() || "")) {
       setErrorDateEndMessage("Ngày kết thúc không thể hơn hơn ngày hiện tại");
@@ -102,7 +102,7 @@ const ModalAddNewCompetition = () => {
     console.log("Check date start: ", typeof dateStart?.toISOString());
     console.log("Check date end: ", typeof dateEnd?.toISOString());
     if (
-      isPastDate(dateStart?.toISOString() || "") ||
+      // isPastDate(dateStart?.toISOString() || "") ||
       isPastDate(dateEnd?.toISOString() || "") ||
       isPastDate(dateEndSubmit?.toISOString() || "") ||
       isDateGreaterThan(dateStart || "", dateEnd || "") ||
