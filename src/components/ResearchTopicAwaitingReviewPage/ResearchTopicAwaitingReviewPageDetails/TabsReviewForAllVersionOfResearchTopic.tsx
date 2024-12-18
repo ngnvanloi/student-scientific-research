@@ -42,6 +42,7 @@ const TabsReviewForAllVersionOfResearchTopic = (props: IProps) => {
             accountID={accountID}
             researchTopicID={researchTopicDetail.id}
             reviewAcceptanceStatus={researchTopicDetail.reviewAcceptanceStatus}
+            researchTopic={researchTopicDetail}
           />
         ),
         newFilePath: version.newReportFilePath,

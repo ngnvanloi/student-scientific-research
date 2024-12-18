@@ -1,43 +1,37 @@
 "use client";
-
-import { VersionOfResearchProjectTopic } from "@/types/VersionOfResearchProjectTopic";
-import { useGetListFaculty } from "@/hooks-query/queries/use-get-faculties";
 import { useGetListConclude } from "@/hooks-query/queries/use-get-conclude";
 import { useForm } from "react-hook-form";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Alert, Button } from "antd";
 import FormSelect, { SelectItem } from "@/components/FormCard/FormSelectField";
 import { TFormReviewTopic } from "@/components/FormCard/FormInputsData";
 import { FormReviewTopicSchema } from "@/components/FormCard/ZodSchema";
 import FormField from "@/components/FormCard/FormInputField";
 import { HistoryUpdateResearchTopic } from "@/types/HistoryUpdateResearchTopic";
-import {
-  ParamsSubmitReviewForm,
-  useSubmitReviewFormMutation,
-} from "@/hooks-query/mutations/use-submit-review-form-for-topic-version";
-import {
-  ParamsCreateNotification,
-  useCreateNotificationMutation,
-} from "@/hooks-query/mutations/use-create-notification-mutation";
+import { ParamsSubmitReviewForm } from "@/hooks-query/mutations/use-submit-review-form-for-topic-version";
 import { useSession } from "next-auth/react";
-import { NotificationContentSample } from "@/lib/notification-content-sample ";
 import { useToast } from "@/hooks/use-toast";
-import { SpinnerLoading } from "@/components/SpinnerLoading/SpinnerLoading";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
 import { ModalConfirmReviewTopic } from "@/components/Modal/ModalConfirmReviewTopic";
+import { ResearchProjectTopic } from "@/types/ResearchProjectTopic";
 
 interface IProps {
   version: HistoryUpdateResearchTopic;
   accountID: number;
   researchTopicID: number;
   reviewAcceptanceStatus: number;
+  researchTopic?: ResearchProjectTopic;
 }
 
 const FormReviewTopic = (props: IProps) => {
-  const { version, accountID, researchTopicID, reviewAcceptanceStatus } = props;
+  const {
+    version,
+    accountID,
+    researchTopicID,
+    reviewAcceptanceStatus,
+    researchTopic,
+  } = props;
   const { data: session } = useSession();
   const { toast } = useToast();
   const { data: concludes } = useGetListConclude();
@@ -68,6 +62,42 @@ const FormReviewTopic = (props: IProps) => {
     "Checking owner review version: ",
     JSON.stringify(version.review_Forms, null, 2)
   );
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [timeLeft, setTimeLeft] = useState("");
+  useEffect(() => {
+    setIsDisabled(true);
+    let targetTime = new Date(
+      researchTopic?.review_Committees?.dateEnd || ""
+    ).getTime();
+
+    const updateCountdown = () => {
+      const currentTime = new Date().getTime();
+      const difference = targetTime - currentTime;
+
+      if (difference <= 0) {
+        setTimeLeft("00 ngày 00 giờ 00 phút 00 giây");
+        setIsDisabled(false);
+        clearInterval(timerInterval);
+      } else {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor(
+          (difference % (1000 * 60 * 60)) / (1000 * 60)
+        );
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        setTimeLeft(
+          `${String(days).padStart(2, "0")} ngày ${String(hours).padStart(2, "0")} giờ ${String(minutes).padStart(2, "0")} phút ${String(seconds).padStart(2, "0")} giây`
+        );
+      }
+    };
+
+    const timerInterval = setInterval(updateCountdown, 1000);
+
+    // Cleanup timer on unmount
+    return () => clearInterval(timerInterval);
+  }, [researchTopic]);
 
   // REACT HOOK FORM
   const {
@@ -119,7 +149,8 @@ const FormReviewTopic = (props: IProps) => {
       </div>
       {hasReviewed ||
       reviewAcceptanceStatus === 1 ||
-      reviewAcceptanceStatus === 2 ? (
+      reviewAcceptanceStatus === 2 ||
+      !isDisabled ? (
         <div>
           <p className="font-semibold mt-3 text-base">
             Nội dung phản biện trước đó:{" "}

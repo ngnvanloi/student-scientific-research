@@ -1,4 +1,5 @@
 "use client";
+import CountdownTimer from "@/components/CountdownTimer/CountdownTimer";
 import PreviewPDFCustomToolbar from "@/components/PreviewPDF/PreviewPDFCustomToolbar";
 import ResearchTopicOverview from "@/components/ResearchTopicAwaitingReviewPage/ResearchTopicAwaitingReviewPageDetails/ResearchTopicOverview";
 import TabsReviewForAllVersionOfResearchTopic from "@/components/ResearchTopicAwaitingReviewPage/ResearchTopicAwaitingReviewPageDetails/TabsReviewForAllVersionOfResearchTopic";
@@ -25,7 +26,6 @@ const ResearchTopicAwaitingReviewPageDetailsPage = ({
   const route = useRouter();
   const { data: researchTopicDetail } =
     useGetResearchProjectTopicDetail(idResearchTopic);
-  // console.log("file path: ", researchTopicDetail?.data.reportFilePath);
   useEffect(() => {
     document.title = `Phản Biện Đề Tài: ${researchTopicDetail?.data.nameTopic}`;
   }, [researchTopicDetail]);
@@ -61,6 +61,12 @@ const ResearchTopicAwaitingReviewPageDetailsPage = ({
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+      </div>
+      <div className="flex items-center gap-2 justify-center font-bold mb-3 text-base">
+        <p>Thời gian phản biện còn lại:</p>
+        <CountdownTimer
+          endDate={researchTopicDetail?.data.review_Committees?.dateEnd || ""}
+        />
       </div>
       <div className="grid grid-cols-2 gap-1">
         <div className="border h-screen">
