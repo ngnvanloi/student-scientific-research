@@ -66,6 +66,7 @@ export default function AppHeader() {
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           <Link
             href="/"
+            prefetch={true}
             className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "home" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
             onClick={() => setCurrentTab("home")}
           >
@@ -74,6 +75,7 @@ export default function AppHeader() {
 
           <Link
             href="/posts"
+            prefetch={true}
             className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "post" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
             onClick={() => setCurrentTab("post")}
           >
@@ -81,6 +83,7 @@ export default function AppHeader() {
           </Link>
           <Link
             href="/competitions"
+            prefetch={true}
             className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "competition" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
             onClick={() => setCurrentTab("competition")}
           >
@@ -88,6 +91,7 @@ export default function AppHeader() {
           </Link>
           <Link
             href="/article"
+            prefetch={true}
             className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "article" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
             onClick={() => setCurrentTab("article")}
           >
@@ -95,6 +99,7 @@ export default function AppHeader() {
           </Link>
           <Link
             href="/research-topic"
+            prefetch={true}
             className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "topic" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
             onClick={() => setCurrentTab("topic")}
           >
@@ -106,6 +111,7 @@ export default function AppHeader() {
           <div className="hidden lg:flex lg:flex-1 lg:justify-end ">
             <Link
               href="/login"
+              prefetch={true}
               className={`text-sm font-semibold leading-6 text-gray-900 ${currentTab === "login" ? "border-b-2 border-b-blue-900 text-blue-900 transition ease-in-out duration-300" : ""}`}
               onClick={() => setCurrentTab("login")}
             >
