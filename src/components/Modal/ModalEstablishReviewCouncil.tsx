@@ -9,7 +9,6 @@ import FormField from "../FormCard/FormInputField";
 import { Alert, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-
 import { Competition } from "@/types/Competition";
 import { ModalAddReviewerForCouncil } from "./ModalAddReviewerForCouncil";
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";

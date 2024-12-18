@@ -40,9 +40,9 @@ const ResearchTopicCardForAdmin = (props: IProps) => {
         </p>
         <p className="flex gap-2 mt-1">
           <CalendarDateRangeIcon width={16} />
-          {formatDate(researchTopic?.review_Committees.dateStart || "") +
+          {formatDate(researchTopic?.review_Committees?.dateStart || "") +
             " ->" +
-            formatDate(researchTopic?.review_Committees.dateEnd || "")}
+            formatDate(researchTopic?.review_Committees?.dateEnd || "")}
         </p>
       </div>
       <div

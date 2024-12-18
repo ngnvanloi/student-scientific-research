@@ -114,10 +114,10 @@ const ModalUpdateReviewerProfile = (props: IProps) => {
         numberPhone: reviewer.numberPhone,
         sex: reviewer.sex,
         facultyId: String(reviewer.facultyId),
-        dateOfBirth: reviewer.dateOfBirth,
+        dateOfBirth: reviewer?.dateOfBirth,
       });
       setDateOfBirth(
-        reviewer.dateOfBirth ? new Date(reviewer.dateOfBirth) : undefined
+        reviewer.dateOfBirth ? new Date(reviewer?.dateOfBirth) : undefined
       );
     }
   }, [reviewer, reset]);

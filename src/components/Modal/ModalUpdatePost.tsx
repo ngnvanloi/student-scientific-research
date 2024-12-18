@@ -58,7 +58,7 @@ const ModalUpdatePost = (props: IProps) => {
   useEffect(() => {
     if (post) {
       setContent(post.content);
-      setDate(new Date(post.dateUpLoad));
+      setDate(new Date(post?.dateUpLoad));
       reset({
         title: post?.title || "",
       });

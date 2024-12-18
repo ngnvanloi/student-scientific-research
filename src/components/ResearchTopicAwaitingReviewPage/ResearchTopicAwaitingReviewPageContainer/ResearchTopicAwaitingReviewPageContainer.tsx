@@ -55,9 +55,9 @@ const ResearchTopicAwaitingReviewPageContainer = () => {
                   </p>
                   <p className="flex gap-2 mt-1">
                     <CalendarDateRangeIcon width={16} />
-                    {formatDate(item.review_Committees.dateStart || "") +
+                    {formatDate(item.review_Committees?.dateStart || "") +
                       " ->" +
-                      formatDate(item.review_Committees.dateEnd || "")}
+                      formatDate(item.review_Committees?.dateEnd || "")}
                   </p>
                 </div>
                 <div

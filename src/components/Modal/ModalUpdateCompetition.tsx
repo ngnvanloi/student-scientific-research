@@ -113,9 +113,9 @@ const ModalUpdateCompetition = (props: IProps) => {
       description: competition.description,
       destination: competition.destination,
     });
-    setDateEndSubmit(new Date(competition.dateEndSubmit));
-    setDateStart(new Date(competition.dateStart));
-    setDateEnd(new Date(competition.dateEnd));
+    setDateEndSubmit(new Date(competition?.dateEndSubmit));
+    setDateStart(new Date(competition?.dateStart));
+    setDateEnd(new Date(competition?.dateEnd));
   }, [competition]);
   // HANDLE LOGIC
   const onSubmit = (data: TFormAddCompetition) => {

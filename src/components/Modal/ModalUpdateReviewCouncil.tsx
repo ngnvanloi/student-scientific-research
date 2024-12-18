@@ -51,7 +51,7 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
         name: item.name,
         email: item.email,
         numberPhone: item.numberPhone,
-        dateOfBirth: item.dateOfBirth,
+        dateOfBirth: item?.dateOfBirth,
         sex: item.sex,
         description: item.description,
       };
@@ -60,10 +60,10 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
   const [listReviewer, setListReviewer] =
     useState<ReviewBoardMembers[]>(listReviewPreviously);
   const [dateStart, setDateStart] = useState<Date | undefined>(
-    reviewCouncil?.dateStart ? new Date(reviewCouncil.dateStart) : undefined
+    reviewCouncil?.dateStart ? new Date(reviewCouncil?.dateStart) : undefined
   );
   const [dateEnd, setDateEnd] = useState<Date | undefined>(
-    reviewCouncil?.dateEnd ? new Date(reviewCouncil.dateEnd) : undefined
+    reviewCouncil?.dateEnd ? new Date(reviewCouncil?.dateEnd) : undefined
   );
   const [isModalAddReviewer, setModalAddReviewer] = useState<boolean>(false);
   useEffect(() => {
@@ -72,7 +72,7 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
         name: item.name,
         email: item.email,
         numberPhone: item.numberPhone,
-        dateOfBirth: item.dateOfBirth,
+        dateOfBirth: item?.dateOfBirth,
         sex: item.sex,
         description: item.description,
       })) || [];
@@ -82,10 +82,10 @@ const ModalUpdateReviewCouncil = (props: IProps) => {
     console.log("========check dateStart: ", reviewCouncil?.dateStart);
     console.log("========check dateEnd: ", reviewCouncil?.dateEnd);
     setDateStart(
-      reviewCouncil?.dateStart ? new Date(reviewCouncil.dateStart) : undefined
+      reviewCouncil?.dateStart ? new Date(reviewCouncil?.dateStart) : undefined
     );
     setDateEnd(
-      reviewCouncil?.dateEnd ? new Date(reviewCouncil.dateEnd) : undefined
+      reviewCouncil?.dateEnd ? new Date(reviewCouncil?.dateEnd) : undefined
     );
     // cập nhật reviewCommitteeName
     if (reviewCouncil) {

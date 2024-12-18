@@ -43,7 +43,7 @@ const ReviewOverview = (props: IProps) => {
                           Phiên bản đề tài: {index + 1}
                         </p>
                         <p>
-                          Ngày cập nhật: {formatDate(item.dateUpdate || "")}
+                          Ngày cập nhật: {formatDate(item?.dateUpdate || "")}
                         </p>
                       </div>
                     }
@@ -57,7 +57,7 @@ const ReviewOverview = (props: IProps) => {
                               </p>
                               <p className="text-xs">
                                 Ngày phản biện:{" "}
-                                {formatDate(item.date_Upload || "")}
+                                {formatDate(item?.date_Upload || "")}
                               </p>
                               <p className="mt-2">Nội dung: {item.content}</p>
                               {(() => {

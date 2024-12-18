@@ -49,7 +49,7 @@ const BlogDetailPage = ({ params }: { params: { id: number } }) => {
         </div>
         <div className="flex gap-2 justify-center items-center">
           <CalendarDateRangeIcon width={24} />
-          <p>{post?.data.dateUpLoad}</p>
+          <p>{post?.data?.dateUpLoad}</p>
         </div>
       </div>
       {/* Nội dung */}

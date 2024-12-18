@@ -48,7 +48,7 @@ const ArticleDetailContainer = (props: IProps) => {
         </div>
         <div>
           <span className="font-bold">Ngày đăng tải:</span>{" "}
-          {formatDate(article?.data.dateUpload || "")}
+          {formatDate(article?.data?.dateUpload || "")}
         </div>
         <div>
           <h2 className="font-bold">Danh sách tác giả</h2>

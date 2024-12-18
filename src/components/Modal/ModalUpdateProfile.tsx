@@ -105,10 +105,10 @@ const ModalUpdateProfile = (props: IProps) => {
         numberPhone: author.numberPhone,
         sex: author.sex,
         facultyId: String(author.facultyId),
-        dateOfBirth: author.dateOfBirth,
+        dateOfBirth: author?.dateOfBirth,
       });
       setDateOfBirth(
-        author.dateOfBirth ? new Date(author.dateOfBirth) : undefined
+        author.dateOfBirth ? new Date(author?.dateOfBirth) : undefined
       );
     }
   }, [author, reset]);

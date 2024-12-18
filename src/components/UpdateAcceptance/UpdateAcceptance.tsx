@@ -53,7 +53,7 @@ const FormUpdateAcceptance = (props: IProps) => {
           name: item.author.name,
           email: item.author.email,
           numberPhone: item.author.numberPhone,
-          dateOfBirth: item.author.dateOfBirth,
+          dateOfBirth: item.author?.dateOfBirth,
           sex: item.author.sex,
           roleName: "co-author",
         }))

@@ -16,7 +16,7 @@ const ReviewerProfilePage = () => {
     name: user?.data.name || "",
     email: user?.data.email || "",
     numberPhone: user?.data.numberPhone || "",
-    dateOfBirth: user?.data.dateOfBirth || "",
+    dateOfBirth: user?.data?.dateOfBirth || "",
     sex: user?.data.sex || "",
     academicDegree: user?.data.academicRank || "",
     academicRank: user?.data.academicDegree || "",
@@ -73,7 +73,7 @@ const ReviewerProfilePage = () => {
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm/6 font-medium text-gray-900">Ngày sinh</dt>
             <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-              {formatDate(user?.data.dateOfBirth || "")}
+              {formatDate(user?.data?.dateOfBirth || "")}
             </dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

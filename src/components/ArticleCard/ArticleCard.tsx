@@ -65,7 +65,7 @@ const ArticleCardForAuthor = (props: IPropsAuthorArticle) => {
           </div>
           <div className="mt-3">
             <span className="block text-indigo-600 text-sm">
-              {formatDate(articleItem.dateUpload)}
+              {formatDate(articleItem?.dateUpload)}
             </span>
             <h3 className="text-lg text-gray-800 duration-150 group-hover:text-indigo-600 font-semibold truncate max-h-[300px]">
               {articleItem.title}
@@ -247,7 +247,7 @@ const ArticleCardForGuest = (props: IProps) => {
             {articleItem.title}
           </p>
           <p className="mt-1 truncate text-xs/5 text-gray-500">
-            {formatDate(articleItem.dateUpload)}
+            {formatDate(articleItem?.dateUpload)}
           </p>
           <p className="mt-1 truncate text-xs/5 text-gray-500">
             {articleItem.author_Articles

@@ -106,7 +106,7 @@ const AcceptanceOverview = (props: IProps) => {
               Ngày đăng tải:{" "}
               <span className="font-normal">
                 {formatDate(
-                  (acceptance?.researchTopic.dateUpLoad as string) || ""
+                  (acceptance?.researchTopic?.dateUpLoad as string) || ""
                 )}
               </span>
             </p>

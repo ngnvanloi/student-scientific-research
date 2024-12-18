@@ -24,8 +24,8 @@ const EstablishReviewCouncilPageContainer = () => {
   const filteredCompetitions = listCompetitions?.data.items.filter(
     (competition) => {
       const currentDate = new Date();
-      const dateStart = new Date(competition.dateStart);
-      const dateEnd = new Date(competition.dateEnd);
+      const dateStart = new Date(competition?.dateStart);
+      const dateEnd = new Date(competition?.dateEnd);
       return currentDate >= dateStart && currentDate <= dateEnd;
     }
   );

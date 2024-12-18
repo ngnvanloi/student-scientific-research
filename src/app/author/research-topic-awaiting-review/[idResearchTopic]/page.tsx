@@ -34,11 +34,11 @@ const TopicAwaitingReviewPageDetail = ({
         <p className="font-semibold uppercase text-lg text-center mb-3">
           {researchTopicDetail?.data.nameTopic}
         </p>
-        {researchTopicDetail?.data.review_Committees.dateEnd && (
+        {researchTopicDetail?.data.review_Committees?.dateEnd && (
           <div className="flex gap-3 justify-center">
             <p>Thời gian còn lại:</p>
             <CountdownTimer
-              endDate={researchTopicDetail?.data.review_Committees.dateEnd}
+              endDate={researchTopicDetail?.data.review_Committees?.dateEnd}
             />
           </div>
         )}
