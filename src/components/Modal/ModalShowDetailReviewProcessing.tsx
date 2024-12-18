@@ -75,7 +75,7 @@ const ModalShowDetailReviewProcessing = (props: IProps) => {
   useEffect(() => {
     setIsDisabled(true);
     let targetTime = new Date(
-      researchTopic?.review_Committees.dateEnd || ""
+      researchTopic?.review_Committees?.dateEnd || ""
     ).getTime();
 
     const updateCountdown = () => {
@@ -202,17 +202,16 @@ const ModalShowDetailReviewProcessing = (props: IProps) => {
                     Nếu đề tài đã đạt đủ yêu cầu, hãy tiến hành phê duyệt để tác
                     giả có thể tiến hành giai đoạn nghiệm thu
                   </p>
-                  {researchTopic?.review_Committees.dateEnd && (
+                  {researchTopic?.review_Committees?.dateEnd && (
                     <div className="flex gap-3 font-semibold">
                       <p>Thời gian phản biện còn lại:</p>
                       <CountdownTimer
-                        endDate={researchTopic?.review_Committees.dateEnd}
+                        endDate={researchTopic?.review_Committees?.dateEnd}
                       />
                     </div>
                   )}
                 </div>
-
-                {isDisabled ? (
+                {/* {isDisabled ? (
                   <p className={`${isDisabled ? "hover:cursor-wait" : ""}`}></p>
                 ) : (
                   <div className="flex gap-2">
@@ -248,7 +247,40 @@ const ModalShowDetailReviewProcessing = (props: IProps) => {
                       </button>
                     </div>
                   </div>
-                )}
+                )} */}
+                <div className="flex gap-2">
+                  <FormSelect
+                    name="approvalStatus"
+                    items={approvalStatus}
+                    register={register}
+                    error={errors.approvalStatus}
+                    // label="Chọn tình trạng phê duyệt"
+                    className="relative z-20 w-full appearance-none rounded-lg border border-stroke dark:border-dark-3 bg-transparent py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2"
+                  />
+                  <div>
+                    {errorMessage && (
+                      <div className="mt-4">
+                        <Alert
+                          message="Oops! Đã có lỗi xảy ra"
+                          description={errorMessage}
+                          type="error"
+                          closable={{
+                            "aria-label": "close",
+                            closeIcon: <CloseOutlined />,
+                          }}
+                          onClose={() => setErrorMessage(null)}
+                          showIcon
+                        />
+                      </div>
+                    )}
+                    <button
+                      className="w-full p-2.5 flex-1 text-white bg-green-600 rounded-md ring-offset-2 ring-green-400 focus:ring-2 transition"
+                      onClick={handleSubmit(onSubmit, onError)}
+                    >
+                      Phê duyệt
+                    </button>
+                  </div>
+                </div>
               </div>
               <div className="flex gap-1">
                 <div className="mb-5 basis-1/2 px-3 py-2 border max-h-[700px] overflow-x-auto">
