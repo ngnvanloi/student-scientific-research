@@ -213,7 +213,6 @@ const FormReviewTopic = (props: IProps) => {
                 />
               </div>
             )}
-
             <Button
               onClick={handleSubmit(onSubmit, onError)}
               className="px-6 py-2 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "

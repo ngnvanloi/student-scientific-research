@@ -22,7 +22,7 @@ import { CloseOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, Button } from "antd";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface IProps {
@@ -55,7 +55,42 @@ const SubmitNewResearchTopicVersion = (props: IProps) => {
     useSubmitNewVersionResearchTopicMutation((msg) => {
       setErrorMessage(msg);
     });
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [timeLeft, setTimeLeft] = useState("");
+  useEffect(() => {
+    setIsDisabled(true);
+    let targetTime = new Date(
+      researchTopicDetail?.review_Committees?.dateEnd || ""
+    ).getTime();
 
+    const updateCountdown = () => {
+      const currentTime = new Date().getTime();
+      const difference = targetTime - currentTime;
+
+      if (difference <= 0) {
+        setTimeLeft("00 ngày 00 giờ 00 phút 00 giây");
+        setIsDisabled(false);
+        clearInterval(timerInterval);
+      } else {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor(
+          (difference % (1000 * 60 * 60)) / (1000 * 60)
+        );
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        setTimeLeft(
+          `${String(days).padStart(2, "0")} ngày ${String(hours).padStart(2, "0")} giờ ${String(minutes).padStart(2, "0")} phút ${String(seconds).padStart(2, "0")} giây`
+        );
+      }
+    };
+
+    const timerInterval = setInterval(updateCountdown, 1000);
+
+    // Cleanup timer on unmount
+    return () => clearInterval(timerInterval);
+  }, [researchTopicDetail]);
   const {
     mutate: notiMutation,
     isSuccess: isNotiSuccess,
@@ -196,63 +231,77 @@ const SubmitNewResearchTopicVersion = (props: IProps) => {
   };
   // UI
   return (
-    <div className="px-3 py-2">
-      {isPending || fileIsPending || fileProductIsPending ? (
-        <SpinnerLoading />
+    <div>
+      {isDisabled ? (
+        <div className="px-3 py-2">
+          {isPending || fileIsPending || fileProductIsPending ? (
+            <SpinnerLoading />
+          ) : (
+            ""
+          )}
+
+          <div className="">
+            <div className="mt-2">
+              <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
+                File thuyết minh
+              </label>
+              <DragFileUpload
+                limit={1}
+                multiple={false}
+                setFile={setFileReport}
+              />
+            </div>
+            <div className="mt-2">
+              <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
+                File sản phẩm (nếu có)
+              </label>
+              <DragFileUpload
+                limit={1}
+                multiple={false}
+                setFile={setFileProduct}
+              />
+            </div>
+          </div>
+          <div className="mt-2">
+            <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
+              Tổng quan chỉnh sửa
+            </label>
+            <FormField
+              type="text"
+              placeholder="Nhập tổng quan nội dung chỉnh sửa ..."
+              name="summary"
+              register={register}
+              error={errors.summary}
+              isTextArea={true}
+              className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
+            />
+          </div>
+          {errorMessage && (
+            <div className="mt-4">
+              <Alert
+                message="Oops! Đã có lỗi xảy ra"
+                description={errorMessage}
+                type="error"
+                closable={{
+                  "aria-label": "close",
+                  closeIcon: <CloseOutlined />,
+                }}
+                onClose={() => setErrorMessage(null)}
+                showIcon
+              />
+            </div>
+          )}
+          <Button
+            onClick={handleSubmit(onSubmit, onError)}
+            className="my-3"
+            type="primary"
+          >
+            Xác nhận
+          </Button>
+        </div>
       ) : (
         ""
       )}
-
-      <div className="">
-        <div className="mt-2">
-          <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-            File thuyết minh
-          </label>
-          <DragFileUpload limit={1} multiple={false} setFile={setFileReport} />
-        </div>
-        <div className="mt-2">
-          <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-            File sản phẩm (nếu có)
-          </label>
-          <DragFileUpload limit={1} multiple={false} setFile={setFileProduct} />
-        </div>
-      </div>
-      <div className="mt-2">
-        <label className="mb-[10px] block text-base font-bold text-dark dark:text-white">
-          Tổng quan chỉnh sửa
-        </label>
-        <FormField
-          type="text"
-          placeholder="Nhập tổng quan nội dung chỉnh sửa ..."
-          name="summary"
-          register={register}
-          error={errors.summary}
-          isTextArea={true}
-          className="w-full rounded-md border border-stroke dark:border-dark-3 py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2 disabled:border-gray-2 dark:disabled:bg-dark-4 dark:disabled:border-dark-4"
-        />
-      </div>
-      {errorMessage && (
-        <div className="mt-4">
-          <Alert
-            message="Oops! Đã có lỗi xảy ra"
-            description={errorMessage}
-            type="error"
-            closable={{
-              "aria-label": "close",
-              closeIcon: <CloseOutlined />,
-            }}
-            onClose={() => setErrorMessage(null)}
-            showIcon
-          />
-        </div>
-      )}
-      <Button
-        onClick={handleSubmit(onSubmit, onError)}
-        className="my-3"
-        type="primary"
-      >
-        Xác nhận
-      </Button>
     </div>
   );
 };
