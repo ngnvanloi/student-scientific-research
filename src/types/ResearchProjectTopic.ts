@@ -11,8 +11,8 @@ export type ResearchProjectTopic = {
   achievedResults: string;
   budget: number;
   projectDuration: number;
-  isAcceptanceApproved: boolean;
-  isReviewerAcceptance: boolean;
+  acceptanceApprovedStatus: number;
+  reviewAcceptanceStatus: number;
   budgetFilePath: string;
   productFilePath: string;
   reportFilePath: string;

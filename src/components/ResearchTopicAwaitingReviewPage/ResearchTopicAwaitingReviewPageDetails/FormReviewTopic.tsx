@@ -27,15 +27,17 @@ import { useToast } from "@/hooks/use-toast";
 import { SpinnerLoading } from "@/components/SpinnerLoading/SpinnerLoading";
 import { useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
+import { ModalConfirmReviewTopic } from "@/components/Modal/ModalConfirmReviewTopic";
 
 interface IProps {
   version: HistoryUpdateResearchTopic;
   accountID: number;
   researchTopicID: number;
+  reviewAcceptanceStatus: number;
 }
 
 const FormReviewTopic = (props: IProps) => {
-  const { version, accountID, researchTopicID } = props;
+  const { version, accountID, researchTopicID, reviewAcceptanceStatus } = props;
   const { data: session } = useSession();
   const { toast } = useToast();
   const { data: concludes } = useGetListConclude();
@@ -45,6 +47,13 @@ const FormReviewTopic = (props: IProps) => {
       name: item.result,
     })
   );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [paramsSender, setParamsSender] = useState<ParamsSubmitReviewForm>({
+    content: "",
+    history_Update_ResearchTopicId: 0,
+    concludeId: 0,
+  });
   // với mỗi version, kiểm tra versionID và ReviewerID đã tồn tại trong bảng RevierForm chưa
   //    -> nếu chưa: hiển thị form phản biện
   //    -> ngược lại, hiển thị kết quả phản biện
@@ -59,19 +68,7 @@ const FormReviewTopic = (props: IProps) => {
     "Checking owner review version: ",
     JSON.stringify(version.review_Forms, null, 2)
   );
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { mutate, isPending, isError, isSuccess } = useSubmitReviewFormMutation(
-    (msg) => {
-      setErrorMessage(msg);
-    }
-  );
-  const {
-    mutate: notiMutation,
-    isSuccess: isNotiSuccess,
-    isError: isNotiError,
-    error: notiError,
-    isPending: notiIsPending,
-  } = useCreateNotificationMutation();
+
   // REACT HOOK FORM
   const {
     register,
@@ -98,38 +95,11 @@ const FormReviewTopic = (props: IProps) => {
         history_Update_ResearchTopicId: version.id,
         concludeId: Number(data.concludeId),
       };
-      mutate(params, {
-        onSuccess: () => {
-          let notiContent = `${session?.user?.name} ${NotificationContentSample.NotificationType.reviewProcess.reviewer}. Nội dung phản biện: ${data.content}`;
-          // gửi thông báo cho người đăng kí
-          const paramsNoti: ParamsCreateNotification = {
-            notificationContent: notiContent,
-            notificationDate: new Date().toISOString(),
-            recevierId: accountID,
-            notificationTypeId: 3,
-            targetId: researchTopicID,
-          };
-          notiMutation(paramsNoti, {
-            onSuccess: () => {
-              toast({
-                title: "Thành công",
-                variant: "default",
-                description: `Bạn đã gửi thông báo thành công, vui lòng cập nhật hệ thống liên tục khi có phản hồi mới nhất từ tác giả`,
-              });
-            },
-            onError: (error) => {
-              console.error("Lỗi khi gửi thông báo:", error);
-            },
-          });
-          setErrorMessage(null);
-        },
-        onError: (error) => {
-          console.error("Lỗi khi gửi thông báo:", error);
-        },
-      });
-      console.log(params);
+      setParamsSender(params);
+      setIsOpen(true);
+
       // RESET FORM UPDATE
-      reset({});
+      // reset({});
     }
   };
 
@@ -139,14 +109,21 @@ const FormReviewTopic = (props: IProps) => {
 
   return (
     <div>
-      {notiIsPending || isPending ? <SpinnerLoading /> : ""}
       <div>
-        <h4 className="font-semibold mb-2">Nội dung chỉnh sửa của version:</h4>
-        <p className="text-justify">{version.summary}</p>
+        <h4 className="font-semibold mb-2 text-base">
+          Nội dung chỉnh sửa của version:
+        </h4>
+        <p className="text-justify max-h-[290px] overflow-x-auto">
+          {version.summary}
+        </p>
       </div>
-      {hasReviewed ? (
+      {hasReviewed ||
+      reviewAcceptanceStatus === 1 ||
+      reviewAcceptanceStatus === 2 ? (
         <div>
-          <p className="font-semibold mt-3">Nội dung phản biện trước đó: </p>
+          <p className="font-semibold mt-3 text-base">
+            Nội dung phản biện trước đó:{" "}
+          </p>
           <p>
             {version.review_Forms
               .filter((item) => item.reviewer.accountId === accountIdToCheck)
@@ -162,7 +139,7 @@ const FormReviewTopic = (props: IProps) => {
         </div>
       ) : (
         <div>
-          <h4 className="font-semibold mb-2">
+          <h4 className="font-semibold mt-3 mb-2 text-base">
             Phần nhận xét của người phản biện:
           </h4>
           <div>
@@ -210,8 +187,15 @@ const FormReviewTopic = (props: IProps) => {
               onClick={handleSubmit(onSubmit, onError)}
               className="px-6 py-2 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "
             >
-              Submit
+              Gửi đi
             </Button>
+            <ModalConfirmReviewTopic
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              paramsSubmitReviewForm={paramsSender}
+              accountID={accountID}
+              researchTopicID={researchTopicID}
+            />
           </div>
         </div>
       )}

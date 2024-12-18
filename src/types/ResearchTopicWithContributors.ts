@@ -13,8 +13,8 @@ export type ResearchTopicWithContributors = {
   summary?: string;
   budget: number;
   projectDuration: number;
-  isAcceptanceApproved: false;
-  isReviewerAcceptance: false;
+  acceptanceApprovedStatus: number;
+  reviewAcceptanceStatus: number;
   budgetFilePath: string;
   productFilePath: string;
   reportFilePath: string;

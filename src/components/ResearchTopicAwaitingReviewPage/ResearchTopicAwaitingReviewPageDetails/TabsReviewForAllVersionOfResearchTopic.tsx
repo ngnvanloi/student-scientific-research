@@ -11,14 +11,18 @@ interface IProps {
 }
 const TabsReviewForAllVersionOfResearchTopic = (props: IProps) => {
   const { setFileVersionUrl, researchTopicDetail, accountID } = props;
+  // console.log(
+  //   " ===================> Version Research topic details: ",
+  //   researchTopicDetail.history_Update_ResearchTopics
+  // );
+  // // render số tab với các phiên bản bài báo
+  // console.log(
+  //   "checking version of research: ",
+  //   researchTopicDetail.history_Update_ResearchTopics
+  // );
   console.log(
-    " ===================> Version Research topic details: ",
-    researchTopicDetail.history_Update_ResearchTopics
-  );
-  // render số tab với các phiên bản bài báo
-  console.log(
-    "checking version of research: ",
-    researchTopicDetail.history_Update_ResearchTopics
+    "=====> checking is review acceptance: ",
+    researchTopicDetail.reviewAcceptanceStatus
   );
 
   type TabItem = {
@@ -37,6 +41,7 @@ const TabsReviewForAllVersionOfResearchTopic = (props: IProps) => {
             version={version}
             accountID={accountID}
             researchTopicID={researchTopicDetail.id}
+            reviewAcceptanceStatus={researchTopicDetail.reviewAcceptanceStatus}
           />
         ),
         newFilePath: version.newReportFilePath,
