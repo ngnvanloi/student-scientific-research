@@ -10,6 +10,7 @@ export type ParamsGetListCompetition = {
   nameSearch?: string;
   organizerName?: string;
   facultyId?: number;
+  year?: number;
 };
 // Hook để sử dụng useQuery cho việc lấy danh sách cuộc thi
 export const useGetListCompetition = (params: ParamsGetListCompetition) => {
@@ -42,6 +43,7 @@ export async function GetListCompetition(
   if (param.facultyId) {
     queryParams.append("facultyId", param.facultyId.toString());
   }
+
   const fullUrl = `${baseUrl}?${queryParams.toString()}`;
   //
   const response = (await communityRequest)(fullUrl, {
@@ -86,6 +88,9 @@ export async function GetListCompetitionaAdmin(
   // if (param.facultyId) {
   //   queryParams.append("facultyId", param.facultyId.toString());
   // }
+  if (param.year) {
+    queryParams.append("year", param.year.toString());
+  }
 
   const fullUrl = `${baseUrl}?${queryParams.toString()}`;
 

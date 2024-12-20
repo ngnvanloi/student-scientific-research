@@ -223,6 +223,14 @@ const AcceptanceOverview = (props: IProps) => {
         ) : (
           ""
         )}
+        <div className="">
+          <p className="font-semibold text-base">
+            Cuộc thi tham gia:{" "}
+            <span className="font-normal">
+              {acceptance?.researchTopic.competitionName}
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );

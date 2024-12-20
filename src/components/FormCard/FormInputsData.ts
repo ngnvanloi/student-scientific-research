@@ -148,6 +148,8 @@ export type TFormFilter = {
   competitionId?: string;
   facultyId?: string;
   roleName?: string;
+  kindOfApproval?: string;
+  year?: number;
 };
 
 export type TFormRequestAcceptanceDeadline = {

@@ -2,7 +2,7 @@
 import { useGetListConclude } from "@/hooks-query/queries/use-get-conclude";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, Button } from "antd";
+import { Alert, Button, Divider } from "antd";
 import FormSelect, { SelectItem } from "@/components/FormCard/FormSelectField";
 import { TFormReviewTopic } from "@/components/FormCard/FormInputsData";
 import { FormReviewTopicSchema } from "@/components/FormCard/ZodSchema";
@@ -22,6 +22,7 @@ interface IProps {
   researchTopicID: number;
   reviewAcceptanceStatus: number;
   researchTopic?: ResearchProjectTopic;
+  versionOfTopic?: number;
 }
 
 const FormReviewTopic = (props: IProps) => {
@@ -31,6 +32,7 @@ const FormReviewTopic = (props: IProps) => {
     researchTopicID,
     reviewAcceptanceStatus,
     researchTopic,
+    versionOfTopic,
   } = props;
   const { data: session } = useSession();
   const { toast } = useToast();
@@ -139,14 +141,32 @@ const FormReviewTopic = (props: IProps) => {
 
   return (
     <div>
-      <div>
-        <h4 className="font-semibold mb-2 text-base">
-          Nội dung chỉnh sửa của version:
-        </h4>
-        <p className="text-justify max-h-[290px] overflow-x-auto">
-          {version.summary}
-        </p>
-      </div>
+      {versionOfTopic !== 1 ? (
+        <>
+          <Divider
+            variant="dotted"
+            style={{ borderColor: "#7fb6ff", color: "#5474c7" }}
+          >
+            Phần của tác giả
+          </Divider>
+          <div>
+            <h4 className="font-semibold mb-2 text-base">
+              Chú thích nội dung đã chỉnh sửa theo yêu cầu phản biện trước đó:
+            </h4>
+            <p className="text-justify max-h-[290px] overflow-x-auto">
+              {version.summary}
+            </p>
+          </div>
+        </>
+      ) : (
+        ""
+      )}
+      <Divider
+        variant="dotted"
+        style={{ borderColor: "#7fb6ff", color: "#5474c7" }}
+      >
+        Phần của người phản biện
+      </Divider>
       {hasReviewed ||
       reviewAcceptanceStatus === 1 ||
       reviewAcceptanceStatus === 2 ||

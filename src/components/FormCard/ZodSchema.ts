@@ -535,6 +535,8 @@ export const FormFilterSchema: ZodType<TFormFilter> = z.object({
   competitionId: z.string().optional(),
   facultyId: z.string().optional(),
   roleName: z.string().optional(),
+  kindOfApproval: z.string().optional(),
+  year: z.number({ message: "Vui lòng nhập năm hợp lệ" }).optional(),
 });
 export const FormRequestAcceptanceDeadlineSchema: ZodType<TFormRequestAcceptanceDeadline> =
   z.object({

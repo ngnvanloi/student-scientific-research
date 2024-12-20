@@ -167,6 +167,12 @@ const ResearchTopicOverview = (props: IProps) => {
       ) : (
         ""
       )}
+      <div className="">
+        <p className="font-semibold text-base">
+          Cuộc thi tham gia:{" "}
+          <span className="font-normal">{researchTopic?.competitionName}</span>
+        </p>
+      </div>
     </div>
   );
 };
