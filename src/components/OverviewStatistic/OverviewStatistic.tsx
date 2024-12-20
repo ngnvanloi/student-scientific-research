@@ -29,7 +29,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormAddContributorSchema } from "../FormCard/ZodSchema";
 import { useEffect, useState } from "react";
 import {
+  AdjustmentsHorizontalIcon,
+  ChevronDoubleRightIcon,
   ClipboardDocumentCheckIcon,
+  FunnelIcon,
   MagnifyingGlassIcon,
   NewspaperIcon,
   TrophyIcon,
@@ -37,7 +40,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { RecentArticle } from "./ComponentRelated/recent-article";
 import { formatToVND } from "@/helper/extension-function";
-import { Button, Input } from "antd";
+import { Button, Input, InputNumber } from "antd";
+import { NumericInput } from "../FormCard/InputNumberic";
 const OverviewStatistic = () => {
   // lấy dữ liệu theo combobox cuộc thi
   let params: ParamsGetStatisticForOrganizer = {
@@ -147,31 +151,29 @@ const OverviewStatistic = () => {
   return (
     <div>
       <div className="">
-        <div className="flex items-center justify-between space-y-2">
+        <div className="grid items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">Thống kê</h2>
-          <div className="flex w-[200px] items-center space-x-2 h-full">
-            <Input
-              type="text"
-              placeholder="Nhập năm"
-              className="h-10"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-            />
-            <Button
-              onClick={handleSearch}
-              className="px-3 py-[6px] h-10 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "
-            >
-              <MagnifyingGlassIcon width="16" />
-            </Button>
-          </div>
-          <div className="flex items-center space-x-2 w-[500px]">
-            <FormSelect
-              name="competitionId"
-              items={competitions || []}
-              register={register}
-              error={errors.competitionId}
-              className="w-full appearance-none rounded-lg border border-stroke dark:border-dark-3 bg-transparent py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2"
-            />
+          <div className="flex gap-2">
+            <div className="flex items-center space-x-2 h-full">
+              <NumericInput style={{}} value={year} onChange={setYear} />
+              <Button
+                onClick={handleSearch}
+                className="px-3 py-[6px] h-11 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "
+              >
+                Lọc cuộc thi
+                <AdjustmentsHorizontalIcon width="16" />
+              </Button>
+              <ChevronDoubleRightIcon width={"36"} />
+            </div>
+            <div className="items-center space-x-2">
+              <FormSelect
+                name="competitionId"
+                items={competitions || []}
+                register={register}
+                error={errors.competitionId}
+                className="w-full appearance-none rounded-lg border border-stroke dark:border-dark-3 bg-transparent py-[10px] px-5 text-dark-6 outline-none transition focus:border-blue-400 active:border-blue-400 disabled:cursor-default disabled:bg-gray-2"
+              />
+            </div>
           </div>
         </div>
         <div className="mt-4">

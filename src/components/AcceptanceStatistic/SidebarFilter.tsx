@@ -11,11 +11,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormFilterSchema } from "../FormCard/ZodSchema";
 import { useGetListFaculty } from "@/hooks-query/queries/use-get-faculties";
 import { Button, Input } from "antd";
-import { FunnelIcon } from "@heroicons/react/24/outline";
+import {
+  AdjustmentsHorizontalIcon,
+  FunnelIcon,
+} from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useListAcceptanceContext } from "./ListAcceptanceContext";
 import FormField from "../FormCard/FormInputField";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { NumericInput } from "../FormCard/InputNumberic";
 
 const kindOfApproval: SelectItem[] = [
   { id: 1, name: "Nghiệm thu chờ phê duyệt" },
@@ -106,18 +110,12 @@ const SidebarFilter = () => {
     <div>
       <div>
         <div className="flex w-full items-center space-x-2 h-full">
-          <Input
-            type="text"
-            placeholder="Nhập năm"
-            className="h-10"
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
-          />
+          <NumericInput style={{}} value={year} onChange={setYear} />
           <Button
             onClick={handleSearch}
             className="px-3 py-[6px] h-10 text-white bg-indigo-600 rounded-md outline-none ring-offset-2 ring-indigo-600 focus:ring-2 "
           >
-            <MagnifyingGlassIcon width="16" />
+            <AdjustmentsHorizontalIcon width="16" />
           </Button>
         </div>
       </div>
