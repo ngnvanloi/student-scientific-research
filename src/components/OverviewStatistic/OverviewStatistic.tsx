@@ -336,7 +336,9 @@ const OverviewStatistic = () => {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
             <Card className="col-span-4">
               <CardHeader>
-                <CardTitle>Tổng quan</CardTitle>
+                <CardTitle>
+                  Tỉ lệ các đề tài thành công của tất cả cuộc thi
+                </CardTitle>
               </CardHeader>
               <CardContent className="pl-2">
                 <Overview data={dataStatistic} />
