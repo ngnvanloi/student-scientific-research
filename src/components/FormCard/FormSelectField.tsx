@@ -36,14 +36,14 @@ const FormSelect = <T extends SelectItem>({
       </label>
     )}
     {/* relative z-20 */}
-    <div className="">
+    <div className="w-full">
       <select
         id={name}
         {...register(name)}
         className={className}
         disabled={disabled}
       >
-        <option value="">Select an option</option>
+        <option value="">Chọn một lựa chọn</option>
         {items.map((item) => (
           <option key={item.id} value={item.id}>
             {item.name}
