@@ -46,10 +46,6 @@ const PostList = () => {
           <h1 className="text-gray-800 text-2xl font-extrabold sm:text-3xl">
             Xem thông báo
           </h1>
-          <p className="text-gray-600 mt-2">
-            We're currently looking talent software engineers, and designers to
-            help us in our missions and to grow up.
-          </p>
         </div>
         <div className="mt-3">
           <Input

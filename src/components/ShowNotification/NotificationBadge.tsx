@@ -92,7 +92,7 @@ export function NotificationBadge() {
                 className="w-full bg-[#03509d]"
                 onClick={() => handleMarkAllRead()}
               >
-                <Check className="mr-2 h-4 w-4" /> Mark all as read
+                <Check className="mr-2 h-4 w-4" /> Đánh dấu tất cả đã đọc
               </Button>
             </CardFooter>
           </Card>

@@ -33,7 +33,7 @@ const CompetitionList = () => {
 
       <div>
         <h1 className="text-gray-800 text-3xl font-semibold">
-          Explore The Competitions
+          Khám phá các cuộc thi
           <div className="mt-3">
             <Input
               type="text"
